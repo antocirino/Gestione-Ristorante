@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Servizio per l'applicazione Java
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ristorante-app
+    ports:
+      - "${JAVA_APP_PORT:-8090}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE:-ristorante}
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=${MYSQL_ROOT_PASSWORD:-password}
+      - DISPLAY=host.docker.internal:0
+    networks:
+      - ristorante-network
+    volumes:
+      - ./config:/app/config
+      - /tmp/.X11-unix:/tmp/.X11-unix  # X11 forwarding per la GUI
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Per macOS, per X11
+    privileged: true  # Necessario per alcune configurazioni X11
+
+  # Servizio per il database MySQL
+  db:
+    image: mysql:8.0
+    container_name: ristorante-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-password}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-ristorante}
+      - MYSQL_USER=${MYSQL_USER:-ristorante_user}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-ristorante_pass}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./SQL/init:/docker-entrypoint-initdb.d
+      - mysql-data:/var/lib/mysql
+    networks:
+      - ristorante-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-password}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Servizio per phpmyadmin (opzionale, per gestire il database tramite interfaccia web)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ristorante-phpmyadmin
+    depends_on:
+      - db
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    ports:
+      - "${PHPMYADMIN_PORT:-8081}:80"
+    networks:
+      - ristorante-network
+
+networks:
+  ristorante-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
