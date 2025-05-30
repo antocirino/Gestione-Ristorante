@@ -1,0 +1,683 @@
+{
+  "Antipasti": {
+    "Bruschetta pomodoro e basilico": {
+      "descrizione": "Fette di pane casereccio tostate e condite con pomodoro fresco, basilico e olio d'oliva",
+      "tempo_preparazione": 10,
+      "istruzioni": "Tagliare il pane a fette, tostarlo, strofinare con aglio, condire con pomodoro fresco a cubetti, basilico, sale e olio extravergine d'oliva.",
+      "ingredienti": [
+        { "id": 1, "quantita": 0.1 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 5, "quantita": 0.005 },
+        { "id": 6, "quantita": 0.01 }
+      ]
+    },
+    "Antipasto misto": {
+      "descrizione": "Selezione di salumi e formaggi italiani con sottoli",
+      "tempo_preparazione": 15,
+      "istruzioni": "Disporre su un tagliere i vari affettati, formaggi e verdure sott'olio in modo armonioso.",
+      "ingredienti": [
+        { "id": 10, "quantita": 0.05 },
+        { "id": 11, "quantita": 0.05 },
+        { "id": 7, "quantita": 0.05 },
+        { "id": 8, "quantita": 0.03 },
+        { "id": 46, "quantita": 0.05 }
+      ]
+    },
+    "Crostini ai funghi": {
+      "descrizione": "Crostini di pane con crema di funghi porcini",
+      "tempo_preparazione": 20,
+      "istruzioni": "Tostare fette di pane, saltare i funghi in padella con aglio e prezzemolo, disporre sui crostini.",
+      "ingredienti": [
+        { "id": 2, "quantita": 0.05 },
+        { "id": 15, "quantita": 0.15 },
+        { "id": 5, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.03 },
+        { "id": 3, "quantita": 0.002 }
+      ]
+    },
+    "Affettati misti": {
+      "descrizione": "Selezione di affettati tipici italiani",
+      "tempo_preparazione": 10,
+      "istruzioni": "Affettare e disporre su un tagliere vari tipi di salumi italiani, guarnire con olive e grissini.",
+      "ingredienti": [
+        { "id": 10, "quantita": 0.08 },
+        { "id": 11, "quantita": 0.08 },
+        { "id": 46, "quantita": 0.03 }
+      ]
+    },
+    "Olive all'ascolana": {
+      "descrizione": "Olive ripiene di carne e fritte",
+      "tempo_preparazione": 45,
+      "istruzioni": "Denocciolate le olive, preparare un ripieno con carni miste, riempire le olive, impanarle e friggerle.",
+      "ingredienti": [
+        { "id": 46, "quantita": 0.2 },
+        { "id": 19, "quantita": 0.1 },
+        { "id": 12, "quantita": 2 },
+        { "id": 2, "quantita": 0.1 },
+        { "id": 4, "quantita": 0.1 }
+      ]
+    },
+    "Burrata con pomodorini": {
+      "descrizione": "Burrata fresca servita con pomodorini e basilico",
+      "tempo_preparazione": 5,
+      "istruzioni": "Disporre la burrata al centro del piatto, contornare con pomodorini tagliati a metà, condire con sale, pepe, basilico e olio.",
+      "ingredienti": [
+        { "id": 7, "quantita": 0.15 },
+        { "id": 40, "quantita": 0.1 },
+        { "id": 6, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 3, "quantita": 0.002 }
+      ]
+    },
+    "Carpaccio di manzo": {
+      "descrizione": "Fettine sottilissime di manzo crudo condite con rucola, scaglie di grana e olio",
+      "tempo_preparazione": 15,
+      "istruzioni": "Affettare finemente il filetto di manzo, disporlo sul piatto, condire con sale, pepe, succo di limone, olio, rucola e scaglie di parmigiano.",
+      "ingredienti": [
+        { "id": 31, "quantita": 0.08 },
+        { "id": 4, "quantita": 0.01 },
+        { "id": 8, "quantita": 0.02 },
+        { "id": 41, "quantita": 0.01 },
+        { "id": 13, "quantita": 0.001 },
+        { "id": 54, "quantita": 0.01 }
+      ]
+    },
+    "Insalata caprese": {
+      "descrizione": "Mozzarella e pomodoro conditi con basilico e olio extravergine d'oliva",
+      "tempo_preparazione": 5,
+      "istruzioni": "Tagliare a fette pomodoro e mozzarella, alternarle sul piatto, condire con basilico, sale e olio extravergine d'oliva.",
+      "ingredienti": [
+        { "id": 1, "quantita": 0.15 },
+        { "id": 7, "quantita": 0.1 },
+        { "id": 6, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 3, "quantita": 0.002 }
+      ]
+    },
+    "Parmigiana di melanzane": {
+      "descrizione": "Melanzane fritte a strati con pomodoro, mozzarella e parmigiano",
+      "tempo_preparazione": 60,
+      "istruzioni": "Tagliare le melanzane a fette, friggerle, preparare un sugo di pomodoro, alternare strati di melanzane, sugo, mozzarella e parmigiano, infornare.",
+      "ingredienti": [
+        { "id": 36, "quantita": 0.5 },
+        { "id": 1, "quantita": 0.2 },
+        { "id": 7, "quantita": 0.15 },
+        { "id": 8, "quantita": 0.05 },
+        { "id": 4, "quantita": 0.1 }
+      ]
+    },
+    "Insalata di mare": {
+      "descrizione": "Mix di frutti di mare conditi con olio, limone e prezzemolo",
+      "tempo_preparazione": 30,
+      "istruzioni": "Lessare i frutti di mare, sgusciarli, condire con olio extravergine, limone, prezzemolo e un pizzico di pepe.",
+      "ingredienti": [
+        { "id": 35, "quantita": 0.1 },
+        { "id": 34, "quantita": 0.1 },
+        { "id": 56, "quantita": 0.1 },
+        { "id": 57, "quantita": 0.1 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 54, "quantita": 0.01 },
+        { "id": 13, "quantita": 0.001 }
+      ]
+    }
+  },
+  "Primi": {
+    "Spaghetti alla carbonara": {
+      "descrizione": "Ricetta tradizionale romana",
+      "tempo_preparazione": 20,
+      "istruzioni": "Cuocere la pasta, preparare il condimento con uova, pecorino, guanciale e pepe nero.",
+      "ingredienti": [
+        { "id": 18, "quantita": 0.1 },
+        { "id": 11, "quantita": 0.05 },
+        { "id": 12, "quantita": 2 },
+        { "id": 9, "quantita": 0.03 },
+        { "id": 13, "quantita": 0.005 }
+      ]
+    },
+    "Risotto ai funghi porcini": {
+      "descrizione": "Ricetta cremosa con funghi porcini",
+      "tempo_preparazione": 25,
+      "istruzioni": "Tostare il riso, sfumare con vino bianco, aggiungere i funghi e il brodo caldo poco alla volta.",
+      "ingredienti": [
+        { "id": 17, "quantita": 0.08 },
+        { "id": 15, "quantita": 0.1 },
+        { "id": 23, "quantita": 0.05 },
+        { "id": 8, "quantita": 0.03 },
+        { "id": 25, "quantita": 0.02 }
+      ]
+    },
+    "Lasagne alla bolognese": {
+      "descrizione": "Classico primo piatto della tradizione",
+      "tempo_preparazione": 90,
+      "istruzioni": "Preparare ragù, besciamella, assemblare gli strati e cuocere in forno.",
+      "ingredienti": [
+        { "id": 17, "quantita": 0.5 },
+        { "id": 19, "quantita": 0.3 },
+        { "id": 1, "quantita": 0.2 },
+        { "id": 8, "quantita": 0.1 },
+        { "id": 26, "quantita": 0.2 },
+        { "id": 25, "quantita": 0.05 }
+      ]
+    },
+    "Tagliatelle al ragù": {
+      "descrizione": "Pasta all'uovo condita con ragù di carne",
+      "tempo_preparazione": 60,
+      "istruzioni": "Preparare il soffritto, rosolare la carne macinata, aggiungere pomodoro e cuocere lentamente per circa 2 ore. Condire la pasta cotta al dente.",
+      "ingredienti": [
+        { "id": 17, "quantita": 0.1 },
+        { "id": 19, "quantita": 0.15 },
+        { "id": 1, "quantita": 0.15 },
+        { "id": 20, "quantita": 0.03 },
+        { "id": 21, "quantita": 0.03 },
+        { "id": 22, "quantita": 0.03 },
+        { "id": 24, "quantita": 0.05 }
+      ]
+    },
+    "Penne all'arrabbiata": {
+      "descrizione": "Pasta con salsa di pomodoro piccante",
+      "tempo_preparazione": 20,
+      "istruzioni": "Soffriggere aglio e peperoncino, aggiungere pomodoro e cuocere per 15 minuti. Condire la pasta con la salsa e prezzemolo fresco.",
+      "ingredienti": [
+        { "id": 18, "quantita": 0.1 },
+        { "id": 1, "quantita": 0.2 },
+        { "id": 5, "quantita": 0.01 },
+        { "id": 14, "quantita": 0.005 },
+        { "id": 4, "quantita": 0.03 }
+      ]
+    },
+    "Ravioli ricotta e spinaci": {
+      "descrizione": "Pasta ripiena fatta in casa con ricotta e spinaci",
+      "tempo_preparazione": 60,
+      "istruzioni": "Preparare la pasta all'uovo, il ripieno con ricotta e spinaci, assemblare i ravioli e cuocerli in acqua bollente. Condire con burro fuso e salvia.",
+      "ingredienti": [
+        { "id": 17, "quantita": 0.2 },
+        { "id": 12, "quantita": 2 },
+        { "id": 7, "quantita": 0.2 },
+        { "id": 42, "quantita": 0.15 },
+        { "id": 25, "quantita": 0.05 },
+        { "id": 3, "quantita": 0.005 }
+      ]
+    },
+    "Gnocchi al pesto": {
+      "descrizione": "Gnocchi di patate con salsa al basilico",
+      "tempo_preparazione": 45,
+      "istruzioni": "Preparare gli gnocchi con patate e farina, cuocerli in acqua bollente e condirli con pesto fresco fatto con basilico, pinoli, parmigiano, aglio e olio.",
+      "ingredienti": [
+        { "id": 38, "quantita": 0.5 },
+        { "id": 2, "quantita": 0.1 },
+        { "id": 6, "quantita": 0.1 },
+        { "id": 8, "quantita": 0.05 },
+        { "id": 5, "quantita": 0.005 },
+        { "id": 51, "quantita": 0.03 },
+        { "id": 4, "quantita": 0.1 }
+      ]
+    },
+    "Orecchiette alle cime di rapa": {
+      "descrizione": "Pasta tipica pugliese con cime di rapa",
+      "tempo_preparazione": 30,
+      "istruzioni": "Cuocere le cime di rapa in acqua, aggiungere la pasta a metà cottura, scolare e saltare in padella con aglio, olio e peperoncino.",
+      "ingredienti": [
+        { "id": 18, "quantita": 0.1 },
+        { "id": 43, "quantita": 0.3 },
+        { "id": 5, "quantita": 0.01 },
+        { "id": 14, "quantita": 0.002 },
+        { "id": 4, "quantita": 0.04 }
+      ]
+    },
+    "Bucatini all'amatriciana": {
+      "descrizione": "Pasta con sugo di pomodoro e guanciale",
+      "tempo_preparazione": 25,
+      "istruzioni": "Rosolare il guanciale tagliato a listarelle, aggiungere la salsa di pomodoro, cuocere per 15 minuti, condire la pasta e servire con pecorino grattugiato.",
+      "ingredienti": [
+        { "id": 18, "quantita": 0.1 },
+        { "id": 10, "quantita": 0.08 },
+        { "id": 1, "quantita": 0.2 },
+        { "id": 9, "quantita": 0.04 },
+        { "id": 14, "quantita": 0.001 }
+      ]
+    },
+    "Fettuccine Alfredo": {
+      "descrizione": "Pasta all'uovo condita con burro e parmigiano",
+      "tempo_preparazione": 15,
+      "istruzioni": "Cuocere la pasta, scolarla, mantecarla con burro e parmigiano fino a ottenere una crema liscia e vellutata.",
+      "ingredienti": [
+        { "id": 17, "quantita": 0.1 },
+        { "id": 25, "quantita": 0.1 },
+        { "id": 8, "quantita": 0.1 },
+        { "id": 3, "quantita": 0.002 },
+        { "id": 13, "quantita": 0.001 }
+      ]
+    },
+    "Spaghetti aglio e olio": {
+      "descrizione": "Piatto semplice ma gustoso della tradizione",
+      "tempo_preparazione": 15,
+      "istruzioni": "Soffriggere l'aglio tritato in abbondante olio, eventualmente aggiungere peperoncino, condire la pasta scolata al dente.",
+      "ingredienti": [
+        { "id": 18, "quantita": 0.1 },
+        { "id": 5, "quantita": 0.03 },
+        { "id": 4, "quantita": 0.05 },
+        { "id": 14, "quantita": 0.001 },
+        { "id": 3, "quantita": 0.002 }
+      ]
+    },
+    "Linguine allo scoglio": {
+      "descrizione": "Pasta con frutti di mare e pomodorini",
+      "tempo_preparazione": 30,
+      "istruzioni": "Rosolare aglio in olio, aggiungere i frutti di mare, sfumare con vino bianco, aggiungere pomodorini e prezzemolo, unire la pasta cotta al dente.",
+      "ingredienti": [
+        { "id": 18, "quantita": 0.1 },
+        { "id": 5, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.03 },
+        { "id": 23, "quantita": 0.05 },
+        { "id": 40, "quantita": 0.1 },
+        { "id": 56, "quantita": 0.1 },
+        { "id": 57, "quantita": 0.1 }
+      ]
+    },
+    "Pasta alla norma": {
+      "descrizione": "Ricetta siciliana con melanzane e ricotta salata",
+      "tempo_preparazione": 35,
+      "istruzioni": "Friggere le melanzane a cubetti, preparare un sugo di pomodoro, unire alla pasta scolata al dente e completare con ricotta salata grattugiata.",
+      "ingredienti": [
+        { "id": 18, "quantita": 0.1 },
+        { "id": 1, "quantita": 0.15 },
+        { "id": 36, "quantita": 0.2 },
+        { "id": 4, "quantita": 0.03 },
+        { "id": 5, "quantita": 0.005 }
+      ]
+    }
+  },
+  "Secondi": {
+    "Tagliata di manzo": {
+      "descrizione": "Carne pregiata servita su letto di rucola",
+      "tempo_preparazione": 15,
+      "istruzioni": "Cuocere la carne sulla griglia, condire con sale, pepe e un filo d'olio.",
+      "ingredienti": [
+        { "id": 31, "quantita": 0.2 },
+        { "id": 4, "quantita": 0.01 },
+        { "id": 13, "quantita": 0.002 },
+        { "id": 41, "quantita": 0.02 }
+      ]
+    },
+    "Filetto di branzino": {
+      "descrizione": "Pesce fresco al forno con erbe",
+      "tempo_preparazione": 25,
+      "istruzioni": "Pulire il pesce, condirlo con erbe aromatiche, cuocere al forno.",
+      "ingredienti": [
+        { "id": 33, "quantita": 0.25 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 23, "quantita": 0.05 }
+      ]
+    },
+    "Cotoletta alla milanese": {
+      "descrizione": "Costoletta di vitello impanata e fritta",
+      "tempo_preparazione": 20,
+      "istruzioni": "Battere la carne, passarla nell'uovo sbattuto e nel pangrattato, friggere in abbondante burro chiarificato.",
+      "ingredienti": [
+        { "id": 32, "quantita": 0.2 },
+        { "id": 12, "quantita": 1 },
+        { "id": 2, "quantita": 0.05 },
+        { "id": 25, "quantita": 0.05 }
+      ]
+    },
+    "Pollo alla cacciatora": {
+      "descrizione": "Pollo in umido con pomodoro, vino e olive",
+      "tempo_preparazione": 45,
+      "istruzioni": "Rosolare il pollo, aggiungere cipolla, sedano, carote, sfumare con vino, aggiungere pomodoro e olive, cuocere lentamente.",
+      "ingredienti": [
+        { "id": 60, "quantita": 0.3 },
+        { "id": 1, "quantita": 0.1 },
+        { "id": 22, "quantita": 0.05 },
+        { "id": 20, "quantita": 0.03 },
+        { "id": 21, "quantita": 0.03 },
+        { "id": 24, "quantita": 0.05 }
+      ]
+    },
+    "Scaloppine al limone": {
+      "descrizione": "Fettine di vitello cotte con succo di limone",
+      "tempo_preparazione": 20,
+      "istruzioni": "Infarinare le fettine di carne, rosolarle nel burro, sfumare con vino bianco, aggiungere succo di limone e cuocere brevemente.",
+      "ingredienti": [
+        { "id": 31, "quantita": 0.2 },
+        { "id": 2, "quantita": 0.03 },
+        { "id": 25, "quantita": 0.03 },
+        { "id": 23, "quantita": 0.05 },
+        { "id": 54, "quantita": 0.1 }
+      ]
+    },
+    "Bistecca fiorentina": {
+      "descrizione": "Bistecca di manzo alta e con l'osso, tipica toscana",
+      "tempo_preparazione": 30,
+      "istruzioni": "Portare la carne a temperatura ambiente, cuocerla sulla griglia a fuoco vivo per pochi minuti per lato, salare a fine cottura.",
+      "ingredienti": [
+        { "id": 32, "quantita": 0.5 },
+        { "id": 3, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 13, "quantita": 0.002 }
+      ]
+    },
+    "Polpo alla griglia": {
+      "descrizione": "Tentacoli di polpo grigliati e conditi",
+      "tempo_preparazione": 60,
+      "istruzioni": "Lessare il polpo in acqua con alloro per circa 40 minuti, tagliare i tentacoli e grigliarli, condire con olio, limone e prezzemolo.",
+      "ingredienti": [
+        { "id": 34, "quantita": 0.3 },
+        { "id": 4, "quantita": 0.03 },
+        { "id": 54, "quantita": 0.05 },
+        { "id": 3, "quantita": 0.003 }
+      ]
+    },
+    "Arrosto di vitello": {
+      "descrizione": "Arrosto di vitello con patate e verdure",
+      "tempo_preparazione": 90,
+      "istruzioni": "Rosolare la carne su tutti i lati, aggiungere le verdure, sfumare con vino bianco, cuocere in forno a 180°C per circa un'ora.",
+      "ingredienti": [
+        { "id": 32, "quantita": 0.5 },
+        { "id": 38, "quantita": 0.2 },
+        { "id": 21, "quantita": 0.1 },
+        { "id": 22, "quantita": 0.1 },
+        { "id": 20, "quantita": 0.1 },
+        { "id": 23, "quantita": 0.1 },
+        { "id": 4, "quantita": 0.05 },
+        { "id": 3, "quantita": 0.005 }
+      ]
+    },
+    "Ossobuco alla milanese": {
+      "descrizione": "Ossobuco di vitello con risotto allo zafferano",
+      "tempo_preparazione": 120,
+      "istruzioni": "Infarinare gli ossibuchi, rosolarli in burro e olio, sfumare con vino bianco, aggiungere brodo e cuocere a fuoco basso per circa 2 ore.",
+      "ingredienti": [
+        { "id": 32, "quantita": 0.4 },
+        { "id": 2, "quantita": 0.05 },
+        { "id": 25, "quantita": 0.03 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 23, "quantita": 0.1 },
+        { "id": 22, "quantita": 0.05 },
+        { "id": 21, "quantita": 0.05 },
+        { "id": 20, "quantita": 0.05 }
+      ]
+    },
+    "Salsiccia e friarielli": {
+      "descrizione": "Piatto tipico napoletano con salsicce e friarielli saltati",
+      "tempo_preparazione": 40,
+      "istruzioni": "Cuocere le salsicce in padella, a parte saltare i friarielli con aglio, olio e peperoncino, unire e servire.",
+      "ingredienti": [
+        { "id": 61, "quantita": 0.3 },
+        { "id": 43, "quantita": 0.3 },
+        { "id": 5, "quantita": 0.02 },
+        { "id": 4, "quantita": 0.04 },
+        { "id": 14, "quantita": 0.003 }
+      ]
+    },
+    "Spezzatino di manzo": {
+      "descrizione": "Bocconcini di manzo cotti lentamente con verdure",
+      "tempo_preparazione": 120,
+      "istruzioni": "Rosolare la carne a cubetti, aggiungere le verdure tritate, sfumare con vino rosso, aggiungere brodo e cuocere a fuoco basso per circa 2 ore.",
+      "ingredienti": [
+        { "id": 31, "quantita": 0.3 },
+        { "id": 21, "quantita": 0.1 },
+        { "id": 22, "quantita": 0.1 },
+        { "id": 20, "quantita": 0.05 },
+        { "id": 24, "quantita": 0.1 },
+        { "id": 38, "quantita": 0.2 },
+        { "id": 4, "quantita": 0.03 },
+        { "id": 3, "quantita": 0.005 }
+      ]
+    },
+    "Frittura di pesce": {
+      "descrizione": "Mix di pesce e frutti di mare fritti in pastella",
+      "tempo_preparazione": 25,
+      "istruzioni": "Preparare una pastella con farina, acqua e un pizzico di sale, immergere i pezzi di pesce e frutti di mare, friggere in olio bollente.",
+      "ingredienti": [
+        { "id": 33, "quantita": 0.1 },
+        { "id": 34, "quantita": 0.1 },
+        { "id": 57, "quantita": 0.1 },
+        { "id": 2, "quantita": 0.1 },
+        { "id": 3, "quantita": 0.003 },
+        { "id": 12, "quantita": 1 }
+      ]
+    }
+  },
+  "Contorni": {
+    "Patate al forno": {
+      "descrizione": "Patate croccanti con rosmarino",
+      "tempo_preparazione": 40,
+      "istruzioni": "Tagliare le patate a spicchi, condire con sale, rosmarino e olio, cuocere in forno a 200°C per circa 35-40 minuti.",
+      "ingredienti": [
+        { "id": 38, "quantita": 0.3 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 3, "quantita": 0.003 }
+      ]
+    },
+    "Verdure grigliate": {
+      "descrizione": "Mix di verdure di stagione alla griglia",
+      "tempo_preparazione": 20,
+      "istruzioni": "Tagliare le verdure a fette, spennellarle con olio, grigliarle su entrambi i lati, condire con sale e olio a crudo.",
+      "ingredienti": [
+        { "id": 36, "quantita": 0.1 },
+        { "id": 37, "quantita": 0.1 },
+        { "id": 42, "quantita": 0.1 },
+        { "id": 4, "quantita": 0.03 },
+        { "id": 3, "quantita": 0.002 }
+      ]
+    },
+    "Insalata mista": {
+      "descrizione": "Mix di insalata fresca con pomodorini e carote",
+      "tempo_preparazione": 10,
+      "istruzioni": "Lavare e tagliare l'insalata, aggiungere pomodorini tagliati a metà e carote a julienne, condire con sale, olio e aceto balsamico.",
+      "ingredienti": [
+        { "id": 39, "quantita": 0.1 },
+        { "id": 40, "quantita": 0.05 },
+        { "id": 21, "quantita": 0.05 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 3, "quantita": 0.002 }
+      ]
+    },
+    "Funghi trifolati": {
+      "descrizione": "Funghi saltati con aglio, prezzemolo e vino bianco",
+      "tempo_preparazione": 20,
+      "istruzioni": "Pulire i funghi, rosolare l'aglio in olio, aggiungere i funghi, sfumare con vino bianco, completare con prezzemolo tritato.",
+      "ingredienti": [
+        { "id": 15, "quantita": 0.2 },
+        { "id": 5, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.02 },
+        { "id": 23, "quantita": 0.03 }
+      ]
+    },
+    "Patatine fritte": {
+      "descrizione": "Patate tagliate a bastoncino e fritte",
+      "tempo_preparazione": 15,
+      "istruzioni": "Tagliare le patate a bastoncino, asciugarle bene, friggere in olio bollente fino a doratura, scolare e salare.",
+      "ingredienti": [
+        { "id": 38, "quantita": 0.3 },
+        { "id": 4, "quantita": 0.1 },
+        { "id": 3, "quantita": 0.003 }
+      ]
+    },
+    "Friarielli": {
+      "descrizione": "Cime di rapa saltate in padella",
+      "tempo_preparazione": 20,
+      "istruzioni": "Pulire i friarielli, sbollentarli brevemente, saltarli in padella con aglio, olio e peperoncino.",
+      "ingredienti": [
+        { "id": 43, "quantita": 0.3 },
+        { "id": 5, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.03 },
+        { "id": 14, "quantita": 0.002 },
+        { "id": 3, "quantita": 0.002 }
+      ]
+    },
+    "Melanzane a funghetto": {
+      "descrizione": "Melanzane tagliate a cubetti e saltate in padella",
+      "tempo_preparazione": 25,
+      "istruzioni": "Tagliare le melanzane a cubetti, friggerle leggermente, scolarle e saltarle in padella con pomodorini, aglio e basilico.",
+      "ingredienti": [
+        { "id": 36, "quantita": 0.3 },
+        { "id": 40, "quantita": 0.1 },
+        { "id": 5, "quantita": 0.01 },
+        { "id": 6, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.05 },
+        { "id": 3, "quantita": 0.003 }
+      ]
+    },
+    "Purè di patate": {
+      "descrizione": "Crema di patate con latte e burro",
+      "tempo_preparazione": 30,
+      "istruzioni": "Lessare le patate, passarle, aggiungere latte caldo, burro, sale, pepe e noce moscata.",
+      "ingredienti": [
+        { "id": 38, "quantita": 0.4 },
+        { "id": 26, "quantita": 0.1 },
+        { "id": 25, "quantita": 0.05 },
+        { "id": 3, "quantita": 0.003 },
+        { "id": 13, "quantita": 0.001 }
+      ]
+    },
+    "Carciofi alla romana": {
+      "descrizione": "Carciofi ripieni di erbe aromatiche",
+      "tempo_preparazione": 40,
+      "istruzioni": "Pulire i carciofi, riempire con un trito di aglio, prezzemolo, menta e pangrattato, cuocere in padella con acqua e olio.",
+      "ingredienti": [
+        { "id": 46, "quantita": 0.5 },
+        { "id": 5, "quantita": 0.02 },
+        { "id": 6, "quantita": 0.01 },
+        { "id": 4, "quantita": 0.04 },
+        { "id": 2, "quantita": 0.02 }
+      ]
+    }
+  },
+  "Dolci": {
+    "Tiramisù": {
+      "descrizione": "Dolce al cucchiaio con mascarpone, uova e caffè",
+      "tempo_preparazione": 30,
+      "istruzioni": "Montare tuorli con zucchero, unire mascarpone, incorporare albumi montati a neve, alternare strati di crema e savoiardi inzuppati nel caffè, spolverare con cacao.",
+      "ingredienti": [
+        { "id": 29, "quantita": 0.25 },
+        { "id": 12, "quantita": 4 },
+        { "id": 28, "quantita": 0.1 },
+        { "id": 30, "quantita": 0.05 },
+        { "id": 50, "quantita": 0.05 }
+      ]
+    },
+    "Panna cotta": {
+      "descrizione": "Dolce a base di panna, latte e gelatina",
+      "tempo_preparazione": 20,
+      "istruzioni": "Scaldare panna e latte con zucchero e vaniglia, aggiungere gelatina ammorbidita, versare negli stampi e far raffreddare in frigo.",
+      "ingredienti": [
+        { "id": 27, "quantita": 0.25 },
+        { "id": 26, "quantita": 0.1 },
+        { "id": 28, "quantita": 0.08 },
+        { "id": 53, "quantita": 0.005 }
+      ]
+    },
+    "Torta di mele": {
+      "descrizione": "Torta soffice con mele e cannella",
+      "tempo_preparazione": 60,
+      "istruzioni": "Preparare un impasto con uova, zucchero, farina, burro, lievito, aggiungere le mele a fette, spolverare con cannella e zucchero, cuocere in forno.",
+      "ingredienti": [
+        { "id": 12, "quantita": 3 },
+        { "id": 28, "quantita": 0.15 },
+        { "id": 2, "quantita": 0.2 },
+        { "id": 25, "quantita": 0.1 },
+        { "id": 47, "quantita": 0.5 }
+      ]
+    },
+    "Gelato artigianale": {
+      "descrizione": "Gelato fatto in casa in vari gusti",
+      "tempo_preparazione": 180,
+      "istruzioni": "Preparare una crema base con latte, panna, tuorli d'uovo e zucchero, aromatizzare secondo il gusto desiderato, raffreddare e mantecare in gelatiera.",
+      "ingredienti": [
+        { "id": 26, "quantita": 0.25 },
+        { "id": 27, "quantita": 0.25 },
+        { "id": 12, "quantita": 6 },
+        { "id": 28, "quantita": 0.15 },
+        { "id": 53, "quantita": 0.005 },
+        { "id": 49, "quantita": 0.05 }
+      ]
+    },
+    "Cheesecake": {
+      "descrizione": "Torta fredda a base di formaggio e biscotti",
+      "tempo_preparazione": 240,
+      "istruzioni": "Preparare una base di biscotti sbriciolati e burro, per la farcia mescolare formaggio, zucchero, panna e uova, versare sulla base e cuocere in forno, raffreddare in frigo.",
+      "ingredienti": [
+        { "id": 29, "quantita": 0.5 },
+        { "id": 28, "quantita": 0.15 },
+        { "id": 27, "quantita": 0.1 },
+        { "id": 12, "quantita": 2 },
+        { "id": 25, "quantita": 0.05 }
+      ]
+    },
+    "Cannolo siciliano": {
+      "descrizione": "Dolce tipico siciliano con croccante cialda e ripieno di ricotta",
+      "tempo_preparazione": 60,
+      "istruzioni": "Preparare la cialda con farina, zucchero, vino e strutto, formare i cannoli e friggerli. Lavorare la ricotta con zucchero, canditi e cioccolato, riempire i cannoli.",
+      "ingredienti": [
+        { "id": 2, "quantita": 0.2 },
+        { "id": 28, "quantita": 0.15 },
+        { "id": 7, "quantita": 0.3 },
+        { "id": 50, "quantita": 0.05 },
+        { "id": 24, "quantita": 0.05 }
+      ]
+    },
+    "Babà al rum": {
+      "descrizione": "Soffice dolce lievitato imbevuto di sciroppo al rum",
+      "tempo_preparazione": 180,
+      "istruzioni": "Preparare un impasto con farina, lievito, burro e uova, farlo lievitare, cuocerlo negli appositi stampi e inzupparlo nel sciroppo al rum.",
+      "ingredienti": [
+        { "id": 2, "quantita": 0.2 },
+        { "id": 12, "quantita": 3 },
+        { "id": 25, "quantita": 0.1 },
+        { "id": 28, "quantita": 0.15 },
+        { "id": 62, "quantita": 0.1 }
+      ]
+    },
+    "Sfogliatella": {
+      "descrizione": "Dolce napoletano di pasta sfoglia ripieno di ricotta e canditi",
+      "tempo_preparazione": 120,
+      "istruzioni": "Preparare la sfoglia, il ripieno con ricotta, semolino, canditi e aromi, assemblare le sfogliatelle e cuocere in forno.",
+      "ingredienti": [
+        { "id": 2, "quantita": 0.3 },
+        { "id": 25, "quantita": 0.1 },
+        { "id": 7, "quantita": 0.2 },
+        { "id": 28, "quantita": 0.1 },
+        { "id": 52, "quantita": 0.005 }
+      ]
+    },
+    "Profiteroles": {
+      "descrizione": "Bignè ripieni di panna e ricoperti di cioccolato",
+      "tempo_preparazione": 60,
+      "istruzioni": "Preparare la pasta choux, formare i bignè, cuocerli in forno, farcirli con crema o panna e coprirli con cioccolato fuso.",
+      "ingredienti": [
+        { "id": 2, "quantita": 0.1 },
+        { "id": 12, "quantita": 4 },
+        { "id": 25, "quantita": 0.1 },
+        { "id": 26, "quantita": 0.1 },
+        { "id": 27, "quantita": 0.2 },
+        { "id": 50, "quantita": 0.1 }
+      ]
+    },
+    "Crostata di frutta": {
+      "descrizione": "Base di pasta frolla con crema e frutta fresca",
+      "tempo_preparazione": 60,
+      "istruzioni": "Preparare e cuocere la pasta frolla, stendere uno strato di crema pasticcera, decorare con frutta fresca di stagione e lucidare con gelatina.",
+      "ingredienti": [
+        { "id": 2, "quantita": 0.2 },
+        { "id": 28, "quantita": 0.1 },
+        { "id": 25, "quantita": 0.1 },
+        { "id": 12, "quantita": 2 },
+        { "id": 26, "quantita": 0.2 },
+        { "id": 47, "quantita": 0.3 }
+      ]
+    },
+    "Torta al cioccolato": {
+      "descrizione": "Soffice torta al cioccolato fondente",
+      "tempo_preparazione": 50,
+      "istruzioni": "Fondere il cioccolato con il burro, unire zucchero e uova, aggiungere la farina e cuocere in forno a 180°C per 30-35 minuti.",
+      "ingredienti": [
+        { "id": 50, "quantita": 0.2 },
+        { "id": 25, "quantita": 0.1 },
+        { "id": 28, "quantita": 0.15 },
+        { "id": 12, "quantita": 4 },
+        { "id": 2, "quantita": 0.1 }
+      ]
+    }
+  }
+}

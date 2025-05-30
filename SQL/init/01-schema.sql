@@ -6,14 +6,23 @@ SET FOREIGN_KEY_CHECKS = 0;
 CREATE DATABASE IF NOT EXISTS `ristorante` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `ristorante`;
 
--- Tabella Tavolo
+-- Tabella Ristorante (informazioni generali del ristorante)
+CREATE TABLE IF NOT EXISTS `ristorante` (
+  `id_ristorante` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `numero_tavoli` INT NOT NULL,
+  `costo_coperto` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`id_ristorante`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabella Tavolo (numero_tavolo rimosso perché id_tavolo è già identificativo)
 CREATE TABLE IF NOT EXISTS `tavolo` (
   `id_tavolo` INT NOT NULL AUTO_INCREMENT,
-  `numero_tavolo` INT NOT NULL,
   `max_posti` INT NOT NULL,
   `stato` ENUM('libero', 'occupato') NOT NULL DEFAULT 'libero',
+  `id_ristorante` INT NOT NULL,
   PRIMARY KEY (`id_tavolo`),
-  UNIQUE KEY `unique_numero_tavolo` (`numero_tavolo`)
+  FOREIGN KEY (`id_ristorante`) REFERENCES `ristorante` (`id_ristorante`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabella Ingrediente
@@ -44,13 +53,35 @@ CREATE TABLE IF NOT EXISTS `pietanza` (
   FOREIGN KEY (`id_categoria`) REFERENCES `categoria_pietanza` (`id_categoria`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabella Ricetta (relazione tra pietanza e ingredienti)
-CREATE TABLE IF NOT EXISTS `ricetta` (
+-- Tabella Menu (relazione diretta tra ristorante e pietanze)
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id_ristorante` INT NOT NULL,
   `id_pietanza` INT NOT NULL,
+  `disponibile` BOOLEAN NOT NULL DEFAULT TRUE,
+  PRIMARY KEY (`id_ristorante`, `id_pietanza`),
+  FOREIGN KEY (`id_ristorante`) REFERENCES `ristorante` (`id_ristorante`) ON DELETE CASCADE,
+  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabella Ricetta (ora contiene informazioni sulla ricetta)
+CREATE TABLE IF NOT EXISTS `ricetta` (
+  `id_ricetta` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `descrizione` TEXT NOT NULL,
+  `id_pietanza` INT NOT NULL,
+  `tempo_preparazione` INT,
+  `istruzioni` TEXT,
+  PRIMARY KEY (`id_ricetta`),
+  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabella Ricetta_Ingrediente (relazione tra ricetta e ingredienti)
+CREATE TABLE IF NOT EXISTS `ricetta_ingrediente` (
+  `id_ricetta` INT NOT NULL,
   `id_ingrediente` INT NOT NULL,
   `quantita` FLOAT NOT NULL,
-  PRIMARY KEY (`id_pietanza`, `id_ingrediente`),
-  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`) ON DELETE CASCADE,
+  PRIMARY KEY (`id_ricetta`, `id_ingrediente`),
+  FOREIGN KEY (`id_ricetta`) REFERENCES `ricetta` (`id_ricetta`) ON DELETE CASCADE,
   FOREIGN KEY (`id_ingrediente`) REFERENCES `ingrediente` (`id_ingrediente`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -79,17 +110,18 @@ CREATE TABLE IF NOT EXISTS `ordine` (
   `num_persone` INT NOT NULL,
   `data_ordine` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `stato` ENUM('in_attesa', 'in_preparazione', 'pronto', 'consegnato', 'pagato') NOT NULL DEFAULT 'in_attesa',
+  `id_ristorante` INT NOT NULL,
   PRIMARY KEY (`id_ordine`),
-  FOREIGN KEY (`id_tavolo`) REFERENCES `tavolo` (`id_tavolo`)
+  FOREIGN KEY (`id_tavolo`) REFERENCES `tavolo` (`id_tavolo`),
+  FOREIGN KEY (`id_ristorante`) REFERENCES `ristorante` (`id_ristorante`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabella Dettaglio Ordine (per pietanze singole)
+-- Tabella Dettaglio Ordine (per pietanze singole, rimosso campo note)
 CREATE TABLE IF NOT EXISTS `dettaglio_ordine_pietanza` (
   `id_dettaglio` INT NOT NULL AUTO_INCREMENT,
   `id_ordine` INT NOT NULL,
   `id_pietanza` INT NOT NULL,
   `quantita` INT NOT NULL DEFAULT 1,
-  `note` TEXT,
   PRIMARY KEY (`id_dettaglio`),
   FOREIGN KEY (`id_ordine`) REFERENCES `ordine` (`id_ordine`) ON DELETE CASCADE,
   FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`)
@@ -117,43 +149,5 @@ CREATE TABLE IF NOT EXISTS `utente` (
   PRIMARY KEY (`id_utente`),
   UNIQUE KEY `unique_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Tabella Configurazione (per parametri del sistema come costo coperto)
-CREATE TABLE IF NOT EXISTS `configurazione` (
-  `chiave` VARCHAR(50) NOT NULL,
-  `valore` VARCHAR(255) NOT NULL,
-  `descrizione` TEXT,
-  PRIMARY KEY (`chiave`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Inserimento configurazione iniziale
-INSERT INTO `configurazione` (`chiave`, `valore`, `descrizione`) VALUES
-('costo_coperto', '2.00', 'Costo del coperto per persona');
-
--- Inserimento categorie pietanze
-INSERT INTO `categoria_pietanza` (`nome`) VALUES
-('Antipasto'),
-('Primo'),
-('Secondo'),
-('Contorno'),
-('Frutta'),
-('Dolce'),
-('Bevanda');
-
--- Dati di esempio per i tavoli
-INSERT INTO `tavolo` (`numero_tavolo`, `max_posti`, `stato`) VALUES
-(1, 4, 'libero'),
-(2, 6, 'libero'),
-(3, 2, 'libero'),
-(4, 8, 'libero'),
-(5, 4, 'libero'),
-(6, 6, 'libero');
-
--- Dati di esempio per gli utenti
-INSERT INTO `utente` (`username`, `password`, `nome`, `cognome`, `ruolo`) VALUES
-('cameriere1', 'password', 'Mario', 'Rossi', 'cameriere'),
-('cuoco1', 'password', 'Chef', 'Antonino', 'cuoco'),
-('cassiere1', 'password', 'Giulia', 'Verdi', 'cassiere'),
-('direttore1', 'password', 'Paolo', 'Bianchi', 'direttore');
 
 SET FOREIGN_KEY_CHECKS = 1;
