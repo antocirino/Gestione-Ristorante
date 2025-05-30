@@ -27,9 +27,17 @@ public class FirstForm extends JFrame {
 
         // Pannello centrale
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(3, 1, 10, 10));
+        centerPanel.setLayout(new BorderLayout());
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Pannello di benvenuto in alto
+        JPanel welcomePanel = new JPanel();
+        JLabel welcomeLabel = new JLabel("Benvenuto nel sistema di gestione ristorante!");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        welcomePanel.add(welcomeLabel);
+
+        // Pannello per testare la connessione al database
+        JPanel testPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton testDbButton = new JButton("Test Connessione Database");
         testDbButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -43,6 +51,49 @@ public class FirstForm extends JFrame {
                 }
             }
         });
+        testPanel.add(testDbButton);
+
+        // Pannello per i ruoli utente
+        JPanel ruoliPanel = new JPanel();
+        ruoliPanel.setLayout(new GridLayout(2, 2, 20, 20));
+        ruoliPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        JButton cameriereButton = new JButton("Cameriere");
+        cameriereButton.setPreferredSize(new Dimension(150, 100));
+        cameriereButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new CameriereForm().setVisible(true);
+            }
+        });
+
+        JButton cuocoButton = new JButton("Cuoco");
+        cuocoButton.setPreferredSize(new Dimension(150, 100));
+        cuocoButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new CuocoForm().setVisible(true);
+            }
+        });
+
+        JButton cassiereButton = new JButton("Cassiere");
+        cassiereButton.setPreferredSize(new Dimension(150, 100));
+        cassiereButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new CassiereForm().setVisible(true);
+            }
+        });
+
+        JButton direttoreButton = new JButton("Direttore");
+        direttoreButton.setPreferredSize(new Dimension(150, 100));
+        direttoreButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new DirettoreForm().setVisible(true);
+            }
+        });
+
+        ruoliPanel.add(cameriereButton);
+        ruoliPanel.add(cuocoButton);
+        ruoliPanel.add(cassiereButton);
+        ruoliPanel.add(direttoreButton);
 
         // Pannello inferiore con status
         JPanel statusPanel = new JPanel();
@@ -50,8 +101,9 @@ public class FirstForm extends JFrame {
         statusPanel.add(statusLabel);
 
         // Aggiungo i pannelli al main panel
-        centerPanel.add(new JLabel("Benvenuto nel sistema di gestione ristorante!"));
-        centerPanel.add(testDbButton);
+        centerPanel.add(welcomePanel, BorderLayout.NORTH);
+        centerPanel.add(ruoliPanel, BorderLayout.CENTER);
+        centerPanel.add(testPanel, BorderLayout.SOUTH);
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
