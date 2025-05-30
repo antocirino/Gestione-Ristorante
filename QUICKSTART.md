@@ -100,6 +100,28 @@ Lo script `docker-utils.sh` offre diversi comandi utili:
 - Username: root
 - Password: password
 
+## Variabili d'ambiente
+
+Il progetto utilizza le seguenti variabili d'ambiente definite nel file `.env`:
+
+### Database MySQL
+
+- `MYSQL_ROOT_PASSWORD`: Password dell'utente root del database
+- `MYSQL_DATABASE`: Nome del database
+- `MYSQL_USER`: Nome dell'utente aggiuntivo (non utilizzato nella connessione attuale)
+- `MYSQL_PASSWORD`: Password dell'utente aggiuntivo
+
+### Connessione Java al database
+
+- `DATABASE_URL`: URL JDBC per la connessione al database
+- `DATABASE_USER`: Utente per la connessione al database (impostato su root)
+- `DATABASE_PASSWORD`: Password per la connessione al database
+
+### Porte
+
+- `PHPMYADMIN_PORT`: Porta per accedere a phpMyAdmin
+- `JAVA_APP_PORT`: Porta esposta per l'applicazione Java
+
 ## Risoluzione dei Problemi
 
 1. **Interfaccia grafica non visibile**:

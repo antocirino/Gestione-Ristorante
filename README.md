@@ -20,6 +20,23 @@ Il progetto è completamente dockerizzato per facilitare l'installazione e garan
 - Container per il database MySQL
 - Container per phpMyAdmin (per la gestione web del database)
 
+### Variabili d'ambiente
+
+Il sistema utilizza variabili d'ambiente definite nel file `.env` per configurare l'applicazione:
+
+```
+# Database
+DATABASE_URL=jdbc:mysql://db:3306/ristorante
+DATABASE_USER=root
+DATABASE_PASSWORD=password
+
+# Porte
+JAVA_APP_PORT=8090
+PHPMYADMIN_PORT=8081
+```
+
+Puoi modificare queste variabili nel file `.env` per personalizzare la configurazione.
+
 ---
 
 ## 🚀 Come Eseguire il Progetto
