@@ -18,10 +18,9 @@ public class DBConnection {
 
     private DBConnection() {
         // Recupera i parametri dalle variabili d'ambiente o usa valori di default
-        this.url = System.getenv("DATABASE_URL") != null ? System.getenv("DATABASE_URL")
-                : "jdbc:mysql://localhost:3306/ristorante";
-        this.username = System.getenv("DATABASE_USER") != null ? System.getenv("DATABASE_USER") : "root";
-        this.password = System.getenv("DATABASE_PASSWORD") != null ? System.getenv("DATABASE_PASSWORD") : "password";
+        this.url = System.getenv("DATABASE_URL");
+        this.username = System.getenv("DATABASE_USER");
+        this.password = System.getenv("DATABASE_PASSWORD");
     }
 
     public static synchronized DBConnection getInstance() {
