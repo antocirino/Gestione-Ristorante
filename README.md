@@ -158,6 +158,10 @@ Su **_macOS_** se l'interfaccia grafica non appare ma i container si avviano cor
 ```zsh
 export DISPLAY=:0
 ```
+oppure
+```zsh
+export DISPLAY=localhost:0
+```
 
 ### 2. Problemi di connessione al database
 
