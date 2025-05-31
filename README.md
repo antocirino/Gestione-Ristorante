@@ -137,6 +137,11 @@ Se l'interfaccia grafica non appare:
 ./docker-utils.sh logs
 ```
 
+Su ***macOS*** se l'interfaccia grafica non appare ma i container si avviano correttamente:
+```zsh
+export DISPLAY=:0
+```
+
 ### 2. Problemi di connessione al database
 
 ```zsh
