@@ -1,0 +1,130 @@
+package boundary;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import database.DatabaseTest;
+
+public class FirstForm extends JFrame {
+    private JPanel mainPanel;
+    private JLabel statusLabel;
+
+    public FirstForm() {
+        setTitle("Sistema di Gestione Ristorante");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        // Pannello superiore con titolo
+        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(41, 128, 185));
+        JLabel titleLabel = new JLabel("GESTIONE RISTORANTE");
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        headerPanel.add(titleLabel);
+
+        // Pannello centrale
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BorderLayout());
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Pannello di benvenuto in alto
+        JPanel welcomePanel = new JPanel();
+        JLabel welcomeLabel = new JLabel("Benvenuto nel sistema di gestione ristorante!");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        welcomePanel.add(welcomeLabel);
+
+        // Pannello per testare la connessione al database
+        JPanel testPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton testDbButton = new JButton("Test Connessione Database");
+        testDbButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                boolean result = DatabaseTest.testConnection();
+                if (result) {
+                    statusLabel.setText("Connessione al database riuscita!");
+                    statusLabel.setForeground(new Color(39, 174, 96));
+                } else {
+                    statusLabel.setText("ERRORE: Impossibile connettersi al database!");
+                    statusLabel.setForeground(Color.RED);
+                }
+            }
+        });
+        testPanel.add(testDbButton);
+
+        // Pannello per i ruoli utente
+        JPanel ruoliPanel = new JPanel();
+        ruoliPanel.setLayout(new GridLayout(2, 2, 20, 20));
+        ruoliPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        JButton cameriereButton = new JButton("Cameriere");
+        cameriereButton.setPreferredSize(new Dimension(150, 100));
+        cameriereButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new CameriereForm().setVisible(true);
+            }
+        });
+
+        JButton cuocoButton = new JButton("Cuoco");
+        cuocoButton.setPreferredSize(new Dimension(150, 100));
+        cuocoButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new CuocoForm().setVisible(true);
+            }
+        });
+
+        JButton cassiereButton = new JButton("Cassiere");
+        cassiereButton.setPreferredSize(new Dimension(150, 100));
+        cassiereButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new CassiereForm().setVisible(true);
+            }
+        });
+
+        JButton direttoreButton = new JButton("Direttore");
+        direttoreButton.setPreferredSize(new Dimension(150, 100));
+        direttoreButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new DirettoreForm().setVisible(true);
+            }
+        });
+
+        ruoliPanel.add(cameriereButton);
+        ruoliPanel.add(cuocoButton);
+        ruoliPanel.add(cassiereButton);
+        ruoliPanel.add(direttoreButton);
+
+        // Pannello inferiore con status
+        JPanel statusPanel = new JPanel();
+        statusLabel = new JLabel("Pronto");
+        statusPanel.add(statusLabel);
+
+        // Aggiungo i pannelli al main panel
+        centerPanel.add(welcomePanel, BorderLayout.NORTH);
+        centerPanel.add(ruoliPanel, BorderLayout.CENTER);
+        centerPanel.add(testPanel, BorderLayout.SOUTH);
+
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+        mainPanel.add(statusPanel, BorderLayout.SOUTH);
+
+        add(mainPanel);
+        setLocationRelativeTo(null);
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Imposta il look and feel
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new FirstForm().setVisible(true);
+            }
+        });
+    }
+}
