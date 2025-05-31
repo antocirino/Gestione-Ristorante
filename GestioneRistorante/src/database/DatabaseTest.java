@@ -22,8 +22,12 @@ public class DatabaseTest {
         ResultSet rs = null;
 
         try {
+            // Stampa le informazioni di connessione per debug
+            DBConnection dbInstance = DBConnection.getInstance();
+            System.out.println("Tentativo di connessione con: " + dbInstance.getConnectionInfo());
+
             // Ottieni la connessione
-            conn = DBConnection.getInstance().getConnection();
+            conn = dbInstance.getConnection();
             System.out.println("Connessione al database stabilita con successo!");
 
             // Esegui una query di test

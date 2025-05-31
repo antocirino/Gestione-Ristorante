@@ -40,33 +40,6 @@ Su macOS, è necessario configurare X11 per permettere alle applicazioni Docker 
    ./docker-utils.sh restart
    ```
 
-## Configurazione per Linux
-
-Su Linux, l'integrazione è più semplice:
-
-1. **Permettere connessioni X11 locali**
-
-   ```bash
-   xhost +local:docker
-   ```
-
-2. **Modifica del docker-compose.yml** (già configurato)
-
-   Assicurarsi che nel servizio `app` ci sia:
-
-   ```yaml
-   volumes:
-     - /tmp/.X11-unix:/tmp/.X11-unix
-   environment:
-     - DISPLAY=${DISPLAY}
-   ```
-
-3. **Avviare i container**
-
-   ```bash
-   ./docker-utils.sh start
-   ```
-
 ## Configurazione per Windows
 
 Su Windows, è necessario usare un server X11:

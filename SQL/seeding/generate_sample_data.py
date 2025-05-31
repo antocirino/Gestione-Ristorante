@@ -27,14 +27,14 @@ nomi_antipasti = [
 
 nomi_primi = [
     "Spaghetti alla carbonara", "Risotto ai funghi porcini", "Lasagne alla bolognese",
-    "Tagliatelle al ragù", "Penne all arrabbiata", "Ravioli ricotta e spinaci", 
+    "Tagliatelle al ragu", "Penne all arrabbiata", "Ravioli ricotta e spinaci", 
     "Linguine allo scoglio", "Gnocchi al pesto", "Orecchiette alle cime di rapa",
     "Bucatini all amatriciana", "Fettuccine Alfredo", "Spaghetti aglio e olio",
 ]
 
 nomi_secondi = [
     "Tagliata di manzo", "Scaloppine al limone", "Filetto di branzino",
-    "Cotoletta alla milanese", "Baccalà alla vicentina", "Bistecca fiorentina",
+    "Cotoletta alla milanese", "Baccala alla vicentina", "Bistecca fiorentina",
     "Polpo alla griglia", "Arrosto di vitello", "Ossobuco alla milanese", 
     "Salsiccia e friarielli", "Frittura di pesce", "Spezzatino di manzo",
 ]
@@ -42,19 +42,19 @@ nomi_secondi = [
 nomi_contorni = [
     "Patate al forno", "Insalata mista", "Verdure grigliate",
     "Friarielli", "Funghi trifolati", "Melanzane a funghetto", 
-    "Patatine fritte", "Purè di patate", "Carciofi alla romana"
+    "Patatine fritte", "Pure di patate", "Carciofi alla romana"
 ]
 
 nomi_dolci = [
-    "Tiramisù", "Panna cotta", "Cannolo siciliano",
-    "Babà al rum", "Sfogliatella", "Profiteroles", 
+    "Tiramisu", "Panna cotta", "Cannolo siciliano",
+    "Baba al rum", "Sfogliatella", "Profiteroles", 
     "Crostata di frutta", "Torta al cioccolato"
 ]
 
 nomi_bevande = [
     "Acqua naturale", "Acqua frizzante", "Coca Cola",
     "Aranciata", "Vino rosso della casa", "Vino bianco della casa",
-    "Birra alla spina", "Sprite", "Caffè", "Amaro", 
+    "Birra alla spina", "Sprite", "Caffe", "Amaro", 
     "Limoncello", "Grappa", "Prosecco", "Vino rosato della casa",
 ]
 
@@ -71,7 +71,7 @@ ingredienti_comuni = [
     ("Pecorino", "kg", 8.0, 1.5),
     ("Guanciale", "kg", 5.0, 1.0),
     ("Pancetta", "kg", 5.0, 1.0),
-    ("Uova", "unità", 100.0, 20.0),
+    ("Uova", "unita", 100.0, 20.0),
     ("Pepe nero", "kg", 2.0, 0.3),
     ("Peperoncino", "kg", 1.0, 0.2),
     ("Funghi porcini", "kg", 8.0, 1.5),
@@ -89,7 +89,7 @@ ingredienti_comuni = [
     ("Panna", "litri", 5.0, 1.0),
     ("Zucchero", "kg", 8.0, 1.5),
     ("Mascarpone", "kg", 5.0, 1.0),
-    ("Caffè", "kg", 3.0, 0.5),
+    ("Caffe", "kg", 3.0, 0.5),
     ("Filetto di manzo", "kg", 10.0, 2.0),
     ("Bistecca", "kg", 15.0, 3.0),
     ("Branzino", "kg", 8.0, 1.5),
@@ -203,7 +203,7 @@ def genera_dati_ingredienti():
 def genera_dati_pietanze():
     """Genera dati per la tabella pietanza"""
     sql = "-- Dati generati per la tabella pietanza\n"
-    sql += "INSERT INTO `pietanza` (`nome`, `prezzo`, `id_categoria`) VALUES\n"
+    sql += "INSERT INTO `pietanza` (`nome`, `prezzo`, `id_categoria`, `disponibile`) VALUES\n"
     
     values = []
     
@@ -221,37 +221,37 @@ def genera_dati_pietanze():
     for nome in nomi_antipasti:
         nome = nome.replace("'", " ")  
         prezzo = round(random.uniform(6.0, 12.0), 2)
-        values.append(f"('{nome}', {prezzo}, 1)")
+        values.append(f"('{nome}', {prezzo}, 1, 1)")
     
     # Categoria 2: Primi
     for nome in nomi_primi:
         nome = nome.replace("'", " ")  
         prezzo = round(random.uniform(9.0, 14.0), 2)
-        values.append(f"('{nome}', {prezzo}, 2)")
+        values.append(f"('{nome}', {prezzo}, 2, 1)")
     
     # Categoria 3: Secondi
     for nome in nomi_secondi:
         nome = nome.replace("'", " ")  
         prezzo = round(random.uniform(14.0, 22.0), 2)
-        values.append(f"('{nome}', {prezzo}, 3)")
+        values.append(f"('{nome}', {prezzo}, 3, 1)")
     
     # Categoria 4: Contorni
     for nome in nomi_contorni:
         nome = nome.replace("'", " ")
         prezzo = round(random.uniform(4.0, 7.0), 2)
-        values.append(f"('{nome}', {prezzo}, 4)")
+        values.append(f"('{nome}', {prezzo}, 4, 1)")
     
     # Categoria 6: Dolci
     for nome in nomi_dolci:
         nome = nome.replace("'", " ")
         prezzo = round(random.uniform(5.0, 8.0), 2)
-        values.append(f"('{nome}', {prezzo}, 6)")
+        values.append(f"('{nome}', {prezzo}, 6, 1)")
     
     # Categoria 7: Bevande
     for nome in nomi_bevande:
         nome = nome.replace("'", " ")
         prezzo = round(random.uniform(2.0, 5.0), 2)
-        values.append(f"('{nome}', {prezzo}, 7)")
+        values.append(f"('{nome}', {prezzo}, 7, 1)")
     
     sql += ",\n".join(values) + ";\n\n"
     return sql
@@ -260,14 +260,13 @@ def genera_dati_pietanze():
 def genera_dati_menu(num_ristoranti=1):
     """Genera dati per la tabella menu"""
     sql = "-- Dati generati per la tabella menu\n"
-    sql += "INSERT INTO `menu` (`id_ristorante`, `id_pietanza`, `disponibile`) VALUES\n"
+    sql += "INSERT INTO `menu` (`id_ristorante`, `id_pietanza`) VALUES\n"
     
     values = []
     for id_ristorante in range(1, num_ristoranti + 1):
         num_pietanze = len(nomi_antipasti + nomi_primi + nomi_secondi + nomi_contorni + nomi_dolci + nomi_bevande)
         for id_pietanza in range(1, num_pietanze + 1):
-            disponibile = random.choice([1, 1, 1, 1, 1, 0])  # 5/6 di probabilità che sia disponibile
-            values.append(f"({id_ristorante}, {id_pietanza}, {disponibile})")
+            values.append(f"({id_ristorante}, {id_pietanza})")
     
     sql += ",\n".join(values) + ";\n\n"
     return sql
@@ -356,11 +355,11 @@ def genera_dati_menu_fisso():
     sql_menu += "INSERT INTO `menu_fisso` (`nome`, `prezzo`, `descrizione`) VALUES\n"
     
     menu_fissi = [
-        ("Menu Degustazione", 35.00, "Un percorso gastronomico che vi farà scoprire i sapori della nostra tradizione"),
-        ("Menu di Terra", 30.00, "Una selezione di piatti a base di carne e prodotti dell'orto"),
+        ("Menu Degustazione", 35.00, "Un percorso gastronomico che vi fara scoprire i sapori della nostra tradizione"),
+        ("Menu di Terra", 30.00, "Una selezione di piatti a base di carne e prodotti dell orto"),
         ("Menu di Mare", 40.00, "I migliori sapori del mare mediterraneo"),
         ("Menu Vegetariano", 25.00, "Piatti gustosi preparati solo con ingredienti vegetali"),
-        ("Menu Bambini", 15.00, "Piatti semplici adatti ai più piccoli")
+        ("Menu Bambini", 15.00, "Piatti semplici adatti ai piu piccoli")
     ]
     
     values_menu = []
@@ -477,47 +476,9 @@ def genera_dati_ordini(num_ristoranti=1):
     
     sql_dettaglio += ",\n".join(values_dettaglio) + ";\n\n"
     
-    # Aggiungiamo anche alcuni ordini di menu fissi
-    sql_dettaglio_menu = "-- Dati generati per la tabella dettaglio_ordine_menu\n"
-    sql_dettaglio_menu += "INSERT INTO `dettaglio_ordine_menu` (`id_ordine`, `id_menu`, `quantita`) VALUES\n"
     
-    values_dettaglio_menu = []
-    
-    # Solo per alcuni ordini (30% circa), aggiungiamo menu fissi
-    for id_ordine in range(1, num_ordini + 1):
-        if random.random() < 0.3:
-            id_menu = random.randint(1, 5)  # Assumiamo che ci siano 5 menu fissi
-            quantita = random.randint(1, 2)
-            values_dettaglio_menu.append(f"({id_ordine}, {id_menu}, {quantita})")
-    
-    if values_dettaglio_menu:
-        sql_dettaglio_menu += ",\n".join(values_dettaglio_menu) + ";\n\n"
-    else:
-        sql_dettaglio_menu = ""
-    
-    return sql_ordini + sql_dettaglio + sql_dettaglio_menu
+    return sql_ordini + sql_dettaglio
 
-def genera_dati_utenti():
-    """Genera dati per la tabella utente"""
-    sql = "-- Dati generati per la tabella utente\n"
-    sql += "INSERT INTO `utente` (`username`, `password`, `nome`, `cognome`, `ruolo`) VALUES\n"
-    
-    utenti = [
-        ("cameriere1", "password", "Mario", "Rossi", "cameriere"),
-        ("cameriere2", "password", "Giuseppe", "Verdi", "cameriere"),
-        ("cameriere3", "password", "Laura", "Bianchi", "cameriere"),
-        ("cuoco1", "password", "Antonio", "Ferrari", "cuoco"),
-        ("cuoco2", "password", "Giulia", "Romano", "cuoco"),
-        ("cassiere1", "password", "Marco", "Esposito", "cassiere"),
-        ("direttore1", "password", "Francesca", "Marino", "direttore")
-    ]
-    
-    values = []
-    for username, password, nome, cognome, ruolo in utenti:
-        values.append(f"('{username}', '{password}', '{nome}', '{cognome}', '{ruolo}')")
-    
-    sql += ",\n".join(values) + ";\n\n"
-    return sql
 
 def main():
     """Funzione principale"""
@@ -542,8 +503,7 @@ def main():
     sql_output += genera_dati_menu(num_ristoranti)
     sql_output += genera_dati_ricette()
     sql_output += genera_dati_menu_fisso()
-    sql_output += genera_dati_ordini(num_ristoranti)
-    sql_output += genera_dati_utenti()
+    # sql_output += genera_dati_ordini(num_ristoranti) --> inizialmente vuoto, non abbiamo ordini
     
     sql_output += "SET FOREIGN_KEY_CHECKS = 1;\n"
     

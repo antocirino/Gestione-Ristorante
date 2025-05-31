@@ -1,9 +1,9 @@
 {
   "Antipasti": {
     "Bruschetta pomodoro e basilico": {
-      "descrizione": "Fette di pane casereccio tostate e condite con pomodoro fresco, basilico e olio d'oliva",
+      "descrizione": "Fette di pane casereccio tostate e condite con pomodoro fresco, basilico e olio d oliva",
       "tempo_preparazione": 10,
-      "istruzioni": "Tagliare il pane a fette, tostarlo, strofinare con aglio, condire con pomodoro fresco a cubetti, basilico, sale e olio extravergine d'oliva.",
+      "istruzioni": "Tagliare il pane a fette, tostarlo, strofinare con aglio, condire con pomodoro fresco a cubetti, basilico, sale e olio extravergine d oliva.",
       "ingredienti": [
         { "id": 1, "quantita": 0.1 },
         { "id": 4, "quantita": 0.02 },
@@ -14,7 +14,7 @@
     "Antipasto misto": {
       "descrizione": "Selezione di salumi e formaggi italiani con sottoli",
       "tempo_preparazione": 15,
-      "istruzioni": "Disporre su un tagliere i vari affettati, formaggi e verdure sott'olio in modo armonioso.",
+      "istruzioni": "Disporre su un tagliere i vari affettati, formaggi e verdure sott olio in modo armonioso.",
       "ingredienti": [
         { "id": 10, "quantita": 0.05 },
         { "id": 11, "quantita": 0.05 },
@@ -45,7 +45,7 @@
         { "id": 46, "quantita": 0.03 }
       ]
     },
-    "Olive all'ascolana": {
+    "Olive all ascolana": {
       "descrizione": "Olive ripiene di carne e fritte",
       "tempo_preparazione": 45,
       "istruzioni": "Denocciolate le olive, preparare un ripieno con carni miste, riempire le olive, impanarle e friggerle.",
@@ -60,7 +60,7 @@
     "Burrata con pomodorini": {
       "descrizione": "Burrata fresca servita con pomodorini e basilico",
       "tempo_preparazione": 5,
-      "istruzioni": "Disporre la burrata al centro del piatto, contornare con pomodorini tagliati a metà, condire con sale, pepe, basilico e olio.",
+      "istruzioni": "Disporre la burrata al centro del piatto, contornare con pomodorini tagliati a meta, condire con sale, pepe, basilico e olio.",
       "ingredienti": [
         { "id": 7, "quantita": 0.15 },
         { "id": 40, "quantita": 0.1 },
@@ -83,9 +83,9 @@
       ]
     },
     "Insalata caprese": {
-      "descrizione": "Mozzarella e pomodoro conditi con basilico e olio extravergine d'oliva",
+      "descrizione": "Mozzarella e pomodoro conditi con basilico e olio extravergine d oliva",
       "tempo_preparazione": 5,
-      "istruzioni": "Tagliare a fette pomodoro e mozzarella, alternarle sul piatto, condire con basilico, sale e olio extravergine d'oliva.",
+      "istruzioni": "Tagliare a fette pomodoro e mozzarella, alternarle sul piatto, condire con basilico, sale e olio extravergine d oliva.",
       "ingredienti": [
         { "id": 1, "quantita": 0.15 },
         { "id": 7, "quantita": 0.1 },
@@ -149,7 +149,7 @@
     "Lasagne alla bolognese": {
       "descrizione": "Classico primo piatto della tradizione",
       "tempo_preparazione": 90,
-      "istruzioni": "Preparare ragù, besciamella, assemblare gli strati e cuocere in forno.",
+      "istruzioni": "Preparare ragu, besciamella, assemblare gli strati e cuocere in forno.",
       "ingredienti": [
         { "id": 17, "quantita": 0.5 },
         { "id": 19, "quantita": 0.3 },
@@ -159,8 +159,8 @@
         { "id": 25, "quantita": 0.05 }
       ]
     },
-    "Tagliatelle al ragù": {
-      "descrizione": "Pasta all'uovo condita con ragù di carne",
+    "Tagliatelle al ragu": {
+      "descrizione": "Pasta all uovo condita con ragu di carne",
       "tempo_preparazione": 60,
       "istruzioni": "Preparare il soffritto, rosolare la carne macinata, aggiungere pomodoro e cuocere lentamente per circa 2 ore. Condire la pasta cotta al dente.",
       "ingredienti": [
@@ -173,7 +173,7 @@
         { "id": 24, "quantita": 0.05 }
       ]
     },
-    "Penne all'arrabbiata": {
+    "Penne all arrabbiata": {
       "descrizione": "Pasta con salsa di pomodoro piccante",
       "tempo_preparazione": 20,
       "istruzioni": "Soffriggere aglio e peperoncino, aggiungere pomodoro e cuocere per 15 minuti. Condire la pasta con la salsa e prezzemolo fresco.",
@@ -188,7 +188,7 @@
     "Ravioli ricotta e spinaci": {
       "descrizione": "Pasta ripiena fatta in casa con ricotta e spinaci",
       "tempo_preparazione": 60,
-      "istruzioni": "Preparare la pasta all'uovo, il ripieno con ricotta e spinaci, assemblare i ravioli e cuocerli in acqua bollente. Condire con burro fuso e salvia.",
+      "istruzioni": "Preparare la pasta all uovo, il ripieno con ricotta e spinaci, assemblare i ravioli e cuocerli in acqua bollente. Condire con burro fuso e salvia.",
       "ingredienti": [
         { "id": 17, "quantita": 0.2 },
         { "id": 12, "quantita": 2 },
@@ -215,7 +215,7 @@
     "Orecchiette alle cime di rapa": {
       "descrizione": "Pasta tipica pugliese con cime di rapa",
       "tempo_preparazione": 30,
-      "istruzioni": "Cuocere le cime di rapa in acqua, aggiungere la pasta a metà cottura, scolare e saltare in padella con aglio, olio e peperoncino.",
+      "istruzioni": "Cuocere le cime di rapa in acqua, aggiungere la pasta a meta cottura, scolare e saltare in padella con aglio, olio e peperoncino.",
       "ingredienti": [
         { "id": 18, "quantita": 0.1 },
         { "id": 43, "quantita": 0.3 },
@@ -224,7 +224,7 @@
         { "id": 4, "quantita": 0.04 }
       ]
     },
-    "Bucatini all'amatriciana": {
+    "Bucatini all amatriciana": {
       "descrizione": "Pasta con sugo di pomodoro e guanciale",
       "tempo_preparazione": 25,
       "istruzioni": "Rosolare il guanciale tagliato a listarelle, aggiungere la salsa di pomodoro, cuocere per 15 minuti, condire la pasta e servire con pecorino grattugiato.",
@@ -237,7 +237,7 @@
       ]
     },
     "Fettuccine Alfredo": {
-      "descrizione": "Pasta all'uovo condita con burro e parmigiano",
+      "descrizione": "Pasta all uovo condita con burro e parmigiano",
       "tempo_preparazione": 15,
       "istruzioni": "Cuocere la pasta, scolarla, mantecarla con burro e parmigiano fino a ottenere una crema liscia e vellutata.",
       "ingredienti": [
@@ -251,7 +251,7 @@
     "Spaghetti aglio e olio": {
       "descrizione": "Piatto semplice ma gustoso della tradizione",
       "tempo_preparazione": 15,
-      "istruzioni": "Soffriggere l'aglio tritato in abbondante olio, eventualmente aggiungere peperoncino, condire la pasta scolata al dente.",
+      "istruzioni": "Soffriggere l aglio tritato in abbondante olio, eventualmente aggiungere peperoncino, condire la pasta scolata al dente.",
       "ingredienti": [
         { "id": 18, "quantita": 0.1 },
         { "id": 5, "quantita": 0.03 },
@@ -291,7 +291,7 @@
     "Tagliata di manzo": {
       "descrizione": "Carne pregiata servita su letto di rucola",
       "tempo_preparazione": 15,
-      "istruzioni": "Cuocere la carne sulla griglia, condire con sale, pepe e un filo d'olio.",
+      "istruzioni": "Cuocere la carne sulla griglia, condire con sale, pepe e un filo d olio.",
       "ingredienti": [
         { "id": 31, "quantita": 0.2 },
         { "id": 4, "quantita": 0.01 },
@@ -312,7 +312,7 @@
     "Cotoletta alla milanese": {
       "descrizione": "Costoletta di vitello impanata e fritta",
       "tempo_preparazione": 20,
-      "istruzioni": "Battere la carne, passarla nell'uovo sbattuto e nel pangrattato, friggere in abbondante burro chiarificato.",
+      "istruzioni": "Battere la carne, passarla nell uovo sbattuto e nel pangrattato, friggere in abbondante burro chiarificato.",
       "ingredienti": [
         { "id": 32, "quantita": 0.2 },
         { "id": 12, "quantita": 1 },
@@ -346,7 +346,7 @@
       ]
     },
     "Bistecca fiorentina": {
-      "descrizione": "Bistecca di manzo alta e con l'osso, tipica toscana",
+      "descrizione": "Bistecca di manzo alta e con l osso, tipica toscana",
       "tempo_preparazione": 30,
       "istruzioni": "Portare la carne a temperatura ambiente, cuocerla sulla griglia a fuoco vivo per pochi minuti per lato, salare a fine cottura.",
       "ingredienti": [
@@ -370,7 +370,7 @@
     "Arrosto di vitello": {
       "descrizione": "Arrosto di vitello con patate e verdure",
       "tempo_preparazione": 90,
-      "istruzioni": "Rosolare la carne su tutti i lati, aggiungere le verdure, sfumare con vino bianco, cuocere in forno a 180°C per circa un'ora.",
+      "istruzioni": "Rosolare la carne su tutti i lati, aggiungere le verdure, sfumare con vino bianco, cuocere in forno a 180°C per circa un ora.",
       "ingredienti": [
         { "id": 32, "quantita": 0.5 },
         { "id": 38, "quantita": 0.2 },
@@ -464,7 +464,7 @@
     "Insalata mista": {
       "descrizione": "Mix di insalata fresca con pomodorini e carote",
       "tempo_preparazione": 10,
-      "istruzioni": "Lavare e tagliare l'insalata, aggiungere pomodorini tagliati a metà e carote a julienne, condire con sale, olio e aceto balsamico.",
+      "istruzioni": "Lavare e tagliare l insalata, aggiungere pomodorini tagliati a meta e carote a julienne, condire con sale, olio e aceto balsamico.",
       "ingredienti": [
         { "id": 39, "quantita": 0.1 },
         { "id": 40, "quantita": 0.05 },
@@ -476,7 +476,7 @@
     "Funghi trifolati": {
       "descrizione": "Funghi saltati con aglio, prezzemolo e vino bianco",
       "tempo_preparazione": 20,
-      "istruzioni": "Pulire i funghi, rosolare l'aglio in olio, aggiungere i funghi, sfumare con vino bianco, completare con prezzemolo tritato.",
+      "istruzioni": "Pulire i funghi, rosolare l aglio in olio, aggiungere i funghi, sfumare con vino bianco, completare con prezzemolo tritato.",
       "ingredienti": [
         { "id": 15, "quantita": 0.2 },
         { "id": 5, "quantita": 0.01 },
@@ -519,7 +519,7 @@
         { "id": 3, "quantita": 0.003 }
       ]
     },
-    "Purè di patate": {
+    "Pure di patate": {
       "descrizione": "Crema di patate con latte e burro",
       "tempo_preparazione": 30,
       "istruzioni": "Lessare le patate, passarle, aggiungere latte caldo, burro, sale, pepe e noce moscata.",
@@ -545,10 +545,10 @@
     }
   },
   "Dolci": {
-    "Tiramisù": {
-      "descrizione": "Dolce al cucchiaio con mascarpone, uova e caffè",
+    "Tiramisu": {
+      "descrizione": "Dolce al cucchiaio con mascarpone, uova e caffe",
       "tempo_preparazione": 30,
-      "istruzioni": "Montare tuorli con zucchero, unire mascarpone, incorporare albumi montati a neve, alternare strati di crema e savoiardi inzuppati nel caffè, spolverare con cacao.",
+      "istruzioni": "Montare tuorli con zucchero, unire mascarpone, incorporare albumi montati a neve, alternare strati di crema e savoiardi inzuppati nel caffe, spolverare con cacao.",
       "ingredienti": [
         { "id": 29, "quantita": 0.25 },
         { "id": 12, "quantita": 4 },
@@ -583,7 +583,7 @@
     "Gelato artigianale": {
       "descrizione": "Gelato fatto in casa in vari gusti",
       "tempo_preparazione": 180,
-      "istruzioni": "Preparare una crema base con latte, panna, tuorli d'uovo e zucchero, aromatizzare secondo il gusto desiderato, raffreddare e mantecare in gelatiera.",
+      "istruzioni": "Preparare una crema base con latte, panna, tuorli d uovo e zucchero, aromatizzare secondo il gusto desiderato, raffreddare e mantecare in gelatiera.",
       "ingredienti": [
         { "id": 26, "quantita": 0.25 },
         { "id": 27, "quantita": 0.25 },
@@ -617,7 +617,7 @@
         { "id": 24, "quantita": 0.05 }
       ]
     },
-    "Babà al rum": {
+    "Baba al rum": {
       "descrizione": "Soffice dolce lievitato imbevuto di sciroppo al rum",
       "tempo_preparazione": 180,
       "istruzioni": "Preparare un impasto con farina, lievito, burro e uova, farlo lievitare, cuocerlo negli appositi stampi e inzupparlo nel sciroppo al rum.",
@@ -642,9 +642,9 @@
       ]
     },
     "Profiteroles": {
-      "descrizione": "Bignè ripieni di panna e ricoperti di cioccolato",
+      "descrizione": "Bigne ripieni di panna e ricoperti di cioccolato",
       "tempo_preparazione": 60,
-      "istruzioni": "Preparare la pasta choux, formare i bignè, cuocerli in forno, farcirli con crema o panna e coprirli con cioccolato fuso.",
+      "istruzioni": "Preparare la pasta choux, formare i bigne, cuocerli in forno, farcirli con crema o panna e coprirli con cioccolato fuso.",
       "ingredienti": [
         { "id": 2, "quantita": 0.1 },
         { "id": 12, "quantita": 4 },
