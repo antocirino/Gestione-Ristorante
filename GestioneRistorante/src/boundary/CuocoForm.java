@@ -201,7 +201,7 @@ public class CuocoForm extends JFrame {
     private void caricaOrdini() {
         try {
             Connection conn = DBConnection.getInstance().getConnection();
-            String query = "SELECT o.id_ordine, t.numero_tavolo, o.num_persone, o.data_ordine, o.stato " +
+            String query = "SELECT o.id_ordine, t.id_tavolo, o.num_persone, o.data_ordine, o.stato " +
                     "FROM ordine o " +
                     "JOIN tavolo t ON o.id_tavolo = t.id_tavolo " +
                     "WHERE o.stato IN ('in_attesa', 'in_preparazione', 'pronto') " +
@@ -228,11 +228,13 @@ public class CuocoForm extends JFrame {
 
             while (rs.next()) {
                 int idOrdine = rs.getInt("id_ordine");
-                int numeroTavolo = rs.getInt("numero_tavolo");
+                int idTavolo = rs.getInt("id_tavolo");
                 int numPersone = rs.getInt("num_persone");
                 java.sql.Timestamp timestamp = rs.getTimestamp("data_ordine");
                 String ora = sdf.format(timestamp);
                 String stato = rs.getString("stato");
+                // Utilizziamo l'id del tavolo al posto del numero
+                int numeroTavolo = idTavolo;
 
                 StatoOrdine statoOrdine = StatoOrdine.fromCodice(stato);
 
@@ -287,7 +289,7 @@ public class CuocoForm extends JFrame {
             model.setRowCount(0);
 
             // Carico le pietanze dell'ordine
-            String queryPietanze = "SELECT p.nome, dop.quantita, dop.note " +
+            String queryPietanze = "SELECT p.nome, dop.quantita " +
                     "FROM dettaglio_ordine_pietanza dop " +
                     "JOIN pietanza p ON dop.id_pietanza = p.id_pietanza " +
                     "WHERE dop.id_ordine = ?";
@@ -299,13 +301,12 @@ public class CuocoForm extends JFrame {
             while (rsPietanze.next()) {
                 String nome = rsPietanze.getString("nome");
                 int quantita = rsPietanze.getInt("quantita");
-                String note = rsPietanze.getString("note");
 
                 model.addRow(new Object[] {
                         "Pietanza",
                         nome,
                         quantita,
-                        note != null ? note : ""
+                        "" // Campo note vuoto
                 });
             }
 

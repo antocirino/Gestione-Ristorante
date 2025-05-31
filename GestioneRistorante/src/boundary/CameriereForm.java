@@ -2,15 +2,16 @@ package boundary;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import CFG.DBConnection;
+import control.Controller;
+import entity.Pietanza;
+import entity.Tavolo;
 
 /**
  * Schermata per il cameriere che permette di visualizzare il menu
@@ -180,7 +181,7 @@ public class CameriereForm extends JFrame {
 
         // Tabella menu fissi
         DefaultTableModel menuFissiTableModel = new DefaultTableModel(
-                new String[] { "ID", "Nome", "Descrizione", "Prezzo (€)" }, 0) {
+                new String[] { "ID", "Nome", "Dettagli Menu", "Prezzo (€)" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Rendi tutte le celle non modificabili
@@ -190,6 +191,58 @@ public class CameriereForm extends JFrame {
         menuFissiTable = new JTable(menuFissiTableModel);
         menuFissiTable.getColumnModel().getColumn(0).setMaxWidth(50);
         menuFissiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Configurazione per rendere visibile il testo multilinea con scrollbar
+        menuFissiTable.setDefaultRenderer(Object.class, new javax.swing.table.TableCellRenderer() {
+            // Manteniamo istanze dei renderer per non creare sempre nuovi oggetti
+            private final DefaultTableCellRenderer defaultRenderer = new DefaultTableCellRenderer();
+
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    JTable table, Object value, boolean isSelected, boolean hasFocus,
+                    int row, int column) {
+
+                // Per la colonna dei dettagli del menu, usiamo un pannello con scrollbar
+                if (column == 2) {
+                    JTextArea textArea = new JTextArea();
+                    textArea.setText((value != null) ? value.toString() : "");
+                    textArea.setWrapStyleWord(true);
+                    textArea.setLineWrap(true);
+                    textArea.setEditable(false);
+                    textArea.setMargin(new Insets(5, 5, 5, 5)); // Aggiungiamo un po' di margine per la leggibilità
+
+                    // Imposta i colori per la selezione
+                    if (isSelected) {
+                        textArea.setBackground(table.getSelectionBackground());
+                        textArea.setForeground(table.getSelectionForeground());
+                    } else {
+                        textArea.setBackground(table.getBackground());
+                        textArea.setForeground(table.getForeground());
+                    }
+
+                    // Creiamo uno scrollpane per il textArea
+                    JScrollPane scrollPane = new JScrollPane(textArea);
+                    scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+                    scrollPane.setOpaque(true);
+                    scrollPane.setBackground(textArea.getBackground());
+
+                    // Coloriamo anche lo scrollpane quando la riga è selezionata
+                    scrollPane.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+                        @Override
+                        protected void configureScrollBarColors() {
+                            this.thumbColor = isSelected ? table.getSelectionBackground().darker()
+                                    : new Color(0xB0B0B0);
+                        }
+                    });
+
+                    return scrollPane;
+                } else {
+                    // Per le altre colonne, utilizziamo il renderer standard
+                    return defaultRenderer.getTableCellRendererComponent(
+                            table, value, isSelected, hasFocus, row, column);
+                }
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(menuFissiTable);
 
@@ -284,19 +337,13 @@ public class CameriereForm extends JFrame {
      */
     private void caricaCategorie() {
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            String query = "SELECT id_categoria, nome FROM categoria_pietanza ORDER BY nome";
+            Controller controller = Controller.getInstance();
+            Map<Integer, String> categorie = controller.getCategoriePietanze();
 
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                categorieComboBox.addItem(rs.getString("nome"));
+            for (String nomeCategoria : categorie.values()) {
+                categorieComboBox.addItem(nomeCategoria);
             }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante il caricamento delle categorie: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);
@@ -308,23 +355,19 @@ public class CameriereForm extends JFrame {
      */
     private void caricaTavoli() {
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            String query = "SELECT id_tavolo, numero_tavolo, max_posti FROM tavolo WHERE stato = 'libero' ORDER BY numero_tavolo";
-
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
+            Controller controller = Controller.getInstance();
+            List<Tavolo> tavoli = controller.getAllTavoli();
 
             tavoliComboBox.removeAllItems();
-            while (rs.next()) {
-                int idTavolo = rs.getInt("id_tavolo");
-                int numeroTavolo = rs.getInt("numero_tavolo");
-                int maxPosti = rs.getInt("max_posti");
-                tavoliComboBox.addItem(idTavolo + " - Tavolo " + numeroTavolo + " (max " + maxPosti + " posti)");
+            for (Tavolo tavolo : tavoli) {
+                if (!tavolo.isOccupato()) {
+                    int idTavolo = tavolo.getIdTavolo();
+                    int maxPosti = tavolo.getMaxPosti();
+                    tavoliComboBox.addItem(
+                            idTavolo + " - Tavolo " + tavolo.getNumeroTavolo() + " (max " + maxPosti + " posti)");
+                }
             }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante il caricamento dei tavoli: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);
@@ -336,36 +379,39 @@ public class CameriereForm extends JFrame {
      */
     private void caricaPietanze() {
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
+            Controller controller = Controller.getInstance();
             String categoriaSelezionata = (String) categorieComboBox.getSelectedItem();
-            String query;
-            PreparedStatement stmt;
 
-            if (categoriaSelezionata == null || categoriaSelezionata.equals("Tutte le categorie")) {
-                query = "SELECT p.id_pietanza, p.nome, cp.nome as categoria, p.prezzo " +
-                        "FROM pietanza p JOIN categoria_pietanza cp ON p.id_categoria = cp.id_categoria " +
-                        "ORDER BY cp.nome, p.nome";
-                stmt = conn.prepareStatement(query);
-            } else {
-                query = "SELECT p.id_pietanza, p.nome, cp.nome as categoria, p.prezzo " +
-                        "FROM pietanza p JOIN categoria_pietanza cp ON p.id_categoria = cp.id_categoria " +
-                        "WHERE cp.nome = ? ORDER BY p.nome";
-                stmt = conn.prepareStatement(query);
-                stmt.setString(1, categoriaSelezionata);
+            List<Pietanza> pietanze;
+            Map<Integer, String> categorie = controller.getCategoriePietanze();
+            Map<String, Integer> categorieInverse = new HashMap<>();
+
+            // Creiamo una mappa inversa da nome categoria a ID categoria
+            for (Map.Entry<Integer, String> entry : categorie.entrySet()) {
+                categorieInverse.put(entry.getValue(), entry.getKey());
             }
 
-            ResultSet rs = stmt.executeQuery();
+            if (categoriaSelezionata == null || categoriaSelezionata.equals("Tutte le categorie")) {
+                pietanze = controller.getAllPietanze();
+            } else {
+                Integer idCategoria = categorieInverse.get(categoriaSelezionata);
+                if (idCategoria != null) {
+                    pietanze = controller.getPietanzeByCategoria(idCategoria);
+                } else {
+                    pietanze = new ArrayList<>();
+                }
+            }
 
             // Svuoto la tabella
             DefaultTableModel model = (DefaultTableModel) pietanzeTable.getModel();
             model.setRowCount(0);
 
             // Popolo la tabella e la mappa dei prezzi
-            while (rs.next()) {
-                int idPietanza = rs.getInt("id_pietanza");
-                String nome = rs.getString("nome");
-                String categoria = rs.getString("categoria");
-                double prezzo = rs.getDouble("prezzo");
+            for (Pietanza pietanza : pietanze) {
+                int idPietanza = pietanza.getIdPietanza();
+                String nome = pietanza.getNome();
+                String categoria = pietanza.getNomeCategoria();
+                double prezzo = pietanza.getPrezzo();
 
                 model.addRow(new Object[] { idPietanza, nome, categoria, String.format("%.2f", prezzo) });
 
@@ -373,10 +419,7 @@ public class CameriereForm extends JFrame {
                 prezziPietanze.put(idPietanza, prezzo);
                 nomiPietanze.put(idPietanza, nome);
             }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante il caricamento delle pietanze: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);
@@ -388,33 +431,39 @@ public class CameriereForm extends JFrame {
      */
     private void caricaMenuFissi() {
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            String query = "SELECT id_menu, nome, descrizione, prezzo FROM menu_fisso ORDER BY nome";
-
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
+            Controller controller = Controller.getInstance();
+            Map<Integer, Map<String, Object>> menuFissi = controller.getMenuFissi();
 
             // Svuoto la tabella
             DefaultTableModel model = (DefaultTableModel) menuFissiTable.getModel();
             model.setRowCount(0);
 
             // Popolo la tabella e la mappa dei prezzi
-            while (rs.next()) {
-                int idMenu = rs.getInt("id_menu");
-                String nome = rs.getString("nome");
-                String descrizione = rs.getString("descrizione");
-                double prezzo = rs.getDouble("prezzo");
+            for (Map.Entry<Integer, Map<String, Object>> entry : menuFissi.entrySet()) {
+                int idMenu = entry.getKey();
+                Map<String, Object> menuInfo = entry.getValue();
 
-                model.addRow(new Object[] { idMenu, nome, descrizione, String.format("%.2f", prezzo) });
+                String nome = (String) menuInfo.get("nome");
+                String descrizione = (String) menuInfo.get("descrizione");
+                double prezzo = (Double) menuInfo.get("prezzo");
+
+                // Dettagli menu - per ora utilizziamo solo la descrizione
+                String dettagliMenu = descrizione
+                        + "\n\nPIETANZE INCLUSE:\nIl dettaglio delle pietanze è disponibile nel controller";
+
+                model.addRow(new Object[] { idMenu, nome, dettagliMenu, String.format("%.2f", prezzo) });
 
                 // Salvo nome e prezzo per uso futuro
                 prezziMenu.put(idMenu, prezzo);
                 nomiMenu.put(idMenu, nome);
             }
 
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
+            // Ajusto le dimensioni delle celle per una migliore visualizzazione
+            menuFissiTable.setRowHeight(180); // Aumento ulteriormente l'altezza delle righe per mostrare più contenuto
+                                              // scrollabile
+            menuFissiTable.getColumnModel().getColumn(2).setPreferredWidth(350); // Allargo la colonna dei dettagli
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante il caricamento dei menu fissi: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);
@@ -459,7 +508,8 @@ public class CameriereForm extends JFrame {
     }
 
     /**
-     * Aggiunge un menu fisso all'ordine corrente
+     * Aggiunge un menu fisso all'ordine corrente, inserendo singolarmente tutte le
+     * pietanze che lo compongono
      */
     private void aggiungiMenuAllOrdine(int quantita) {
         int selectedRow = menuFissiTable.getSelectedRow();
@@ -475,15 +525,23 @@ public class CameriereForm extends JFrame {
         double prezzo = prezziMenu.get(idMenu);
         double totale = prezzo * quantita;
 
+        // Aggiungiamo il menu come intestazione
         ordineTableModel.addRow(new Object[] {
                 idMenu,
                 "Menu",
-                nomeMenu,
+                "=== " + nomeMenu + " ===",
                 quantita,
                 String.format("%.2f", prezzo),
                 String.format("%.2f", totale),
-                ""
+                "Menu completo"
         });
+
+        // Per una vera implementazione, dovremo modificare il Controller per ottenere
+        // le pietanze incluse nel menu
+        // Per ora solo un messaggio informativo
+        JOptionPane.showMessageDialog(this,
+                "Menu aggiunto all'ordine. In una versione completa, qui verrebbero mostrate le singole pietanze incluse nel menu.",
+                "Menu aggiunto", JOptionPane.INFORMATION_MESSAGE);
 
         // Vai alla tab dell'ordine
         tabbedPane.setSelectedComponent(ordinePanel);
@@ -525,86 +583,45 @@ public class CameriereForm extends JFrame {
         String tavolo = tavoliComboBox.getSelectedItem().toString();
         int idTavolo = Integer.parseInt(tavolo.split(" - ")[0]);
 
-        // Ottieni il numero di persone
-        String numPersoneStr = JOptionPane.showInputDialog(this, "Numero di persone al tavolo:", "1");
-        if (numPersoneStr == null)
-            return; // Annullato
+        // Prepara i dati per l'ordine
+        List<Map<String, Object>> elementiOrdine = new ArrayList<>();
+        String note = ""; // Le note potrebbero essere aggiunte come campo nell'interfaccia
 
-        int numPersone;
-        try {
-            numPersone = Integer.parseInt(numPersoneStr);
-            if (numPersone < 1)
-                throw new NumberFormatException();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Il numero di persone deve essere un valore positivo",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
+        // Ciclo su tutte le righe dell'ordine
+        for (int i = 0; i < ordineTableModel.getRowCount(); i++) {
+            int id = Integer.parseInt(ordineTableModel.getValueAt(i, 0).toString());
+            String tipo = ordineTableModel.getValueAt(i, 1).toString();
+            int quantita = Integer.parseInt(ordineTableModel.getValueAt(i, 3).toString());
+            String noteElemento = String.valueOf(ordineTableModel.getValueAt(i, 6));
+
+            // Controlliamo se è un'intestazione di menu o una pietanza inclusa in un menu
+            boolean isMenuHeader = "Menu".equals(tipo) && noteElemento.equals("Menu completo");
+            boolean isPietanzaFromMenu = "Pietanza".equals(tipo) && noteElemento.contains("Inclusa nel menu");
+
+            // Aggiungiamo solo i menu completi e le pietanze singole (non quelle incluse
+            // nei menu)
+            if (isMenuHeader) {
+                Map<String, Object> elementoMenu = new HashMap<>();
+                elementoMenu.put("id", id);
+                elementoMenu.put("isMenu", true);
+                elementoMenu.put("quantita", quantita);
+                elementoMenu.put("note", noteElemento);
+                elementiOrdine.add(elementoMenu);
+            } else if ("Pietanza".equals(tipo) && !isPietanzaFromMenu) {
+                Map<String, Object> elementoPietanza = new HashMap<>();
+                elementoPietanza.put("id", id);
+                elementoPietanza.put("isMenu", false);
+                elementoPietanza.put("quantita", quantita);
+                elementoPietanza.put("note", noteElemento);
+                elementiOrdine.add(elementoPietanza);
+            }
         }
 
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            conn.setAutoCommit(false); // Inizio transazione
+            Controller controller = Controller.getInstance();
+            boolean success = controller.insertOrdine(idTavolo, elementiOrdine, note);
 
-            try {
-                // 1. Inserisco l'ordine
-                String queryOrdine = "INSERT INTO ordine (id_tavolo, num_persone, data_ordine, stato) " +
-                        "VALUES (?, ?, NOW(), 'in_attesa')";
-                PreparedStatement stmtOrdine = conn.prepareStatement(queryOrdine,
-                        PreparedStatement.RETURN_GENERATED_KEYS);
-                stmtOrdine.setInt(1, idTavolo);
-                stmtOrdine.setInt(2, numPersone);
-                stmtOrdine.executeUpdate();
-
-                ResultSet rs = stmtOrdine.getGeneratedKeys();
-                int idOrdine = -1;
-                if (rs.next()) {
-                    idOrdine = rs.getInt(1);
-                } else {
-                    throw new SQLException("Errore durante la creazione dell'ordine, ID non generato");
-                }
-
-                // 2. Aggiorno lo stato del tavolo a occupato
-                String queryTavolo = "UPDATE tavolo SET stato = 'occupato' WHERE id_tavolo = ?";
-                PreparedStatement stmtTavolo = conn.prepareStatement(queryTavolo);
-                stmtTavolo.setInt(1, idTavolo);
-                stmtTavolo.executeUpdate();
-
-                // 3. Inserisco i dettagli dell'ordine (pietanze)
-                String queryPietanza = "INSERT INTO dettaglio_ordine_pietanza (id_ordine, id_pietanza, quantita, note) "
-                        +
-                        "VALUES (?, ?, ?, ?)";
-                PreparedStatement stmtPietanza = conn.prepareStatement(queryPietanza);
-
-                // 4. Inserisco i dettagli dell'ordine (menu fissi)
-                String queryMenu = "INSERT INTO dettaglio_ordine_menu (id_ordine, id_menu, quantita) " +
-                        "VALUES (?, ?, ?)";
-                PreparedStatement stmtMenu = conn.prepareStatement(queryMenu);
-
-                // Ciclo su tutte le righe dell'ordine
-                for (int i = 0; i < ordineTableModel.getRowCount(); i++) {
-                    int id = Integer.parseInt(ordineTableModel.getValueAt(i, 0).toString());
-                    String tipo = ordineTableModel.getValueAt(i, 1).toString();
-                    int quantita = Integer.parseInt(ordineTableModel.getValueAt(i, 3).toString());
-                    String note = (String) ordineTableModel.getValueAt(i, 6);
-
-                    if ("Pietanza".equals(tipo)) {
-                        stmtPietanza.setInt(1, idOrdine);
-                        stmtPietanza.setInt(2, id);
-                        stmtPietanza.setInt(3, quantita);
-                        stmtPietanza.setString(4, note);
-                        stmtPietanza.executeUpdate();
-                    } else if ("Menu".equals(tipo)) {
-                        stmtMenu.setInt(1, idOrdine);
-                        stmtMenu.setInt(2, id);
-                        stmtMenu.setInt(3, quantita);
-                        stmtMenu.executeUpdate();
-                    }
-                }
-
-                // Commit della transazione
-                conn.commit();
-
+            if (success) {
                 // Mostro conferma e resetto l'ordine
                 JOptionPane.showMessageDialog(this,
                         "Ordine inviato con successo",
@@ -615,15 +632,12 @@ public class CameriereForm extends JFrame {
 
                 // Aggiorno la lista dei tavoli
                 caricaTavoli();
-
-            } catch (SQLException e) {
-                // Rollback in caso di errore
-                conn.rollback();
-                throw e;
-            } finally {
-                conn.setAutoCommit(true); // Ripristina auto commit
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Si è verificato un errore durante l'invio dell'ordine",
+                        "Errore", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante l'invio dell'ordine: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);

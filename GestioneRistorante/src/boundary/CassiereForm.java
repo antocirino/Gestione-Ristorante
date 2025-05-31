@@ -3,11 +3,10 @@ package boundary;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import CFG.DBConnection;
+import java.util.List;
+import java.util.Map;
+import control.Controller;
+import entity.Tavolo;
 
 /**
  * Schermata per il cassiere che permette di calcolare il conto di un tavolo
@@ -114,9 +113,7 @@ public class CassiereForm extends JFrame {
 
         stampaContoButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(CassiereForm.this,
-                        "Stampa conto inviata alla stampante",
-                        "Stampa", JOptionPane.INFORMATION_MESSAGE);
+                stampaContoTavolo();
             }
         });
 
@@ -134,29 +131,30 @@ public class CassiereForm extends JFrame {
     }
 
     /**
-     * Carica i tavoli occupati dal database
+     * Carica tutti i tavoli dal database con il loro stato attuale
      */
     private void caricaTavoli() {
         tavoliComboBox.removeAllItems();
 
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            String query = "SELECT t.numero_tavolo, o.id_ordine FROM tavolo t " +
-                    "JOIN ordine o ON t.id_tavolo = o.id_tavolo " +
-                    "WHERE t.stato = 'occupato' AND o.stato != 'pagato'";
+            Controller controller = Controller.getInstance();
+            List<Tavolo> tavoli = controller.getAllTavoli();
 
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
+            for (Tavolo tavolo : tavoli) {
+                int idTavolo = tavolo.getIdTavolo();
+                int maxPosti = tavolo.getMaxPosti();
+                boolean occupato = tavolo.isOccupato();
+                String displayText = "";
 
-            while (rs.next()) {
-                int numeroTavolo = rs.getInt("numero_tavolo");
-                int idOrdine = rs.getInt("id_ordine");
-                tavoliComboBox.addItem(numeroTavolo + " (Ordine: " + idOrdine + ")");
+                if (!occupato) {
+                    displayText = "Tavolo " + idTavolo + " (" + maxPosti + " posti) - LIBERO";
+                } else {
+                    displayText = "Tavolo " + idTavolo + " (" + maxPosti + " posti) - OCCUPATO";
+                }
+
+                tavoliComboBox.addItem(displayText);
             }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante il caricamento dei tavoli: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);
@@ -175,114 +173,42 @@ public class CassiereForm extends JFrame {
         }
 
         String selectedItem = (String) tavoliComboBox.getSelectedItem();
-        int idOrdine = Integer.parseInt(selectedItem.split("\\(Ordine: ")[1].replace(")", ""));
+        // Estraiamo l'ID del tavolo dal formato "Tavolo X (Y posti) - STATO"
+        String[] parts = selectedItem.split(" ");
+        int idTavolo = Integer.parseInt(parts[1]);
 
-        int numeroCoperti;
-        try {
-            numeroCoperti = Integer.parseInt(coppertiField.getText().trim());
-            if (numeroCoperti < 1) {
-                throw new NumberFormatException();
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Inserisci un numero valido di coperti",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
+        // Cancello il contenuto precedente
+        pulisciCampi();
+        coppertiField.setEditable(false);
+
+        Controller controller = Controller.getInstance();
+        Map<String, Object> risultatoConto = controller.getContoTavolo(idTavolo);
+
+        if (risultatoConto.containsKey("errore")) {
+            dettagliContoTextArea.setText((String) risultatoConto.get("errore"));
             return;
         }
 
-        try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            double costoCoperto = 0;
-            double totalePietanze = 0;
-            double totaleMenus = 0;
+        if ((Boolean) risultatoConto.get("success")) {
+            // Imposta i dettagli del conto
+            dettagliContoTextArea.setText((String) risultatoConto.get("dettagli"));
 
-            // Recupero il costo del coperto dalle configurazioni
-            String queryCoperto = "SELECT valore FROM configurazione WHERE chiave = 'costo_coperto'";
-            PreparedStatement stmtCoperto = conn.prepareStatement(queryCoperto);
-            ResultSet rsCoperto = stmtCoperto.executeQuery();
-            if (rsCoperto.next()) {
-                costoCoperto = Double.parseDouble(rsCoperto.getString("valore"));
-            }
-            rsCoperto.close();
-            stmtCoperto.close();
+            // Imposta il totale
+            double totale = (Double) risultatoConto.get("totale");
+            totaleLabel.setText(String.format("Totale: € %.2f", totale));
 
-            // Recupero le pietanze ordinate
-            String queryPietanze = "SELECT p.nome, p.prezzo, dop.quantita " +
-                    "FROM dettaglio_ordine_pietanza dop " +
-                    "JOIN pietanza p ON dop.id_pietanza = p.id_pietanza " +
-                    "WHERE dop.id_ordine = ?";
-            PreparedStatement stmtPietanze = conn.prepareStatement(queryPietanze);
-            stmtPietanze.setInt(1, idOrdine);
-            ResultSet rsPietanze = stmtPietanze.executeQuery();
+            // Imposta il numero di coperti
+            int numeroPersone = (Integer) risultatoConto.get("numeroPersone");
+            coppertiField.setText(String.valueOf(numeroPersone));
 
-            StringBuilder dettagli = new StringBuilder();
-            dettagli.append("DETTAGLIO CONTO\n");
-            dettagli.append("===============================\n\n");
-            dettagli.append("PIETANZE:\n");
-
-            // Aggiungo le pietanze al dettaglio
-            while (rsPietanze.next()) {
-                String nome = rsPietanze.getString("nome");
-                double prezzo = rsPietanze.getDouble("prezzo");
-                int quantita = rsPietanze.getInt("quantita");
-                double subtotale = prezzo * quantita;
-
-                dettagli.append(String.format("%-30s %2d x €%6.2f = €%7.2f\n",
-                        nome, quantita, prezzo, subtotale));
-
-                totalePietanze += subtotale;
-            }
-            rsPietanze.close();
-            stmtPietanze.close();
-
-            // Recupero i menu fissi ordinati
-            String queryMenus = "SELECT m.nome, m.prezzo, dom.quantita " +
-                    "FROM dettaglio_ordine_menu dom " +
-                    "JOIN menu_fisso m ON dom.id_menu = m.id_menu " +
-                    "WHERE dom.id_ordine = ?";
-            PreparedStatement stmtMenus = conn.prepareStatement(queryMenus);
-            stmtMenus.setInt(1, idOrdine);
-            ResultSet rsMenus = stmtMenus.executeQuery();
-
-            dettagli.append("\nMENU FISSI:\n");
-
-            // Aggiungo i menu fissi al dettaglio
-            while (rsMenus.next()) {
-                String nome = rsMenus.getString("nome");
-                double prezzo = rsMenus.getDouble("prezzo");
-                int quantita = rsMenus.getInt("quantita");
-                double subtotale = prezzo * quantita;
-
-                dettagli.append(String.format("%-30s %2d x €%6.2f = €%7.2f\n",
-                        nome, quantita, prezzo, subtotale));
-
-                totaleMenus += subtotale;
-            }
-            rsMenus.close();
-            stmtMenus.close();
-
-            // Calcolo il totale complessivo
-            double importoCoperti = costoCoperto * numeroCoperti;
-            double totaleComplessivo = totalePietanze + totaleMenus + importoCoperti;
-
-            dettagli.append("\n===============================\n");
-            dettagli.append(String.format("%-30s %2d x €%6.2f = €%7.2f\n",
-                    "COPERTI", numeroCoperti, costoCoperto, importoCoperti));
-            dettagli.append("===============================\n");
-            dettagli.append(String.format("%-42s €%7.2f\n", "TOTALE PIETANZE:", totalePietanze));
-            dettagli.append(String.format("%-42s €%7.2f\n", "TOTALE MENU:", totaleMenus));
-            dettagli.append(String.format("%-42s €%7.2f\n", "TOTALE COPERTI:", importoCoperti));
-            dettagli.append("===============================\n");
-            dettagli.append(String.format("%-42s €%7.2f\n", "TOTALE:", totaleComplessivo));
-
-            // Aggiorno l'interfaccia
-            dettagliContoTextArea.setText(dettagli.toString());
-            totaleLabel.setText(String.format("TOTALE: € %.2f", totaleComplessivo));
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Errore durante il calcolo del conto: " + e.getMessage(),
-                    "Errore Database", JOptionPane.ERROR_MESSAGE);
+            // Abilita i pulsanti
+            stampaContoButton.setEnabled(true);
+            pagaButton.setEnabled(true);
+        } else {
+            dettagliContoTextArea.setText("Si è verificato un errore nel calcolo del conto.");
+            totaleLabel.setText("Totale: € 0.00");
+            stampaContoButton.setEnabled(false);
+            pagaButton.setEnabled(false);
         }
     }
 
@@ -298,43 +224,92 @@ public class CassiereForm extends JFrame {
         }
 
         String selectedItem = (String) tavoliComboBox.getSelectedItem();
-        int idOrdine = Integer.parseInt(selectedItem.split("\\(Ordine: ")[1].replace(")", ""));
-        int numeroTavolo = Integer.parseInt(selectedItem.split(" ")[0]);
+        // Estraiamo l'ID del tavolo dal formato "Tavolo X (Y posti) - STATO"
+        String[] parts = selectedItem.split(" ");
+        int idTavolo = Integer.parseInt(parts[1]);
 
-        try {
-            Connection conn = DBConnection.getInstance().getConnection();
-
-            // Aggiorno lo stato dell'ordine a pagato
-            String queryOrdine = "UPDATE ordine SET stato = 'pagato' WHERE id_ordine = ?";
-            PreparedStatement stmtOrdine = conn.prepareStatement(queryOrdine);
-            stmtOrdine.setInt(1, idOrdine);
-            stmtOrdine.executeUpdate();
-            stmtOrdine.close();
-
-            // Aggiorno lo stato del tavolo a libero
-            String queryTavolo = "UPDATE tavolo SET stato = 'libero' WHERE numero_tavolo = ?";
-            PreparedStatement stmtTavolo = conn.prepareStatement(queryTavolo);
-            stmtTavolo.setInt(1, numeroTavolo);
-            stmtTavolo.executeUpdate();
-            stmtTavolo.close();
-
+        // Verifica se il tavolo è libero
+        if (selectedItem.contains("LIBERO")) {
             JOptionPane.showMessageDialog(this,
-                    "Pagamento registrato con successo.",
-                    "Pagamento completato", JOptionPane.INFORMATION_MESSAGE);
+                    "Il tavolo selezionato è libero. Non ci sono ordini da pagare.",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Conferma del pagamento
+        int conferma = JOptionPane.showConfirmDialog(this,
+                "Confermi il pagamento del conto?",
+                "Conferma pagamento", JOptionPane.YES_NO_OPTION);
+
+        if (conferma != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        Controller controller = Controller.getInstance();
+        boolean success = controller.registraPagamentoOrdine(idTavolo);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this,
+                    "Pagamento registrato con successo!\nIl tavolo è stato liberato.",
+                    "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
 
             // Aggiorno la lista dei tavoli
             caricaTavoli();
 
-            // Resetto i campi
-            dettagliContoTextArea.setText("");
-            totaleLabel.setText("TOTALE: € 0,00");
-            coppertiField.setText("");
-
-        } catch (SQLException e) {
+            // Pulisco i campi
+            pulisciCampi();
+        } else {
             JOptionPane.showMessageDialog(this,
-                    "Errore durante il pagamento: " + e.getMessage(),
-                    "Errore Database", JOptionPane.ERROR_MESSAGE);
+                    "Errore durante la registrazione del pagamento.",
+                    "Errore", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /**
+     * Stampa il conto del tavolo selezionato
+     */
+    private void stampaContoTavolo() {
+        if (tavoliComboBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleziona un tavolo",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String selectedItem = (String) tavoliComboBox.getSelectedItem();
+        // Estraiamo l'ID del tavolo dal formato "Tavolo X (Y posti) - STATO"
+        String[] parts = selectedItem.split(" ");
+        int idTavolo = Integer.parseInt(parts[1]);
+
+        // Verifica se il tavolo è libero
+        if (selectedItem.contains("LIBERO")) {
+            JOptionPane.showMessageDialog(this,
+                    "Il tavolo selezionato è libero. Non ci sono ordini da stampare.",
+                    "Attenzione", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Controller controller = Controller.getInstance();
+        boolean success = controller.stampaConto(idTavolo);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this,
+                    "Conto stampato con successo!",
+                    "Informazione", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Impossibile stampare il conto. Nessun ordine attivo trovato.",
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Pulisce i campi dell'interfaccia
+     */
+    private void pulisciCampi() {
+        dettagliContoTextArea.setText("");
+        totaleLabel.setText("TOTALE: € 0,00");
+        coppertiField.setText("");
     }
 
     public static void main(String[] args) {

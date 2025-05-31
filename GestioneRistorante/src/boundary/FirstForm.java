@@ -3,7 +3,7 @@ package boundary;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import database.DatabaseTest;
+import control.Controller;
 
 public class FirstForm extends JFrame {
     private JPanel mainPanel;
@@ -41,7 +41,8 @@ public class FirstForm extends JFrame {
         JButton testDbButton = new JButton("Test Connessione Database");
         testDbButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean result = DatabaseTest.testConnection();
+                Controller controller = Controller.getInstance();
+                boolean result = controller.testDatabaseConnection();
                 if (result) {
                     statusLabel.setText("Connessione al database riuscita!");
                     statusLabel.setForeground(new Color(39, 174, 96));
