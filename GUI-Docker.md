@@ -80,21 +80,11 @@ Su Windows, è necessario usare un server X11:
    - Multiple windows
    - Display number: 0
    - Start no client
-   - **Importante**: Disabilitare "Native opengl" e abilitare "Disable access control"
+   - Disabilita "Native opengl"
+   - Abilita "Disable access control" (per permettere la connessione dal container)
+   - Lascia VcXsrv in esecuzione durante tutto l'utilizzo dell'applicazione.
 
-3. **Trovare l'indirizzo IP**
-
-   ```bash
-   ipconfig
-   ```
-
-4. **Impostare la variabile DISPLAY nel .env**
-
-   ```
-   DISPLAY=your-windows-ip:0.0
-   ```
-
-5. **Avviare i container**
+3. **Avviare i container**
 
    ```bash
    ./docker-utils.sh start

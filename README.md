@@ -41,7 +41,7 @@ Puoi modificare queste variabili nel file `.env` per personalizzare la configura
 
 ## 🚀 Come Eseguire il Progetto
 
-### Metodo 1: Avvio Rapido con Ricostruzione (consigliato per prima installazione)
+### Metodo 1: Avvio Rapido con Ricostruzione (consigliato per prima installazione) **_macOS_**
 
 ```zsh
 chmod +x avvia-app-rebuild.sh
@@ -54,6 +54,22 @@ Questo script si occuperà di:
 - Fermare eventuali container in esecuzione
 - Ricostruire i container (elimina anche i dati esistenti)
 - Mostrare i log dell'applicazione
+
+### Metodo 1: Avvio Rapido con Ricostruzione (consigliato per prima installazione) **_Windows_**
+
+1. **Compila l'applicazione Java** (usa Git Bash o WSL):
+
+   ```sh
+   chmod +x compile.sh
+   ./compile.sh
+   ```
+
+2. **Costruisci e avvia i container**:
+   ```sh
+   docker compose build --no-cache
+   docker compose up -d
+   ```
+   Se tutto è configurato correttamente, la GUI Java Swing apparirà automaticamente sul desktop di Windows tramite VcXsrv.
 
 ### Metodo 2: Avvio Manuale Passo-Passo
 
@@ -137,7 +153,8 @@ Se l'interfaccia grafica non appare:
 ./docker-utils.sh logs
 ```
 
-Su ***macOS*** se l'interfaccia grafica non appare ma i container si avviano correttamente:
+Su **_macOS_** se l'interfaccia grafica non appare ma i container si avviano correttamente:
+
 ```zsh
 export DISPLAY=:0
 ```
