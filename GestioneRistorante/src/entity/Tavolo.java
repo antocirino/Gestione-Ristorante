@@ -1,23 +1,78 @@
 package entity;
 
+import database.DBTavolo;
+
 /**
  * Classe che rappresenta un tavolo del ristorante
  */
 public class Tavolo {
     private int idTavolo;
-    private int numeroTavolo;
+    private int numero;
     private int maxPosti;
-    private boolean occupato;
+    private String stato;
+    private int idRistorante;
 
     // Costruttori
     public Tavolo() {
     }
 
-    public Tavolo(int idTavolo, int numeroTavolo, int maxPosti, boolean occupato) {
+    public Tavolo(int idTavolo, int numero, int maxPosti, String stato, int idRistorante) {
         this.idTavolo = idTavolo;
-        this.numeroTavolo = numeroTavolo;
+        this.numero = numero;
         this.maxPosti = maxPosti;
-        this.occupato = occupato;
+        this.stato = stato;
+        this.idRistorante = idRistorante;
+    }
+
+    /**
+     * Costruttore che carica un tavolo dal database tramite il suo ID
+     * 
+     * @param idTavolo l'ID del tavolo da caricare
+     */
+    public Tavolo(int idTavolo) {
+        DBTavolo tavolo = new DBTavolo(idTavolo);
+
+        this.idTavolo = idTavolo;
+        this.numero = tavolo.getNumero();
+        this.maxPosti = tavolo.getMaxPosti();
+        this.stato = tavolo.getStato();
+        this.idRistorante = tavolo.getIdRistorante();
+    }
+
+    /**
+     * Salva il tavolo nel database
+     * 
+     * @param idTavolo ID del tavolo (0 per auto-incremento)
+     * @return il numero di righe modificate o -1 in caso di errore
+     */
+    public int scriviSuDB(int idTavolo) {
+        DBTavolo t = new DBTavolo(); // DAO
+
+        t.setNumero(this.numero);
+        t.setMaxPosti(this.maxPosti);
+        t.setStato(this.stato);
+        t.setIdRistorante(this.idRistorante);
+
+        int result = t.salvaInDB(idTavolo);
+
+        // Aggiorna l'ID se si tratta di un nuovo tavolo
+        if (idTavolo == 0 && result > 0) {
+            this.idTavolo = result;
+        }
+
+        return result;
+    }
+
+    /**
+     * Aggiorna lo stato del tavolo
+     * 
+     * @param stato nuovo stato del tavolo ('libero' o 'occupato')
+     * @return il numero di righe modificate o -1 in caso di errore
+     */
+    public int aggiornaStato(String stato) {
+        DBTavolo t = new DBTavolo(this.idTavolo);
+        this.stato = stato;
+        return t.aggiornaStato(stato);
     }
 
     // Getters e setters
@@ -29,12 +84,12 @@ public class Tavolo {
         this.idTavolo = idTavolo;
     }
 
-    public int getNumeroTavolo() {
-        return numeroTavolo;
+    public int getNumero() {
+        return numero;
     }
 
-    public void setNumeroTavolo(int numeroTavolo) {
-        this.numeroTavolo = numeroTavolo;
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public int getMaxPosti() {
@@ -45,17 +100,34 @@ public class Tavolo {
         this.maxPosti = maxPosti;
     }
 
-    public boolean isOccupato() {
-        return occupato;
+    public String getStato() {
+        return stato;
     }
 
-    public void setOccupato(boolean occupato) {
-        this.occupato = occupato;
+    public void setStato(String stato) {
+        this.stato = stato;
+    }
+
+    public int getIdRistorante() {
+        return idRistorante;
+    }
+
+    public void setIdRistorante(int idRistorante) {
+        this.idRistorante = idRistorante;
+    }
+
+    /**
+     * Verifica se il tavolo è occupato
+     * 
+     * @return true se il tavolo è occupato, false altrimenti
+     */
+    public boolean isOccupato() {
+        return "occupato".equalsIgnoreCase(this.stato);
     }
 
     @Override
     public String toString() {
-        return "Tavolo " + numeroTavolo + " (max " + maxPosti + " posti)" +
-                (occupato ? " - Occupato" : " - Libero");
+        return "Tavolo " + numero + " (max " + maxPosti + " posti)" +
+                (isOccupato() ? " - Occupato" : " - Libero");
     }
 }

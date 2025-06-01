@@ -364,7 +364,7 @@ public class CameriereForm extends JFrame {
                     int idTavolo = tavolo.getIdTavolo();
                     int maxPosti = tavolo.getMaxPosti();
                     tavoliComboBox.addItem(
-                            idTavolo + " - Tavolo " + tavolo.getNumeroTavolo() + " (max " + maxPosti + " posti)");
+                            idTavolo + " - Tavolo " + tavolo.getNumero() + " (max " + maxPosti + " posti)");
                 }
             }
         } catch (Exception e) {

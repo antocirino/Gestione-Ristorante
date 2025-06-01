@@ -18,6 +18,11 @@ public class Ingrediente {
     public Ingrediente() {
     }
 
+    /**
+     * Costruttore che carica un ingrediente dal database per ID
+     * 
+     * @param idIngrediente ID dell'ingrediente da caricare
+     */
     public Ingrediente(int idIngrediente) {
 
         DBIngrediente ingrediente = new DBIngrediente(idIngrediente);
@@ -29,26 +34,68 @@ public class Ingrediente {
         this.idIngrediente = idIngrediente;
     }
 
-
+    /**
+     * Salva l'ingrediente nel database
+     * 
+     * @param id_ingrediente ID dell'ingrediente (0 per auto-incremento)
+     * @return il numero di righe modificate o -1 in caso di errore
+     */
     public int scriviSuDB(int id_ingrediente) {
-		
-		DBIngrediente s= new DBIngrediente(); //DAO
-		
-		s.setNome(this.nome);
-		s.setQuantitaDisponibile(this.quantitaDisponibile);
+
+        DBIngrediente s = new DBIngrediente(); // DAO
+
+        s.setNome(this.nome);
+        s.setQuantitaDisponibile(this.quantitaDisponibile);
         s.setUnitaMisura(this.unitaMisura);
         s.setSogliaRiordino(this.sogliaRiordino);
 
-		int i = s.salvaInDB(id_ingrediente);
-		
-		return i;
-	}
+        int i = s.salvaInDB(id_ingrediente);
 
-    public static ArrayList<Ingrediente> getIngredientiEsauriti() {
-        DBIngrediente ingrediente = new DBIngrediente();   
-        return ingrediente.getIngredientiEsauriti();
+        return i;
     }
 
+    public static ArrayList<Ingrediente> getIngredientiEsauriti() {
+        return DBIngrediente.getIngredientiEsauriti();
+    }
+
+    /**
+     * Recupera tutti gli ingredienti sotto la soglia di riordino
+     * 
+     * @return ArrayList di oggetti Ingrediente sotto soglia
+     */
+    public static ArrayList<Ingrediente> getIngredientiSottoSoglia() {
+        return DBIngrediente.getIngredientiSottoSoglia();
+    }
+
+    /**
+     * Prenota una quantità di ingrediente per l'utilizzo in una ricetta
+     * 
+     * @param quantita Quantità da prenotare
+     * @return true se la prenotazione è avvenuta con successo, false altrimenti
+     */
+    public boolean prenotaIngrediente(float quantita) {
+        if (this.quantitaDisponibile < quantita) {
+            return false;
+        }
+
+        // Aggiorna la quantità disponibile
+        this.quantitaDisponibile -= quantita;
+
+        // Aggiorna il database
+        DBIngrediente dbIngrediente = new DBIngrediente(this.idIngrediente);
+        dbIngrediente.setQuantitaDisponibile(this.quantitaDisponibile);
+        return dbIngrediente.aggiornaQuantita() > 0;
+    }
+
+    /**
+     * Verifica se l'ingrediente è disponibile nella quantità richiesta
+     * 
+     * @param quantita Quantità richiesta
+     * @return true se la quantità è disponibile, false altrimenti
+     */
+    public boolean isDisponibile(float quantita) {
+        return this.quantitaDisponibile >= quantita;
+    }
 
     // Getters e setters
     public int getIdIngrediente() {

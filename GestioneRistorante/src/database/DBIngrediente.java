@@ -25,7 +25,9 @@ public class DBIngrediente {
         // Costruttore vuoto per la creazione di una lista di ingredienti
     }
 
-    // Metodo per caricare i dati dell'ingrediente dal database
+    /**
+     * Metodo per caricare un ingrediente dal database tramite il suo ID
+     */
     public void caricaDaDB() {
 
         // 1. definisco la query
@@ -51,6 +53,12 @@ public class DBIngrediente {
 
     }
 
+    /**
+     * Metodo per salvare un ingrediente nel database
+     * 
+     * @param id_ingrediente ID dell'ingrediente da salvare
+     * @return 0 se l'inserimento è andato a buon fine, -1 in caso di errore
+     */
     public int salvaInDB(int id_ingrediente) {
 
         int ret = 0;
@@ -66,7 +74,6 @@ public class DBIngrediente {
             ret = DBConnection.updateQuery(query);
 
         } catch (ClassNotFoundException | SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             ret = -1; // per segnalare l'errore di scrittura
         }
@@ -74,9 +81,12 @@ public class DBIngrediente {
         return ret;
     }
 
-
-    
-
+    /**
+     * Metodo per ottenere gli ingredienti esauriti
+     * 
+     * @return ArrayList di ingredienti con scorte minori o uguali alla soglia di
+     *         riordino
+     */
     public static ArrayList<Ingrediente> getIngredientiEsauriti() {
         // metodo per ottenere gli ingredienti con scorte minore della quantità di
         // soglia
@@ -104,6 +114,52 @@ public class DBIngrediente {
         }
 
         return lista;
+    }
+
+    /**
+     * Recupera tutti gli ingredienti sotto la soglia di riordino
+     * 
+     * @return ArrayList di oggetti Ingrediente sotto soglia
+     */
+    public static ArrayList<Ingrediente> getIngredientiSottoSoglia() {
+        ArrayList<Ingrediente> ingredienti = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM ingrediente WHERE quantita_disponibile <= soglia_riordino";
+            ResultSet rs = DBConnection.selectQuery(query);
+
+            while (rs.next()) {
+                Ingrediente ingrediente = new Ingrediente();
+                ingrediente.setIdIngrediente(rs.getInt("id_ingrediente"));
+                ingrediente.setNome(rs.getString("nome"));
+                ingrediente.setQuantitaDisponibile(rs.getFloat("quantita_disponibile"));
+                ingrediente.setUnitaMisura(rs.getString("unita_misura"));
+                ingrediente.setSogliaRiordino(rs.getFloat("soglia_riordino"));
+
+                ingredienti.add(ingrediente);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nel recupero degli ingredienti sotto soglia: " + e.getMessage());
+        }
+
+        return ingredienti;
+    }
+
+    /**
+     * Aggiorna la quantità di un ingrediente nel database
+     * 
+     * @return il numero di righe modificate o -1 in caso di errore
+     */
+    public int aggiornaQuantita() {
+        try {
+            String query = "UPDATE ingrediente SET quantita_disponibile = " + this.quantitaDisponibile +
+                    " WHERE id_ingrediente = " + this.idIngrediente;
+
+            System.out.println(query); // Per debug
+            return DBConnection.updateQuery(query);
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nell'aggiornamento della quantità: " + e.getMessage());
+            return -1;
+        }
     }
 
     // Getters e setters

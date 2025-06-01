@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `ordine` (
   `data_ordine` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `stato` ENUM('in_attesa', 'in_preparazione', 'pronto', 'consegnato', 'pagato') NOT NULL DEFAULT 'in_attesa',
   `id_ristorante` INT NOT NULL,
+  `costo_totale` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   PRIMARY KEY (`id_ordine`),
   FOREIGN KEY (`id_tavolo`) REFERENCES `tavolo` (`id_tavolo`),
   FOREIGN KEY (`id_ristorante`) REFERENCES `ristorante` (`id_ristorante`)
@@ -122,10 +123,14 @@ CREATE TABLE IF NOT EXISTS `dettaglio_ordine_pietanza` (
   `id_ordine` INT NOT NULL,
   `id_pietanza` INT NOT NULL,
   `quantita` INT NOT NULL DEFAULT 1,
+  `parte_di_menu` BOOLEAN NOT NULL DEFAULT FALSE,
+  `id_menu` INT DEFAULT NULL,
   PRIMARY KEY (`id_dettaglio`),
   FOREIGN KEY (`id_ordine`) REFERENCES `ordine` (`id_ordine`) ON DELETE CASCADE,
   FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Crea indice per migliorare le ricerche per menu
+CREATE INDEX `idx_menu_pietanze` ON `dettaglio_ordine_pietanza` (`id_menu`);
 
 SET FOREIGN_KEY_CHECKS = 1;

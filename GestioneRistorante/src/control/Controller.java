@@ -56,7 +56,8 @@ public class Controller {
      */
     public boolean testDatabaseConnection() {
         try {
-            if (connection == null || connection.isClosed()) {;
+            if (connection == null || connection.isClosed()) {
+                ;
                 connection = DBConnection.getConnection();
             }
 
@@ -215,17 +216,18 @@ public class Controller {
         List<Tavolo> tavoli = new ArrayList<>();
 
         try {
-            String query = "SELECT id_tavolo, numero, max_posti, stato FROM tavolo ORDER BY numero";
+            String query = "SELECT id_tavolo, numero, max_posti, stato, id_ristorante FROM tavolo ORDER BY numero";
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                boolean occupato = "occupato".equalsIgnoreCase(rs.getString("stato"));
+                String stato = rs.getString("stato");
                 Tavolo tavolo = new Tavolo(
                         rs.getInt("id_tavolo"),
                         rs.getInt("numero"),
                         rs.getInt("max_posti"),
-                        occupato);
+                        stato,
+                        rs.getInt("id_ristorante"));
                 tavoli.add(tavolo);
             }
 

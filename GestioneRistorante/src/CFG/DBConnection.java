@@ -22,30 +22,6 @@ public class DBConnection {
     public static String driver = "com.mysql.cj.jdbc.Driver";
     public static final String db_name = "ristorante";
 
-    /*public DBConnection() {
-        if (this.url.contains("ristorante-db") && !isHostReachable()) {
-            this.url = "jdbc:mysql://localhost:3306/ristorante";
-        }
-    }
-        */
-
-    private boolean isHostReachable() {
-        try {
-            // Prova a creare una connessione per vedere se l'host è raggiungibile
-            DriverManager.getConnection(url, username, password);
-            return true;
-        } catch (SQLException e) {
-            // Se c'è un errore di connessione, l'host potrebbe non essere raggiungibile
-            return false;
-        }
-    }
-
-    /*public static synchronized DBConnection getInstance() {
-        if (instance == null) {
-            instance = new DBConnection();
-        }
-        return instance;
-    }*/
 
     public static Connection getConnection() throws SQLException {
         

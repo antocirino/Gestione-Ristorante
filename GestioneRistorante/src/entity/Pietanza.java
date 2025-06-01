@@ -3,6 +3,8 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DBPietanza;
+
 /**
  * Classe che rappresenta una pietanza del menu
  */
@@ -12,11 +14,13 @@ public class Pietanza {
     private double prezzo;
     private int idCategoria;
     private String nomeCategoria;
-    private List<IngredienteRicetta> ingredienti;
+    private boolean disponibile;
+    private List<Object> ingredienti;
 
     // Costruttori
     public Pietanza() {
-        this.ingredienti = new ArrayList<>();
+        this.ingredienti = new ArrayList<Object>();
+        this.disponibile = true;
     }
 
     public Pietanza(int idPietanza, String nome, double prezzo, int idCategoria) {
@@ -24,7 +28,44 @@ public class Pietanza {
         this.nome = nome;
         this.prezzo = prezzo;
         this.idCategoria = idCategoria;
-        this.ingredienti = new ArrayList<>();
+        this.disponibile = true;
+        this.ingredienti = new ArrayList<Object>();
+    }
+
+    /**
+     * Costruttore che carica una pietanza dal database per ID
+     * 
+     * @param idPietanza ID della pietanza da caricare
+     */
+    public Pietanza(int idPietanza) {
+        DBPietanza pietanza = new DBPietanza(idPietanza);
+
+        this.idPietanza = idPietanza;
+        this.nome = pietanza.getNome();
+        this.prezzo = pietanza.getPrezzo();
+        this.idCategoria = pietanza.getIdCategoria();
+        this.nomeCategoria = pietanza.getNomeCategoria();
+        this.disponibile = pietanza.isDisponibile();
+        this.ingredienti = new ArrayList<Object>();
+    }
+
+    /**
+     * Salva la pietanza nel database
+     * 
+     * @param idPietanza ID della pietanza (0 per auto-incremento)
+     * @return il numero di righe modificate o -1 in caso di errore
+     */
+    public int scriviSuDB(int idPietanza) {
+        DBPietanza p = new DBPietanza(); // DAO
+
+        p.setNome(this.nome);
+        p.setPrezzo(this.prezzo);
+        p.setIdCategoria(this.idCategoria);
+        p.setDisponibile(this.disponibile);
+
+        int i = p.salvaInDB(idPietanza);
+
+        return i;
     }
 
     // Getters e setters
@@ -68,16 +109,138 @@ public class Pietanza {
         this.nomeCategoria = nomeCategoria;
     }
 
-    public List<IngredienteRicetta> getIngredienti() {
+    public boolean isDisponibile() {
+        return disponibile;
+    }
+
+    public void setDisponibile(boolean disponibile) {
+        this.disponibile = disponibile;
+    }
+
+    public List<Object> getIngredienti() {
         return ingredienti;
     }
 
-    public void setIngredienti(List<IngredienteRicetta> ingredienti) {
+    public void setIngredienti(List<Object> ingredienti) {
         this.ingredienti = ingredienti;
     }
 
-    public void aggiungiIngrediente(IngredienteRicetta ingrediente) {
+    public void aggiungiIngrediente(Object ingrediente) {
         this.ingredienti.add(ingrediente);
+    }
+
+    /**
+     * Recupera la ricetta associata alla pietanza
+     * 
+     * @return Ricetta associata o null se non esiste
+     */
+    public Ricetta getRicetta() {
+        return Ricetta.getRicettaByPietanza(this.idPietanza);
+    }
+
+    /**
+     * Verifica se la pietanza è disponibile per essere ordinata
+     * Controlla prima la variabile disponibile, se false ritorna false
+     * Se disponibile=true, verifica la disponibilità degli ingredienti
+     * 
+     * @return true se la pietanza è disponibile, false altrimenti
+     */
+    public boolean isDisponibilePerOrdine() {
+        // Primo controllo rapido basato sulla variabile disponibile
+        if (!this.disponibile) {
+            return false;
+        }
+
+        // Recupera la ricetta della pietanza
+        Ricetta ricetta = this.getRicetta();
+        if (ricetta == null) {
+            // Se non c'è una ricetta, consideriamo la pietanza disponibile
+            return true;
+        }
+
+        // Controlla la disponibilità di tutti gli ingredienti necessari
+        List<Ricetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
+        for (Ricetta.IngredienteQuantita ing : ingredientiRicetta) {
+            int idIngrediente = ing.getIdIngrediente();
+            float quantitaNecessaria = ing.getQuantita();
+
+            Ingrediente ingrediente = new Ingrediente(idIngrediente);
+            if (!ingrediente.isDisponibile(quantitaNecessaria)) {
+                // Aggiorna lo stato della pietanza
+                this.disponibile = false;
+                this.aggiornaDisponibilita(false);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Prenota gli ingredienti necessari per preparare la pietanza
+     * 
+     * @param quantita La quantità di pietanze da preparare
+     * @return true se la prenotazione è avvenuta con successo, false altrimenti
+     */
+    public boolean prenotaIngredienti(int quantita) {
+        Ricetta ricetta = this.getRicetta();
+        if (ricetta == null) {
+            // Se non c'è una ricetta, consideriamo l'operazione riuscita
+            return true;
+        }
+
+        // Lista per tenere traccia degli ingredienti già prenotati
+        List<Integer> ingredientiPrenotati = new ArrayList<>();
+
+        try {
+            // Prenota tutti gli ingredienti necessari
+            List<Ricetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
+            for (Ricetta.IngredienteQuantita ing : ingredientiRicetta) {
+                int idIngrediente = ing.getIdIngrediente();
+                float quantitaUnitaria = ing.getQuantita();
+                float quantitaTotale = quantitaUnitaria * quantita;
+
+                Ingrediente ingrediente = new Ingrediente(idIngrediente);
+                if (ingrediente.prenotaIngrediente(quantitaTotale)) {
+                    ingredientiPrenotati.add(idIngrediente);
+                } else {
+                    return false; // Se un ingrediente non è disponibile, ritorna false
+                }
+            }
+
+            return true;
+        } catch (Exception e) {
+            System.err.println("Errore nella prenotazione degli ingredienti: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Aggiorna lo stato di disponibilità della pietanza nel database
+     * 
+     * @param disponibile nuovo stato di disponibilità
+     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
+     */
+    public boolean aggiornaDisponibilita(boolean disponibile) {
+        try {
+            this.disponibile = disponibile;
+            DBPietanza p = new DBPietanza(this.idPietanza);
+            p.setDisponibile(disponibile);
+            int result = p.aggiornaDisponibilita(disponibile);
+
+            if (result > 0) {
+                System.out.println("Disponibilità di " + this.nome + " aggiornata a: " +
+                        (disponibile ? "Disponibile" : "Non disponibile"));
+                return true;
+            } else {
+                System.err.println("Errore nell'aggiornamento della disponibilità di " + this.nome);
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Errore durante l'aggiornamento della disponibilità: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -85,32 +248,4 @@ public class Pietanza {
         return nome + " (" + prezzo + "€)";
     }
 
-    /**
-     * Classe interna che rappresenta un ingrediente di una ricetta
-     */
-    public static class IngredienteRicetta {
-        private Ingrediente ingrediente;
-        private float quantita;
-
-        public IngredienteRicetta(Ingrediente ingrediente, float quantita) {
-            this.ingrediente = ingrediente;
-            this.quantita = quantita;
-        }
-
-        public Ingrediente getIngrediente() {
-            return ingrediente;
-        }
-
-        public void setIngrediente(Ingrediente ingrediente) {
-            this.ingrediente = ingrediente;
-        }
-
-        public float getQuantita() {
-            return quantita;
-        }
-
-        public void setQuantita(float quantita) {
-            this.quantita = quantita;
-        }
-    }
 }
