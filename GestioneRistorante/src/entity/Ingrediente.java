@@ -1,5 +1,9 @@
 package entity;
 
+import java.util.ArrayList;
+
+import database.DBIngrediente;
+
 /**
  * Classe che rappresenta un ingrediente del magazzino
  */
@@ -14,14 +18,37 @@ public class Ingrediente {
     public Ingrediente() {
     }
 
-    public Ingrediente(int idIngrediente, String nome, float quantitaDisponibile,
-            String unitaMisura, float sogliaRiordino) {
+    public Ingrediente(int idIngrediente) {
+
+        DBIngrediente ingrediente = new DBIngrediente(idIngrediente);
+
+        this.nome = ingrediente.getNome();
+        this.quantitaDisponibile = ingrediente.getQuantitaDisponibile();
+        this.unitaMisura = ingrediente.getUnitaMisura();
+        this.sogliaRiordino = ingrediente.getSogliaRiordino();
         this.idIngrediente = idIngrediente;
-        this.nome = nome;
-        this.quantitaDisponibile = quantitaDisponibile;
-        this.unitaMisura = unitaMisura;
-        this.sogliaRiordino = sogliaRiordino;
     }
+
+
+    public int scriviSuDB(int id_ingrediente) {
+		
+		DBIngrediente s= new DBIngrediente(); //DAO
+		
+		s.setNome(this.nome);
+		s.setQuantitaDisponibile(this.quantitaDisponibile);
+        s.setUnitaMisura(this.unitaMisura);
+        s.setSogliaRiordino(this.sogliaRiordino);
+
+		int i = s.salvaInDB(id_ingrediente);
+		
+		return i;
+	}
+
+    public static ArrayList<Ingrediente> getIngredientiEsauriti() {
+        DBIngrediente ingrediente = new DBIngrediente();   
+        return ingrediente.getIngredientiEsauriti();
+    }
+
 
     // Getters e setters
     public int getIdIngrediente() {

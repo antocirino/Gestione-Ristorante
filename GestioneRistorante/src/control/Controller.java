@@ -31,8 +31,7 @@ public class Controller {
      */
     private Controller() {
         try {
-            DBConnection dbInstance = DBConnection.getInstance();
-            this.connection = dbInstance.getConnection();
+            this.connection = DBConnection.getConnection();
         } catch (SQLException e) {
             System.err.println("Errore nell'inizializzazione del controller: " + e.getMessage());
         }
@@ -57,9 +56,8 @@ public class Controller {
      */
     public boolean testDatabaseConnection() {
         try {
-            if (connection == null || connection.isClosed()) {
-                DBConnection dbInstance = DBConnection.getInstance();
-                connection = dbInstance.getConnection();
+            if (connection == null || connection.isClosed()) {;
+                connection = DBConnection.getConnection();
             }
 
             Statement stmt = connection.createStatement();
