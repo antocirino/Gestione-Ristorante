@@ -3,8 +3,10 @@ package boundary;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +14,10 @@ import java.util.Map;
 import control.Controller;
 import entity.Pietanza;
 import entity.Tavolo;
+
+// Importa la libreria SVG Salamander
+import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGUniverse;
 
 /**
  * Schermata per il cameriere che permette di visualizzare il menu
@@ -36,6 +42,19 @@ public class CameriereForm extends JFrame {
     private JTextField noteField;
     private JSpinner quantitaSpinner;
 
+    // Colori e font moderni - versioni più contrastate
+    private Color primaryColor = new Color(41, 128, 185);     // Blu più scuro
+    private Color accentColor = new Color(52, 152, 219);      // Blu accent
+    private Color textColor = new Color(44, 62, 80);          // Grigio scuro
+    private Color lightColor = new Color(236, 240, 241);      // Grigio chiaro
+    private Color successColor = new Color(39, 174, 96);      // Verde più vivido
+    private Color warningColor = new Color(230, 126, 34);     // Arancione più vivido
+    private Color dangerColor = new Color(192, 57, 43);       // Rosso più vivido
+    private Font titleFont = new Font("Segoe UI", Font.BOLD, 26);
+    private Font headerFont = new Font("Segoe UI", Font.BOLD, 18);
+    private Font regularFont = new Font("Segoe UI", Font.PLAIN, 16);
+    private Font smallFont = new Font("Segoe UI", Font.PLAIN, 14);
+
     // Per tenere traccia dell'ordine corrente
     private DefaultTableModel ordineTableModel;
     private Map<Integer, Double> prezziPietanze = new HashMap<>();
@@ -45,47 +64,71 @@ public class CameriereForm extends JFrame {
 
     public CameriereForm() {
         setTitle("Gestione Ristorante - Cameriere");
-        setSize(900, 700);
+        setSize(1200, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setLayout(new BorderLayout(0, 0));
+        mainPanel.setBackground(lightColor);
 
-        // Pannello superiore con titolo
-        JPanel headerPanel = new JPanel();
-        headerPanel.setBackground(new Color(41, 128, 185));
-        JLabel titleLabel = new JLabel("GESTIONE ORDINI");
+        // Pannello superiore con titolo moderno
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(primaryColor);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));
+        
+        JLabel titleLabel = new JLabel("GESTIONE ORDINI - CAMERIERE");
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headerPanel.add(titleLabel);
+        titleLabel.setFont(titleFont);
+        
+        // Aggiunge l'icona SVG al titolo
+        ImageIcon svgIcon = loadSVGIcon("person.svg", 32, 32);
+        JLabel iconLabel = new JLabel(svgIcon);
+        iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+        
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        titlePanel.setBackground(primaryColor);
+        titlePanel.add(iconLabel);
+        titlePanel.add(titleLabel);
+        
+        headerPanel.add(titlePanel, BorderLayout.WEST);
 
-        // Creazione del tabbed pane
+        // Creazione del tabbed pane con stile moderno
         tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(regularFont);
+        tabbedPane.setBackground(lightColor);
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
 
         // Tab per le pietanze
         menuPanel = createMenuPanel();
-        tabbedPane.addTab("Pietanze", menuPanel);
+        tabbedPane.addTab("🍝 Pietanze", menuPanel);
 
         // Tab per i menu fissi
         menuFissoPanel = createMenuFissoPanel();
-        tabbedPane.addTab("Menu Fissi", menuFissoPanel);
+        tabbedPane.addTab("📋 Menu Fissi", menuFissoPanel);
 
         // Tab per l'ordine
         ordinePanel = createOrdinePanel();
-        tabbedPane.addTab("Ordine", ordinePanel);
+        tabbedPane.addTab("🛒 Ordine Corrente", ordinePanel);
 
-        // Pannello bottoni in fondo
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        // Pannello bottoni in fondo con stile moderno
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setBackground(new Color(245, 247, 250));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        indietroButton = new JButton("Indietro");
+        indietroButton = createStyledButton("← Indietro", dangerColor);
         indietroButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                dispose();
+                // Chiude la finestra generando un evento di chiusura
+                CameriereForm.this.dispatchEvent(new java.awt.event.WindowEvent(
+                    CameriereForm.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
             }
         });
 
-        buttonPanel.add(indietroButton);
+        JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        leftButtonPanel.setBackground(new Color(245, 247, 250));
+        leftButtonPanel.add(indietroButton);
+        
+        buttonPanel.add(leftButtonPanel, BorderLayout.WEST);
 
         // Assemblaggio pannelli
         mainPanel.add(headerPanel, BorderLayout.NORTH);
@@ -106,45 +149,62 @@ public class CameriereForm extends JFrame {
      * Crea il pannello con la lista delle pietanze
      */
     private JPanel createMenuPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel panel = new JPanel(new BorderLayout(0, 20));
+        panel.setBackground(lightColor);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Pannello di controllo superiore
-        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
+        controlPanel.setBackground(lightColor);
 
         JLabel categoriaLabel = new JLabel("Filtra per categoria:");
+        categoriaLabel.setFont(regularFont);
+        categoriaLabel.setForeground(textColor);
+        
         categorieComboBox = new JComboBox<>();
         categorieComboBox.addItem("Tutte le categorie");
+        styleComboBox(categorieComboBox);
 
         controlPanel.add(categoriaLabel);
         controlPanel.add(categorieComboBox);
 
-        // Tabella pietanze
+        // Tabella pietanze con stile moderno
         DefaultTableModel menuTableModel = new DefaultTableModel(
                 new String[] { "ID", "Nome", "Categoria", "Prezzo (€)" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Rendi tutte le celle non modificabili
+                return false;
             }
         };
 
         pietanzeTable = new JTable(menuTableModel);
-        pietanzeTable.getColumnModel().getColumn(0).setMaxWidth(50);
+        styleTable(pietanzeTable);
+        pietanzeTable.getColumnModel().getColumn(0).setMaxWidth(60);
         pietanzeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(pietanzeTable);
+        styleScrollPane(scrollPane);
 
         // Pannello inferiore per aggiungere all'ordine
-        JPanel addPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel addPanel = createModernPanel();
+        addPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
         JLabel quantitaLabel = new JLabel("Quantità:");
+        quantitaLabel.setFont(regularFont);
+        quantitaLabel.setForeground(textColor);
+        
         SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 20, 1);
         quantitaSpinner = new JSpinner(spinnerModel);
+        styleSpinner(quantitaSpinner);
 
         JLabel noteLabel = new JLabel("Note:");
+        noteLabel.setFont(regularFont);
+        noteLabel.setForeground(textColor);
+        
         noteField = new JTextField(20);
+        styleTextField(noteField);
 
-        aggiungiPietanzaButton = new JButton("Aggiungi all'ordine");
+        aggiungiPietanzaButton = createStyledButton("+ Aggiungi all'ordine", successColor);
         aggiungiPietanzaButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 aggiungiPietanzaAllOrdine();
@@ -176,84 +236,82 @@ public class CameriereForm extends JFrame {
      * Crea il pannello con la lista dei menu fissi
      */
     private JPanel createMenuFissoPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel panel = new JPanel(new BorderLayout(0, 20));
+        panel.setBackground(lightColor);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Tabella menu fissi
         DefaultTableModel menuFissiTableModel = new DefaultTableModel(
                 new String[] { "ID", "Nome", "Dettagli Menu", "Prezzo (€)" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Rendi tutte le celle non modificabili
+                return false;
             }
         };
 
         menuFissiTable = new JTable(menuFissiTableModel);
-        menuFissiTable.getColumnModel().getColumn(0).setMaxWidth(50);
+        styleTable(menuFissiTable);
+        menuFissiTable.getColumnModel().getColumn(0).setMaxWidth(60);
         menuFissiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        menuFissiTable.setRowHeight(150);
+        menuFissiTable.getColumnModel().getColumn(2).setPreferredWidth(400);
 
-        // Configurazione per rendere visibile il testo multilinea con scrollbar
-        menuFissiTable.setDefaultRenderer(Object.class, new javax.swing.table.TableCellRenderer() {
-            // Manteniamo istanze dei renderer per non creare sempre nuovi oggetti
-            private final DefaultTableCellRenderer defaultRenderer = new DefaultTableCellRenderer();
-
+        // Configurazione per rendere visibile il testo multilinea
+        menuFissiTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
-            public java.awt.Component getTableCellRendererComponent(
+            public Component getTableCellRendererComponent(
                     JTable table, Object value, boolean isSelected, boolean hasFocus,
                     int row, int column) {
 
-                // Per la colonna dei dettagli del menu, usiamo un pannello con scrollbar
                 if (column == 2) {
                     JTextArea textArea = new JTextArea();
                     textArea.setText((value != null) ? value.toString() : "");
                     textArea.setWrapStyleWord(true);
                     textArea.setLineWrap(true);
                     textArea.setEditable(false);
-                    textArea.setMargin(new Insets(5, 5, 5, 5)); // Aggiungiamo un po' di margine per la leggibilità
+                    textArea.setFont(smallFont);
+                    textArea.setMargin(new Insets(8, 8, 8, 8));
 
-                    // Imposta i colori per la selezione
                     if (isSelected) {
-                        textArea.setBackground(table.getSelectionBackground());
-                        textArea.setForeground(table.getSelectionForeground());
+                        textArea.setBackground(accentColor);
+                        textArea.setForeground(Color.WHITE);
                     } else {
-                        textArea.setBackground(table.getBackground());
-                        textArea.setForeground(table.getForeground());
+                        textArea.setBackground(Color.WHITE);
+                        textArea.setForeground(textColor);
                     }
 
-                    // Creiamo uno scrollpane per il textArea
-                    JScrollPane scrollPane = new JScrollPane(textArea);
-                    scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-                    scrollPane.setOpaque(true);
-                    scrollPane.setBackground(textArea.getBackground());
-
-                    // Coloriamo anche lo scrollpane quando la riga è selezionata
-                    scrollPane.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
-                        @Override
-                        protected void configureScrollBarColors() {
-                            this.thumbColor = isSelected ? table.getSelectionBackground().darker()
-                                    : new Color(0xB0B0B0);
-                        }
-                    });
-
-                    return scrollPane;
+                    return textArea;
                 } else {
-                    // Per le altre colonne, utilizziamo il renderer standard
-                    return defaultRenderer.getTableCellRendererComponent(
-                            table, value, isSelected, hasFocus, row, column);
+                    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    c.setFont(regularFont);
+                    if (isSelected) {
+                        c.setBackground(accentColor);
+                        c.setForeground(Color.WHITE);
+                    } else {
+                        c.setBackground(Color.WHITE);
+                        c.setForeground(textColor);
+                    }
+                    return c;
                 }
             }
         });
 
         JScrollPane scrollPane = new JScrollPane(menuFissiTable);
+        styleScrollPane(scrollPane);
 
         // Pannello inferiore per aggiungere all'ordine
-        JPanel addPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel addPanel = createModernPanel();
+        addPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
         JLabel quantitaMenuLabel = new JLabel("Quantità:");
+        quantitaMenuLabel.setFont(regularFont);
+        quantitaMenuLabel.setForeground(textColor);
+        
         SpinnerModel spinnerModelMenu = new SpinnerNumberModel(1, 1, 20, 1);
         JSpinner quantitaMenuSpinner = new JSpinner(spinnerModelMenu);
+        styleSpinner(quantitaMenuSpinner);
 
-        aggiungiMenuButton = new JButton("Aggiungi all'ordine");
+        aggiungiMenuButton = createStyledButton("+ Aggiungi menu all'ordine", warningColor);
         aggiungiMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 aggiungiMenuAllOrdine(Integer.parseInt(quantitaMenuSpinner.getValue().toString()));
@@ -264,7 +322,6 @@ public class CameriereForm extends JFrame {
         addPanel.add(quantitaMenuSpinner);
         addPanel.add(aggiungiMenuButton);
 
-        // Assemblaggio pannello
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(addPanel, BorderLayout.SOUTH);
 
@@ -275,14 +332,20 @@ public class CameriereForm extends JFrame {
      * Crea il pannello per la gestione dell'ordine
      */
     private JPanel createOrdinePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel panel = new JPanel(new BorderLayout(0, 20));
+        panel.setBackground(lightColor);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Pannello superiore con la selezione del tavolo
-        JPanel tavoloPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel tavoloPanel = createModernPanel();
+        tavoloPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
-        JLabel tavoloLabel = new JLabel("Tavolo:");
+        JLabel tavoloLabel = new JLabel("🪑 Seleziona tavolo:");
+        tavoloLabel.setFont(headerFont);
+        tavoloLabel.setForeground(textColor);
+        
         tavoliComboBox = new JComboBox<>();
+        styleComboBox(tavoliComboBox);
 
         tavoloPanel.add(tavoloLabel);
         tavoloPanel.add(tavoliComboBox);
@@ -292,22 +355,25 @@ public class CameriereForm extends JFrame {
                 new String[] { "ID", "Tipo", "Nome", "Quantità", "Prezzo unit. (€)", "Totale (€)", "Note" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Rendi tutte le celle non modificabili
+                return false;
             }
         };
 
         ordineTable = new JTable(ordineTableModel);
-        ordineTable.getColumnModel().getColumn(0).setMaxWidth(50);
+        styleTable(ordineTable);
+        ordineTable.getColumnModel().getColumn(0).setMaxWidth(60);
         ordineTable.getColumnModel().getColumn(1).setMaxWidth(80);
         ordineTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(ordineTable);
+        styleScrollPane(scrollPane);
 
         // Pannello inferiore con i pulsanti
-        JPanel ordineButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel ordineButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
+        ordineButtonPanel.setBackground(lightColor);
 
-        eliminaButton = new JButton("Elimina selezionato");
-        inviaOrdineButton = new JButton("Invia Ordine");
+        eliminaButton = createStyledButton("🗑️ Elimina selezionato", dangerColor);
+        inviaOrdineButton = createStyledButton("📤 Invia Ordine", primaryColor);
 
         eliminaButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -324,11 +390,219 @@ public class CameriereForm extends JFrame {
         ordineButtonPanel.add(eliminaButton);
         ordineButtonPanel.add(inviaOrdineButton);
 
-        // Assemblaggio pannello
         panel.add(tavoloPanel, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(ordineButtonPanel, BorderLayout.SOUTH);
 
+        return panel;
+    }
+
+    // Metodi di utilità per lo styling moderno
+
+    private JButton createStyledButton(String text, Color backgroundColor) {
+        JButton button = new JButton(text);
+        button.setFont(regularFont);
+        button.setForeground(Color.WHITE);
+        button.setBackground(backgroundColor);
+        button.setFocusPainted(false);
+        button.setOpaque(true);
+        button.setBorderPainted(true);
+        button.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(backgroundColor.darker(), 2, true),
+            BorderFactory.createEmptyBorder(12, 20, 12, 20)
+        ));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Effetti hover più evidenti
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(backgroundColor.brighter());
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(backgroundColor.darker().darker(), 2, true),
+                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                ));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(backgroundColor);
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(backgroundColor.darker(), 2, true),
+                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                ));
+            }
+            
+            @Override
+            public void mousePressed(MouseEvent e) {
+                button.setBackground(backgroundColor.darker());
+            }
+            
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (button.contains(e.getPoint())) {
+                    button.setBackground(backgroundColor.brighter());
+                } else {
+                    button.setBackground(backgroundColor);
+                }
+            }
+        });
+        
+        return button;
+    }
+
+    private void styleTable(JTable table) {
+        table.setFont(regularFont);
+        table.setRowHeight(35);
+        table.setBackground(Color.WHITE);
+        table.setForeground(textColor);
+        table.setSelectionBackground(accentColor);
+        table.setSelectionForeground(Color.WHITE);
+        table.setGridColor(new Color(230, 230, 230));
+        table.getTableHeader().setFont(smallFont);
+        table.getTableHeader().setBackground(new Color(52, 73, 94));
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+    }
+
+    private void styleScrollPane(JScrollPane scrollPane) {
+        scrollPane.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        scrollPane.getViewport().setBackground(Color.WHITE);
+    }
+
+    private void styleComboBox(JComboBox<String> comboBox) {
+        comboBox.setFont(regularFont);
+        comboBox.setBackground(Color.WHITE);
+        comboBox.setForeground(textColor);
+        comboBox.setPreferredSize(new Dimension(250, 40));
+        comboBox.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(149, 165, 166), 2, true),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        
+        // Migliora l'aspetto del dropdown
+        comboBox.setOpaque(true);
+        
+        // Personalizza il renderer per le opzioni nel dropdown
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                
+                setFont(regularFont);
+                setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+                
+                if (isSelected) {
+                    setBackground(accentColor);
+                    setForeground(Color.WHITE);
+                } else {
+                    setBackground(Color.WHITE);
+                    setForeground(textColor);
+                }
+                
+                return this;
+            }
+        });
+        
+        // Aggiungi effetti hover per il ComboBox
+        comboBox.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                comboBox.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(accentColor, 2, true),
+                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                ));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                comboBox.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(new Color(149, 165, 166), 2, true),
+                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                ));
+            }
+        });
+    }
+
+    private void styleTextField(JTextField textField) {
+        textField.setFont(regularFont);
+        textField.setBackground(Color.WHITE);
+        textField.setForeground(textColor);
+        textField.setPreferredSize(new Dimension(200, 40));
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(149, 165, 166), 2, true),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        
+        // Aggiungi effetti focus per il TextField
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                textField.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(accentColor, 2, true),
+                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                ));
+            }
+            
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                textField.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(new Color(149, 165, 166), 2, true),
+                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                ));
+            }
+        });
+    }
+
+    private void styleSpinner(JSpinner spinner) {
+        spinner.setFont(regularFont);
+        spinner.setPreferredSize(new Dimension(80, 40));
+        spinner.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(149, 165, 166), 2, true),
+            BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            JTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+            textField.setFont(regularFont);
+            textField.setBackground(Color.WHITE);
+            textField.setForeground(textColor);
+            textField.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+            textField.setHorizontalAlignment(JTextField.CENTER);
+        }
+        
+        // Aggiungi effetti focus per lo Spinner
+        spinner.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                spinner.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(accentColor, 2, true),
+                    BorderFactory.createEmptyBorder(4, 8, 4, 8)
+                ));
+            }
+            
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                spinner.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(new Color(149, 165, 166), 2, true),
+                    BorderFactory.createEmptyBorder(4, 8, 4, 8)
+                ));
+            }
+        });
+    }
+
+    private JPanel createModernPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
         return panel;
     }
 
@@ -641,6 +915,143 @@ public class CameriereForm extends JFrame {
             JOptionPane.showMessageDialog(this,
                     "Errore durante l'invio dell'ordine: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Metodo per caricare icone SVG (copiato da FirstForm)
+    private ImageIcon loadSVGIcon(String filename, int width, int height) {
+        try {
+            // Percorsi possibili per le icone SVG (nell'ordine di priorità)
+            String[] possiblePaths = {
+                "bin/resources/icons/" + filename,                    // Nel container/dopo compilazione
+                "resources/icons/" + filename,                       // Percorso relativo nel container
+                "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
+                "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
+                "src/resources/icons/" + filename                    // Durante sviluppo
+            };
+            
+            java.io.File svgFile = null;
+            String usedPath = null;
+            
+            for (String path : possiblePaths) {
+                java.io.File testFile = new java.io.File(path);
+                if (testFile.exists()) {
+                    svgFile = testFile;
+                    usedPath = path;
+                    System.out.println("Icona SVG trovata: " + usedPath);
+                    break;
+                }
+            }
+            
+            // Se non trovato con percorsi diretti, prova con il class loader
+            if (svgFile == null || !svgFile.exists()) {
+                try {
+                    java.net.URL resourceUrl = getClass().getClassLoader().getResource("icons/" + filename);
+                    if (resourceUrl == null) {
+                        resourceUrl = getClass().getClassLoader().getResource("resources/icons/" + filename);
+                    }
+                    if (resourceUrl != null) {
+                        svgFile = new java.io.File(resourceUrl.toURI());
+                        System.out.println("Icona SVG trovata via class loader: " + resourceUrl);
+                    }
+                } catch (Exception e) {
+                    // Ignora e usa fallback
+                }
+            }
+            
+            if (svgFile == null || !svgFile.exists()) {
+                System.out.println("File SVG non trovato in nessuno dei percorsi: " + filename);
+                return createFallbackIcon(filename, width, height);
+            }
+            
+            SVGUniverse svgUniverse = new SVGUniverse();
+            java.net.URI svgUri = svgFile.toURI();
+            SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(svgUri.toURL()));
+            
+            if (diagram == null) {
+                System.out.println("Impossibile caricare il diagramma SVG: " + filename);
+                return createFallbackIcon(filename, width, height);
+            }
+            
+            // Imposta dimensioni
+            diagram.setIgnoringClipHeuristic(true);
+            
+            // Renderizza SVG come BufferedImage con sfondo trasparente
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = image.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            
+            // Pulisci lo sfondo
+            g2.setComposite(AlphaComposite.Clear);
+            g2.fillRect(0, 0, width, height);
+            g2.setComposite(AlphaComposite.SrcOver);
+            
+            // Cambia il colore dell'SVG in bianco per l'header
+            g2.setColor(Color.WHITE);
+            
+            // Scala e centra l'SVG
+            java.awt.geom.Rectangle2D bounds = diagram.getViewRect();
+            double scaleX = (double) width / bounds.getWidth();
+            double scaleY = (double) height / bounds.getHeight();
+            double scale = Math.min(scaleX, scaleY);
+            
+            int scaledWidth = (int) (bounds.getWidth() * scale);
+            int scaledHeight = (int) (bounds.getHeight() * scale);
+            int x = (width - scaledWidth) / 2;
+            int y = (height - scaledHeight) / 2;
+            
+            g2.translate(x, y);
+            g2.scale(scale, scale);
+            
+            diagram.render(g2);
+            g2.dispose();
+            
+            System.out.println("Icona SVG caricata con successo: " + filename);
+            return new ImageIcon(image);
+            
+        } catch (Exception e) {
+            System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
+            e.printStackTrace();
+            return createFallbackIcon(filename, width, height);
+        }
+    }
+    
+    // Metodo per creare icone di fallback
+    private ImageIcon createFallbackIcon(String filename, int width, int height) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = image.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        // Imposta colore e font
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+        
+        String icon = getUnicodeIcon(filename);
+        FontMetrics fm = g2.getFontMetrics();
+        int textWidth = fm.stringWidth(icon);
+        int textHeight = fm.getHeight();
+        int x = (width - textWidth) / 2;
+        int y = (height - textHeight) / 2 + fm.getAscent();
+        
+        g2.drawString(icon, x, y);
+        g2.dispose();
+        
+        return new ImageIcon(image);
+    }
+
+    // Metodo per ottenere icone Unicode come fallback
+    private String getUnicodeIcon(String filename) {
+        if (filename.contains("person")) {
+            return "👤";
+        } else if (filename.contains("restaurant_menu")) {
+            return "🍽️";
+        } else if (filename.contains("payment")) {
+            return "💳";
+        } else if (filename.contains("admin_panel_settings")) {
+            return "⚙️";
+        } else {
+            return "��";
         }
     }
 
