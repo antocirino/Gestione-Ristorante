@@ -37,4 +37,4 @@ echo "Database MySQL disponibile, avvio applicazione..."
 java -Dswing.defaultlaf=javax.swing.plaf.nimbus.NimbusLookAndFeel \
      -Dsun.java2d.xrender=false \
      -Djava.awt.headless=false \
-     -cp "bin:bin/jars/*" boundary.FirstForm
+     -cp "bin:lib/*" boundary.FirstForm
