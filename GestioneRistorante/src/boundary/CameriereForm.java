@@ -343,7 +343,12 @@ public class CameriereForm extends JFrame {
         JPanel tavoloPanel = createModernPanel();
         tavoloPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
-        JLabel tavoloLabel = new JLabel("🪑 Seleziona tavolo:");
+        // svg tavolo
+        ImageIcon tavoloIcon = loadSVGIcon("table.svg", 20, 20);
+        JLabel tavoloIconLabel = new JLabel(tavoloIcon);
+        tavoloIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+
+        JLabel tavoloLabel = new JLabel("Seleziona tavolo:");
         tavoloLabel.setFont(headerFont);
         tavoloLabel.setForeground(textColor);
         
@@ -375,8 +380,14 @@ public class CameriereForm extends JFrame {
         JPanel ordineButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         ordineButtonPanel.setBackground(lightColor);
 
-        eliminaButton = createStyledButton("🗑️ Elimina selezionato", dangerColor);
-        inviaOrdineButton = createStyledButton("📤 Invia Ordine", primaryColor);
+        eliminaButton = createStyledButton("Elimina selezionato", dangerColor);
+        inviaOrdineButton = createStyledButton("Invia Ordine", primaryColor);
+
+        // Aggiungi icone SVG ai pulsanti
+        ImageIcon eliminaIcon = loadSVGIcon("delete.svg", 20, 20);
+        ImageIcon inviaIcon = loadSVGIcon("send.svg", 20, 20);
+        eliminaButton.setIcon(eliminaIcon);
+        inviaOrdineButton.setIcon(inviaIcon);
 
         eliminaButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
