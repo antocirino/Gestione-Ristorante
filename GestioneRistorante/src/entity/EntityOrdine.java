@@ -49,12 +49,12 @@ public class EntityOrdine {
      * @param numPersone Numero di persone per l'ordine
      * @param stato      Stato iniziale dell'ordine
      */
-        public EntityOrdine(int idOrdine, int idTavolo, int numPersone, String stato, double costoTotale) {
-        this.idTavolo = idTavolo;
+        public EntityOrdine(int idOrdine, int idTavolo, int numPersone, String stato) {this.idTavolo = idTavolo;
+        this.idOrdine = idOrdine;
         this.numPersone = numPersone;
         this.stato = stato;
         this.dataOrdine = new Date(); // Data corrente
-        this.costoTotale = costoTotale;
+        this.costoTotale = 0.0;
     }
 
     /**
@@ -70,7 +70,7 @@ public class EntityOrdine {
         this.numPersone = ordine.getNumPersone();
         this.dataOrdine = ordine.getDataOrdine();
         this.stato = ordine.getStato();
-        this.costoTotale = ordine.getCostoTotale();
+        this.costoTotale = 0.0;
     }
 
     /**

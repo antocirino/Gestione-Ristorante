@@ -34,11 +34,11 @@ public class DettaglioOrdinePietanzaTest {
 
         @Test
     public void testScriviSuDB(){
-            int idOrdine = 1;
-            EntityOrdine ordine = new EntityOrdine(idOrdine, 1, 5, "in_attesa", 50.0);
+            int idOrdine = 9;
+            EntityOrdine ordine = new EntityOrdine(idOrdine, 1, 5, "in_attesa");
             ordine.scriviSuDB();
-            EntityPietanza pietanza = new EntityPietanza(110, "Pizza Margherita", 7.5, 2);
-            pietanza.scriviSuDB(110);
+            EntityPietanza pietanza = new EntityPietanza(160, "Pizza Margherita", 7.5, 2);
+            pietanza.scriviSuDB(160);
             int quantita = 3;
             dettaglioOrdinePietanza = new EntityDettaglioOrdinePietanza(idOrdine, pietanza, quantita);
             int id_dettaglio_ordine_pietanza = 0;//aggiunge automaticamente l'id
