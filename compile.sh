@@ -49,9 +49,33 @@ else
   echo "FlatLaf già presente."
 fi
 
+# Scarica SVG Salamander per le icone SVG
+SVG_SALAMANDER_JAR="svg-salamander-1.1.4.jar"
+if [ ! -f "$JDBC_DIR/$SVG_SALAMANDER_JAR" ]; then
+  echo -e "${YELLOW}Scaricamento della libreria SVG Salamander per le icone...${NC}"
+  curl -L -o "$JDBC_DIR/$SVG_SALAMANDER_JAR" "https://github.com/blackears/svgSalamander/releases/download/v1.1.4/svgSalamander-1.1.4.jar"
+  if [ $? -eq 0 ]; then
+    echo -e "${GREEN}SVG Salamander scaricato con successo.${NC}"
+  else
+    echo -e "${RED}Errore durante il download di SVG Salamander.${NC}"
+    # Non è critico, quindi continuiamo
+  fi
+else
+  echo "SVG Salamander già presente."
+fi
+
 # Compila l'applicazione
 echo -e "${YELLOW}Compilazione dell'applicazione...${NC}"
 javac -d GestioneRistorante/bin -cp "$JDBC_DIR/*" $(find GestioneRistorante/src -name "*.java")
+
+# Copia le risorse (icone SVG) nella cartella bin
+echo -e "${YELLOW}Copia delle risorse...${NC}"
+if [ -d "GestioneRistorante/src/resources" ]; then
+  cp -r GestioneRistorante/src/resources/* GestioneRistorante/bin/resources/
+  echo "Risorse copiate con successo."
+else
+  echo "Cartella resources non trovata, le icone potrebbero non essere disponibili."
+fi
 
 # Verifica se la compilazione ha avuto successo
 if [ $? -eq 0 ]; then
