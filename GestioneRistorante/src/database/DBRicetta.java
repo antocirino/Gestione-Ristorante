@@ -199,7 +199,6 @@ public class DBRicetta {
                 ricetta.setNome(rs.getString("nome"));
                 ricetta.setDescrizione(rs.getString("descrizione"));
                 ricetta.setIdPietanza(rs.getInt("id_pietanza"));
-                ricetta.setNomePietanza(rs.getString("nome_pietanza"));
                 ricetta.setTempoPreparazione(rs.getInt("tempo_preparazione"));
                 ricetta.setIstruzioni(rs.getString("istruzioni"));
                 listaRicette.add(ricetta);

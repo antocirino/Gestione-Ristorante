@@ -13,7 +13,6 @@ public class EntityRicetta {
     private String nome;
     private String descrizione;
     private int idPietanza;
-    private String nomePietanza; // Nome della pietanza associata
     private int tempoPreparazione; // in minuti
     private String istruzioni;
     private List<IngredienteQuantita> ingredienti;
@@ -255,14 +254,6 @@ public class EntityRicetta {
 
     public void setIdPietanza(int idPietanza) {
         this.idPietanza = idPietanza;
-    }
-
-    public String getNomePietanza() {
-        return nomePietanza;
-    }
-
-    public void setNomePietanza(String nomePietanza) {
-        this.nomePietanza = nomePietanza;
     }
 
     public int getTempoPreparazione() {

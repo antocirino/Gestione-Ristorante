@@ -55,6 +55,7 @@ public class DBComposizioneMenu {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
+                System.out.println("DEBUG.");
                 this.nomePietanza = rs.getString("nome_pietanza");
                 this.prezzoPietanza = rs.getDouble("prezzo_pietanza");
             }
@@ -194,6 +195,7 @@ public class DBComposizioneMenu {
     public int getIdMenu() {
         return idMenu;
     }
+
 
     public void setIdMenu(int idMenu) {
         this.idMenu = idMenu;
