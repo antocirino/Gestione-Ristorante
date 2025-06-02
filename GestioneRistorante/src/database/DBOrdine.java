@@ -78,9 +78,12 @@ public class DBOrdine {
         int nuovoId = -1;
 
         String query = String.format(Locale.US,
-                "INSERT INTO ordine (id_tavolo, num_persone, stato, id_ristorante, costo_totale) " +
-                        "VALUES (%d, %d, '%s', %d, %.2f)",
-                this.idTavolo, this.numPersone, this.stato, this.idRistorante, this.costoTotale);
+                "INSERT INTO ordine (id_tavolo, num_persone, stato, data_ordine, id_ristorante, costo_totale) " +
+                        "VALUES (%d, %d, '%s', '%s', %d, %.2f)",
+                this.idTavolo, this.numPersone, this.stato,
+                new java.sql.Timestamp(this.dataOrdine.getTime()),
+                this.idRistorante, this.costoTotale);
+
 
         System.out.println(query);
         try {

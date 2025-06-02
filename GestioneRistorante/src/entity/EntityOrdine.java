@@ -42,6 +42,22 @@ public class EntityOrdine {
     }
 
     /**
+     * Costruttore con tutti i parametri
+     *
+     * @param idOrdine ID dell'ordine da caricare
+     * @param idTavolo   ID del tavolo associato all'ordine
+     * @param numPersone Numero di persone per l'ordine
+     * @param stato      Stato iniziale dell'ordine
+     */
+        public EntityOrdine(int idOrdine, int idTavolo, int numPersone, String stato, double costoTotale) {
+        this.idTavolo = idTavolo;
+        this.numPersone = numPersone;
+        this.stato = stato;
+        this.dataOrdine = new Date(); // Data corrente
+        this.costoTotale = costoTotale;
+    }
+
+    /**
      * Costruttore che carica un ordine dal database per ID
      * 
      * @param idOrdine ID dell'ordine da caricare
@@ -67,6 +83,7 @@ public class EntityOrdine {
 
         o.setIdTavolo(this.idTavolo);
         o.setNumPersone(this.numPersone);
+        o.setDataOrdine(this.dataOrdine);
         o.setStato(this.stato);
         o.setIdRistorante(1); // Assumiamo che il ristorante abbia ID=1 come predefinito
         o.setCostoTotale(this.costoTotale); // Inizializza il costo totale
