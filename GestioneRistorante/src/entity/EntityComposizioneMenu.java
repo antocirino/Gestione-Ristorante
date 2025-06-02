@@ -27,6 +27,7 @@ public class EntityComposizioneMenu {
      * @param idPietanza ID della pietanza
      */
     public EntityComposizioneMenu(int idMenu, int idPietanza) {
+        DBComposizioneMenu c = new DBComposizioneMenu();
         this.idMenu = idMenu;
         this.idPietanza = idPietanza;
     }

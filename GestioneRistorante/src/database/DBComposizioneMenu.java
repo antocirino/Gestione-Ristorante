@@ -105,6 +105,7 @@ public class DBComposizioneMenu {
             return DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nell'eliminazione della composizione menu dal database: " + e.getMessage());
+
         }
         return -1; // Errore
     }
