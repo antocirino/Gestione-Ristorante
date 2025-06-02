@@ -180,17 +180,8 @@ public class FirstForm extends JFrame {
         // Aggiungi azione appropriata
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Manteniamo le azioni originali
                 String role = text;
-                if (role.equals("Cameriere")) {
-                    new CameriereForm().setVisible(true);
-                } else if (role.equals("Cuoco")) {
-                    new CuocoForm().setVisible(true);
-                } else if (role.equals("Cassiere")) {
-                    new CassiereForm().setVisible(true);
-                } else if (role.equals("Direttore")) {
-                    new DirettoreForm().setVisible(true);
-                }
+                openRoleWindow(role);
             }
         });
         
@@ -224,7 +215,7 @@ public class FirstForm extends JFrame {
             
             // Se non trovato con percorsi diretti, prova con il class loader
             if (svgFile == null || !svgFile.exists()) {
-                try {
+        try {
                     java.net.URL resourceUrl = getClass().getClassLoader().getResource("icons/" + filename);
                     if (resourceUrl == null) {
                         resourceUrl = getClass().getClassLoader().getResource("resources/icons/" + filename);
@@ -314,8 +305,8 @@ public class FirstForm extends JFrame {
         int y = (height - textHeight) / 2 + fm.getAscent();
         
         g2.drawString(icon, x, y);
-        g2.dispose();
-        
+            g2.dispose();
+            
         return new ImageIcon(image);
     }
 
@@ -431,4 +422,48 @@ public class FirstForm extends JFrame {
     private JButton cuocoButton;
     private JButton cassiereButton;
     private JButton direttoreButton;
+
+    // Metodo per aprire le finestre dei ruoli gestendo correttamente la visibilità
+    private void openRoleWindow(String role) {
+        JFrame roleWindow = null;
+        
+        // Crea la finestra appropriata
+        if (role.equals("Cameriere")) {
+            roleWindow = new CameriereForm();
+        } else if (role.equals("Cuoco")) {
+            roleWindow = new CuocoForm();
+        } else if (role.equals("Cassiere")) {
+            roleWindow = new CassiereForm();
+        } else if (role.equals("Direttore")) {
+            roleWindow = new DirettoreForm();
+        }
+        
+        if (roleWindow != null) {
+            final JFrame finalRoleWindow = roleWindow;
+            
+            // Nascondi FirstForm
+            this.setVisible(false);
+            
+            // Configura la finestra del ruolo
+            finalRoleWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            
+            // Aggiungi listener per gestire la chiusura
+            finalRoleWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    // Chiudi la finestra del ruolo
+                    finalRoleWindow.dispose();
+                    // Rimostra FirstForm
+                    FirstForm.this.setVisible(true);
+                    FirstForm.this.toFront();
+                    FirstForm.this.requestFocus();
+                }
+            });
+            
+            // Mostra la finestra del ruolo
+            finalRoleWindow.setVisible(true);
+            finalRoleWindow.toFront();
+            finalRoleWindow.requestFocus();
+        }
+    }
 }
