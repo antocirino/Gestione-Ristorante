@@ -100,15 +100,18 @@ public class CameriereForm extends JFrame {
 
         // Tab per le pietanze
         menuPanel = createMenuPanel();
-        tabbedPane.addTab("🍝 Pietanze", menuPanel);
+        ImageIcon pietanzaIcon = loadSVGIcon("pietanza.svg", 20, 20, textColor);
+        tabbedPane.addTab("Pietanze", pietanzaIcon, menuPanel);
 
         // Tab per i menu fissi
         menuFissoPanel = createMenuFissoPanel();
-        tabbedPane.addTab("📋 Menu Fissi", menuFissoPanel);
+        ImageIcon menuIcon = loadSVGIcon("menu.svg", 20, 20, textColor);
+        tabbedPane.addTab("Menu Fissi", menuIcon, menuFissoPanel);
 
         // Tab per l'ordine
         ordinePanel = createOrdinePanel();
-        tabbedPane.addTab("🛒 Ordine Corrente", ordinePanel);
+        ImageIcon ordineIcon = loadSVGIcon("order.svg", 20, 20, textColor);
+        tabbedPane.addTab("Ordine Corrente", ordineIcon, ordinePanel);
 
         // Pannello bottoni in fondo con stile moderno
         JPanel buttonPanel = new JPanel(new BorderLayout());
@@ -920,6 +923,11 @@ public class CameriereForm extends JFrame {
 
     // Metodo per caricare icone SVG (copiato da FirstForm)
     private ImageIcon loadSVGIcon(String filename, int width, int height) {
+        return loadSVGIcon(filename, width, height, Color.WHITE);
+    }
+    
+    // Metodo sovraccaricato per specificare il colore dell'icona
+    private ImageIcon loadSVGIcon(String filename, int width, int height, Color color) {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
             String[] possiblePaths = {
@@ -961,7 +969,7 @@ public class CameriereForm extends JFrame {
             
             if (svgFile == null || !svgFile.exists()) {
                 System.out.println("File SVG non trovato in nessuno dei percorsi: " + filename);
-                return createFallbackIcon(filename, width, height);
+                return createFallbackIcon(filename, width, height, color);
             }
             
             SVGUniverse svgUniverse = new SVGUniverse();
@@ -970,7 +978,7 @@ public class CameriereForm extends JFrame {
             
             if (diagram == null) {
                 System.out.println("Impossibile caricare il diagramma SVG: " + filename);
-                return createFallbackIcon(filename, width, height);
+                return createFallbackIcon(filename, width, height, color);
             }
             
             // Imposta dimensioni
@@ -987,8 +995,8 @@ public class CameriereForm extends JFrame {
             g2.fillRect(0, 0, width, height);
             g2.setComposite(AlphaComposite.SrcOver);
             
-            // Cambia il colore dell'SVG in bianco per l'header
-            g2.setColor(Color.WHITE);
+            // Imposta il colore dell'SVG
+            g2.setColor(color);
             
             // Scala e centra l'SVG
             java.awt.geom.Rectangle2D bounds = diagram.getViewRect();
@@ -1013,19 +1021,19 @@ public class CameriereForm extends JFrame {
         } catch (Exception e) {
             System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
             e.printStackTrace();
-            return createFallbackIcon(filename, width, height);
+            return createFallbackIcon(filename, width, height, color);
         }
     }
     
     // Metodo per creare icone di fallback
-    private ImageIcon createFallbackIcon(String filename, int width, int height) {
+    private ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         // Imposta colore e font
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+        g2.setColor(color);
+        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, Math.min(width, height) - 4));
         
         String icon = getUnicodeIcon(filename);
         FontMetrics fm = g2.getFontMetrics();
@@ -1042,7 +1050,13 @@ public class CameriereForm extends JFrame {
 
     // Metodo per ottenere icone Unicode come fallback
     private String getUnicodeIcon(String filename) {
-        if (filename.contains("person")) {
+        if (filename.contains("pietanza")) {
+            return "🍝";
+        } else if (filename.contains("menu")) {
+            return "📋";
+        } else if (filename.contains("order")) {
+            return "🛒";
+        } else if (filename.contains("person")) {
             return "👤";
         } else if (filename.contains("restaurant_menu")) {
             return "🍽️";
@@ -1051,7 +1065,7 @@ public class CameriereForm extends JFrame {
         } else if (filename.contains("admin_panel_settings")) {
             return "⚙️";
         } else {
-            return "��";
+            return "📄";
         }
     }
 
