@@ -2,7 +2,6 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.Map;
-
 import database.DBCategoriaPietanza;
 
 /**
@@ -34,7 +33,6 @@ public class EntityCategoriaPietanza {
      */
     public EntityCategoriaPietanza(int idCategoria) {
         DBCategoriaPietanza categoria = new DBCategoriaPietanza(idCategoria);
-
         this.idCategoria = idCategoria;
         this.nome = categoria.getNome();
     }
@@ -64,10 +62,8 @@ public class EntityCategoriaPietanza {
         if (this.idCategoria <= 0) {
             return -1; // Non possiamo aggiornare senza un ID valido
         }
-
         DBCategoriaPietanza c = new DBCategoriaPietanza(this.idCategoria); // DAO
         c.setNome(this.nome);
-
         return c.aggiornaNelDB();
     }
 

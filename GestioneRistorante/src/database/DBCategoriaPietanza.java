@@ -23,10 +23,12 @@ public class DBCategoriaPietanza {
      * Costruttore che carica una categoria dal database tramite il suo ID
      * 
      * @param idCategoria l'ID della categoria da caricare
+     * @throws EntitaDuplicataException se l'ID della categoria non esiste nel
+     *                                  database
      */
     public DBCategoriaPietanza(int idCategoria) {
         this.idCategoria = idCategoria;
-        caricaDaDB();
+        caricaDaDB(); // Carico i dati della categoria
     }
 
     /**

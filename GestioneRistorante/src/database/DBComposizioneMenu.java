@@ -31,7 +31,7 @@ public class DBComposizioneMenu {
     public DBComposizioneMenu(int idMenu, int idPietanza) {
         this.idMenu = idMenu;
         this.idPietanza = idPietanza;
-        caricaDaDB();
+        caricaDaDB(); // Carico i dati della composizione menu
     }
 
     /**
@@ -76,6 +76,7 @@ public class DBComposizioneMenu {
             ResultSet rs = DBConnection.selectQuery(checkQuery);
             if (rs.next() && rs.getInt(1) > 0) {
                 // L'associazione esiste già, niente da fare
+                System.out.println("L'associazione menu-pietanza esiste già. Nessuna modifica necessaria.");
                 return 0;
             }
 
