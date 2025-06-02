@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.Ordine;
+import entity.EntityOrdine;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'ordine' nel database
@@ -171,14 +171,14 @@ public class DBOrdine {
      * 
      * @return ArrayList di oggetti Ordine
      */
-    public ArrayList<Ordine> getTuttiOrdini() {
-        ArrayList<Ordine> listaOrdini = new ArrayList<>();
+    public ArrayList<EntityOrdine> getTuttiOrdini() {
+        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
         String query = "SELECT * FROM ordine ORDER BY data_ordine DESC";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Ordine ordine = new Ordine();
+                EntityOrdine ordine = new EntityOrdine();
                 ordine.setIdOrdine(rs.getInt("id_ordine"));
                 ordine.setIdTavolo(rs.getInt("id_tavolo"));
                 ordine.setNumPersone(rs.getInt("num_persone"));
@@ -199,14 +199,14 @@ public class DBOrdine {
      * @param statoFiltro lo stato per cui filtrare
      * @return ArrayList di oggetti Ordine che corrispondono al filtro
      */
-    public ArrayList<Ordine> getOrdiniPerStato(String statoFiltro) {
-        ArrayList<Ordine> listaOrdini = new ArrayList<>();
+    public ArrayList<EntityOrdine> getOrdiniPerStato(String statoFiltro) {
+        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
         String query = "SELECT * FROM ordine WHERE stato = '" + statoFiltro + "' ORDER BY data_ordine DESC";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Ordine ordine = new Ordine();
+                EntityOrdine ordine = new EntityOrdine();
                 ordine.setIdOrdine(rs.getInt("id_ordine"));
                 ordine.setIdTavolo(rs.getInt("id_tavolo"));
                 ordine.setNumPersone(rs.getInt("num_persone"));
@@ -227,14 +227,14 @@ public class DBOrdine {
      * @param idTavolo l'ID del tavolo
      * @return ArrayList di oggetti Ordine per il tavolo specificato
      */
-    public ArrayList<Ordine> getOrdiniPerTavolo(int idTavolo) {
-        ArrayList<Ordine> listaOrdini = new ArrayList<>();
+    public ArrayList<EntityOrdine> getOrdiniPerTavolo(int idTavolo) {
+        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
         String query = "SELECT * FROM ordine WHERE id_tavolo = " + idTavolo + " ORDER BY data_ordine DESC";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Ordine ordine = new Ordine();
+                EntityOrdine ordine = new EntityOrdine();
                 ordine.setIdOrdine(rs.getInt("id_ordine"));
                 ordine.setIdTavolo(rs.getInt("id_tavolo"));
                 ordine.setNumPersone(rs.getInt("num_persone"));
@@ -255,14 +255,14 @@ public class DBOrdine {
      * @param stato lo stato degli ordini da recuperare
      * @return ArrayList di oggetti Ordine con lo stato specificato
      */
-    public ArrayList<Ordine> getOrdiniByStato(String stato) {
-        ArrayList<Ordine> listaOrdini = new ArrayList<>();
+    public ArrayList<EntityOrdine> getOrdiniByStato(String stato) {
+        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
         String query = "SELECT * FROM ordine WHERE stato = '" + stato + "' ORDER BY data_ordine DESC";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Ordine ordine = new Ordine();
+                EntityOrdine ordine = new EntityOrdine();
                 ordine.setIdOrdine(rs.getInt("id_ordine"));
                 ordine.setIdTavolo(rs.getInt("id_tavolo"));
                 ordine.setNumPersone(rs.getInt("num_persone"));

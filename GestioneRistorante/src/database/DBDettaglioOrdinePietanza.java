@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.DettaglioOrdinePietanza;
-import entity.Pietanza;
+import entity.EntityDettaglioOrdinePietanza;
+import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella
@@ -139,8 +139,8 @@ public class DBDettaglioOrdinePietanza {
      * @param idOrdine ID dell'ordine
      * @return ArrayList di oggetti DettaglioOrdinePietanza
      */
-    public ArrayList<DettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
-        ArrayList<DettaglioOrdinePietanza> listaDettagli = new ArrayList<>();
+    public ArrayList<EntityDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
+        ArrayList<EntityDettaglioOrdinePietanza> listaDettagli = new ArrayList<>();
         try {
             String query = "SELECT d.*, p.nome as nome_pietanza, p.prezzo as prezzo_pietanza " +
                     "FROM dettaglio_ordine_pietanza d " +
@@ -149,7 +149,7 @@ public class DBDettaglioOrdinePietanza {
             ResultSet rs = DBConnection.selectQuery(query);
 
             while (rs.next()) {
-                DettaglioOrdinePietanza dettaglio = new DettaglioOrdinePietanza();
+                EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza();
                 dettaglio.setIdDettaglio(rs.getInt("id_dettaglio"));
                 dettaglio.setIdOrdine(rs.getInt("id_ordine"));
                 dettaglio.setIdPietanza(rs.getInt("id_pietanza"));
@@ -157,7 +157,7 @@ public class DBDettaglioOrdinePietanza {
                 dettaglio.setParteDiMenu(rs.getBoolean("parte_di_menu"));
                 dettaglio.setIdMenu(rs.getInt("id_menu"));
 
-                Pietanza pietanza = new Pietanza(rs.getInt("id_pietanza"));
+                EntityPietanza pietanza = new EntityPietanza(rs.getInt("id_pietanza"));
                 dettaglio.setPietanza(pietanza);
 
                 listaDettagli.add(dettaglio);

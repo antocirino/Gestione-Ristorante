@@ -7,7 +7,7 @@ import database.DBIngrediente;
 /**
  * Classe che rappresenta un ingrediente del magazzino
  */
-public class Ingrediente {
+public class EntityIngrediente {
     private int idIngrediente;
     private String nome;
     private float quantitaDisponibile;
@@ -15,7 +15,7 @@ public class Ingrediente {
     private float sogliaRiordino;
 
     // Costruttori
-    public Ingrediente() {
+    public EntityIngrediente() {
     }
 
     /**
@@ -23,7 +23,7 @@ public class Ingrediente {
      * 
      * @param idIngrediente ID dell'ingrediente da caricare
      */
-    public Ingrediente(int idIngrediente) {
+    public EntityIngrediente(int idIngrediente) {
 
         DBIngrediente ingrediente = new DBIngrediente(idIngrediente);
 
@@ -54,7 +54,7 @@ public class Ingrediente {
         return i;
     }
 
-    public static ArrayList<Ingrediente> getIngredientiEsauriti() {
+    public static ArrayList<EntityIngrediente> getIngredientiEsauriti() {
         return DBIngrediente.getIngredientiEsauriti();
     }
 
@@ -63,7 +63,7 @@ public class Ingrediente {
      * 
      * @return ArrayList di oggetti Ingrediente sotto soglia
      */
-    public static ArrayList<Ingrediente> getIngredientiSottoSoglia() {
+    public static ArrayList<EntityIngrediente> getIngredientiSottoSoglia() {
         return DBIngrediente.getIngredientiSottoSoglia();
     }
 

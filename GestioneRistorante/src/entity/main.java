@@ -5,7 +5,7 @@ public class main {
         System.out.println("TEST INGREDIENTE DA DATABASE");
 
         //TEST INGREDIENTE DA DATABASE
-        Ingrediente ingrediente = new Ingrediente(30);
+        EntityIngrediente ingrediente = new EntityIngrediente(30);
         System.out.println("Nome: " + ingrediente.getNome());
         System.out.println("Quantità Disponibile: " + ingrediente.getQuantitaDisponibile());
         System.out.println("Unità di Misura: " + ingrediente.getUnitaMisura());
@@ -17,7 +17,7 @@ public class main {
         
         // TEST SCRITTURA INGREDIENTE SU DATABASE
         System.out.println("TEST INSERIMENTO INGREDIENTE SU DATABASE");
-        Ingrediente ingrediente1 = new Ingrediente();
+        EntityIngrediente ingrediente1 = new EntityIngrediente();
         ingrediente1.setNome("Farina00");
         ingrediente1.setQuantitaDisponibile(24);
         ingrediente1.setUnitaMisura("kg");
@@ -31,8 +31,8 @@ public class main {
 
         //TEST INGREDIENTI CON SCORTE BASSE DA DATABASE
         System.out.println("TEST INGREDIENTI ESURITI DA DATABASE");
-        Ingrediente ingrediente2 = new Ingrediente();
-        for (Ingrediente ing : ingrediente2.getIngredientiEsauriti()) {
+        EntityIngrediente ingrediente2 = new EntityIngrediente();
+        for (EntityIngrediente ing : ingrediente2.getIngredientiEsauriti()) {
             System.out.println("ID: " + ing.getIdIngrediente() + ", Nome: " + ing.getNome() + ", Quantità Disponibile: " + ing.getQuantitaDisponibile() + ", Unità di Misura: " + ing.getUnitaMisura() + ", Soglia di Riordino: " + ing.getSogliaRiordino());
         }
         System.out.println("Test completato con successo!");

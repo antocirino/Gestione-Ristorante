@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
-import entity.Tavolo;
+import entity.EntityTavolo;
 
 /**
  * Schermata per il cassiere che permette di calcolare il conto di un tavolo
@@ -138,9 +138,9 @@ public class CassiereForm extends JFrame {
 
         try {
             Controller controller = Controller.getInstance();
-            List<Tavolo> tavoli = controller.getAllTavoli();
+            List<EntityTavolo> tavoli = controller.getAllTavoli();
 
-            for (Tavolo tavolo : tavoli) {
+            for (EntityTavolo tavolo : tavoli) {
                 int idTavolo = tavolo.getIdTavolo();
                 int maxPosti = tavolo.getMaxPosti();
                 boolean occupato = tavolo.isOccupato();

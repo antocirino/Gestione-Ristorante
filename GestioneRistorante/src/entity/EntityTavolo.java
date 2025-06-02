@@ -5,20 +5,18 @@ import database.DBTavolo;
 /**
  * Classe che rappresenta un tavolo del ristorante
  */
-public class Tavolo {
+public class EntityTavolo {
     private int idTavolo;
-    private int numero;
     private int maxPosti;
     private String stato;
     private int idRistorante;
 
     // Costruttori
-    public Tavolo() {
+    public EntityTavolo() {
     }
 
-    public Tavolo(int idTavolo, int numero, int maxPosti, String stato, int idRistorante) {
+    public EntityTavolo(int idTavolo, int maxPosti, String stato, int idRistorante) {
         this.idTavolo = idTavolo;
-        this.numero = numero;
         this.maxPosti = maxPosti;
         this.stato = stato;
         this.idRistorante = idRistorante;
@@ -29,11 +27,10 @@ public class Tavolo {
      * 
      * @param idTavolo l'ID del tavolo da caricare
      */
-    public Tavolo(int idTavolo) {
+    public EntityTavolo(int idTavolo) {
         DBTavolo tavolo = new DBTavolo(idTavolo);
 
         this.idTavolo = idTavolo;
-        this.numero = tavolo.getNumero();
         this.maxPosti = tavolo.getMaxPosti();
         this.stato = tavolo.getStato();
         this.idRistorante = tavolo.getIdRistorante();
@@ -48,7 +45,6 @@ public class Tavolo {
     public int scriviSuDB(int idTavolo) {
         DBTavolo t = new DBTavolo(); // DAO
 
-        t.setNumero(this.numero);
         t.setMaxPosti(this.maxPosti);
         t.setStato(this.stato);
         t.setIdRistorante(this.idRistorante);
@@ -82,14 +78,6 @@ public class Tavolo {
 
     public void setIdTavolo(int idTavolo) {
         this.idTavolo = idTavolo;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
     }
 
     public int getMaxPosti() {
@@ -127,7 +115,7 @@ public class Tavolo {
 
     @Override
     public String toString() {
-        return "Tavolo " + numero + " (max " + maxPosti + " posti)" +
+        return "Tavolo " + " (max " + maxPosti + " posti)" +
                 (isOccupato() ? " - Occupato" : " - Libero");
     }
 }

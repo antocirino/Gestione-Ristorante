@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.Tavolo;
+import entity.EntityTavolo;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'tavolo' nel database
@@ -14,7 +14,6 @@ import entity.Tavolo;
 public class DBTavolo {
     // Attributi che mappano le colonne della tabella
     private int idTavolo;
-    private int numero; // Il numero del tavolo visualizzato ai clienti
     private int maxPosti;
     private String stato;
     private int idRistorante;
@@ -48,7 +47,6 @@ public class DBTavolo {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
-                this.numero = rs.getInt("numero");
                 this.maxPosti = rs.getInt("max_posti");
                 this.stato = rs.getString("stato");
                 this.idRistorante = rs.getInt("id_ristorante");
@@ -75,15 +73,15 @@ public class DBTavolo {
         if (idTavolo == 0) {
             // Insert di un nuovo tavolo con auto-incremento dell'ID
             query = String.format(Locale.US,
-                    "INSERT INTO tavolo (numero, max_posti, stato, id_ristorante) " +
-                            "VALUES (%d, %d, '%s', %d)",
-                    this.numero, this.maxPosti, this.stato, this.idRistorante);
+                    "INSERT INTO tavolo ( max_posti, stato, id_ristorante) " +
+                            "VALUES ( %d, '%s', %d)",
+                     this.maxPosti, this.stato, this.idRistorante);
         } else {
             // Insert con ID specificato
             query = String.format(Locale.US,
-                    "INSERT INTO tavolo (id_tavolo, numero, max_posti, stato, id_ristorante) " +
-                            "VALUES (%d, %d, %d, '%s', %d)",
-                    idTavolo, this.numero, this.maxPosti, this.stato, this.idRistorante);
+                    "INSERT INTO tavolo (id_tavolo, max_posti, stato, id_ristorante) " +
+                            "VALUES (%d,%d, '%s', %d)",
+                    idTavolo, this.maxPosti, this.stato, this.idRistorante);
         }
 
         System.out.println(query);
@@ -126,16 +124,15 @@ public class DBTavolo {
      * 
      * @return ArrayList di oggetti Tavolo
      */
-    public ArrayList<Tavolo> getTuttiTavoli() {
-        ArrayList<Tavolo> listaTavoli = new ArrayList<>();
+    public ArrayList<EntityTavolo> getTuttiTavoli() {
+        ArrayList<EntityTavolo> listaTavoli = new ArrayList<>();
         String query = "SELECT * FROM tavolo ORDER BY numero";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Tavolo tavolo = new Tavolo();
+                EntityTavolo tavolo = new EntityTavolo();
                 tavolo.setIdTavolo(rs.getInt("id_tavolo"));
-                tavolo.setNumero(rs.getInt("numero"));
                 tavolo.setMaxPosti(rs.getInt("max_posti"));
                 tavolo.setStato(rs.getString("stato"));
                 tavolo.setIdRistorante(rs.getInt("id_ristorante"));
@@ -154,16 +151,15 @@ public class DBTavolo {
      * @param statoFiltro lo stato per cui filtrare ('libero' o 'occupato')
      * @return ArrayList di oggetti Tavolo che corrispondono al filtro
      */
-    public ArrayList<Tavolo> getTavoliPerStato(String statoFiltro) {
-        ArrayList<Tavolo> listaTavoli = new ArrayList<>();
+    public ArrayList<EntityTavolo> getTavoliPerStato(String statoFiltro) {
+        ArrayList<EntityTavolo> listaTavoli = new ArrayList<>();
         String query = "SELECT * FROM tavolo WHERE stato = '" + statoFiltro + "' ORDER BY numero";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Tavolo tavolo = new Tavolo();
+                EntityTavolo tavolo = new EntityTavolo();
                 tavolo.setIdTavolo(rs.getInt("id_tavolo"));
-                tavolo.setNumero(rs.getInt("numero"));
                 tavolo.setMaxPosti(rs.getInt("max_posti"));
                 tavolo.setStato(rs.getString("stato"));
                 tavolo.setIdRistorante(rs.getInt("id_ristorante"));
@@ -183,14 +179,6 @@ public class DBTavolo {
 
     public void setIdTavolo(int idTavolo) {
         this.idTavolo = idTavolo;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
     }
 
     public int getMaxPosti() {

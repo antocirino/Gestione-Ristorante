@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.Ingrediente;
+import entity.EntityIngrediente;
 
 public class DBIngrediente {
     // ATTRIBUTI
@@ -87,10 +87,10 @@ public class DBIngrediente {
      * @return ArrayList di ingredienti con scorte minori o uguali alla soglia di
      *         riordino
      */
-    public static ArrayList<Ingrediente> getIngredientiEsauriti() {
+    public static ArrayList<EntityIngrediente> getIngredientiEsauriti() {
         // metodo per ottenere gli ingredienti con scorte minore della quantità di
         // soglia
-        ArrayList<Ingrediente> lista = new ArrayList<>();
+        ArrayList<EntityIngrediente> lista = new ArrayList<>();
         String query = "SELECT * FROM ingrediente";
 
         try {
@@ -100,7 +100,7 @@ public class DBIngrediente {
                 float soglia = rs.getFloat("soglia_riordino");
                 if (quantita <= soglia) {
                     System.out.println("ingrediente esurito");
-                    Ingrediente ing = new Ingrediente();
+                    EntityIngrediente ing = new EntityIngrediente();
                     ing.setIdIngrediente(rs.getInt("id_ingrediente"));
                     ing.setNome(rs.getString("nome"));
                     ing.setQuantitaDisponibile(quantita);
@@ -121,14 +121,14 @@ public class DBIngrediente {
      * 
      * @return ArrayList di oggetti Ingrediente sotto soglia
      */
-    public static ArrayList<Ingrediente> getIngredientiSottoSoglia() {
-        ArrayList<Ingrediente> ingredienti = new ArrayList<>();
+    public static ArrayList<EntityIngrediente> getIngredientiSottoSoglia() {
+        ArrayList<EntityIngrediente> ingredienti = new ArrayList<>();
         try {
             String query = "SELECT * FROM ingrediente WHERE quantita_disponibile <= soglia_riordino";
             ResultSet rs = DBConnection.selectQuery(query);
 
             while (rs.next()) {
-                Ingrediente ingrediente = new Ingrediente();
+                EntityIngrediente ingrediente = new EntityIngrediente();
                 ingrediente.setIdIngrediente(rs.getInt("id_ingrediente"));
                 ingrediente.setNome(rs.getString("nome"));
                 ingrediente.setQuantitaDisponibile(rs.getFloat("quantita_disponibile"));

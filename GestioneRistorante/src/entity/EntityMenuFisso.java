@@ -9,17 +9,17 @@ import database.DBMenuFisso;
 /**
  * Classe che rappresenta un menu fisso del ristorante
  */
-public class MenuFisso {
+public class EntityMenuFisso {
     private int idMenu;
     private String nome;
     private double prezzo;
     private String descrizione;
-    private List<Pietanza> pietanze;
+    private List<EntityPietanza> pietanze;
 
     /**
      * Costruttore vuoto
      */
-    public MenuFisso() {
+    public EntityMenuFisso() {
         this.pietanze = new ArrayList<>();
     }
 
@@ -30,7 +30,7 @@ public class MenuFisso {
      * @param prezzo      Prezzo del menu fisso
      * @param descrizione Descrizione del menu fisso
      */
-    public MenuFisso(String nome, double prezzo, String descrizione) {
+    public EntityMenuFisso(String nome, double prezzo, String descrizione) {
         this.nome = nome;
         this.prezzo = prezzo;
         this.descrizione = descrizione;
@@ -42,7 +42,7 @@ public class MenuFisso {
      * 
      * @param idMenu ID del menu fisso da caricare
      */
-    public MenuFisso(int idMenu) {
+    public EntityMenuFisso(int idMenu) {
         DBMenuFisso menu = new DBMenuFisso(idMenu);
 
         this.idMenu = idMenu;
@@ -75,7 +75,7 @@ public class MenuFisso {
             m.setIdMenu(nuovoIdMenu);
 
             // Aggiungiamo le pietanze al menu
-            for (Pietanza p : pietanze) {
+            for (EntityPietanza p : pietanze) {
                 m.aggiungiPietanza(p.getIdPietanza());
             }
         }
@@ -88,7 +88,7 @@ public class MenuFisso {
      * 
      * @param pietanza La pietanza da aggiungere
      */
-    public void aggiungiPietanza(Pietanza pietanza) {
+    public void aggiungiPietanza(EntityPietanza pietanza) {
         // Aggiungiamo alla lista locale
         this.pietanze.add(pietanza);
 
@@ -105,7 +105,7 @@ public class MenuFisso {
      * @param pietanza La pietanza da rimuovere
      * @return true se la pietanza è stata rimossa, false altrimenti
      */
-    public boolean rimuoviPietanza(Pietanza pietanza) {
+    public boolean rimuoviPietanza(EntityPietanza pietanza) {
         // Rimuoviamo dalla lista locale
         boolean rimossa = this.pietanze.remove(pietanza);
 
@@ -124,7 +124,7 @@ public class MenuFisso {
      * 
      * @return ArrayList di oggetti MenuFisso
      */
-    public static ArrayList<MenuFisso> getTuttiMenuFissi() {
+    public static ArrayList<EntityMenuFisso> getTuttiMenuFissi() {
         DBMenuFisso menu = new DBMenuFisso();
         return menu.getTuttiMenuFissi();
     }
@@ -173,11 +173,11 @@ public class MenuFisso {
         this.descrizione = descrizione;
     }
 
-    public List<Pietanza> getPietanze() {
+    public List<EntityPietanza> getPietanze() {
         return pietanze;
     }
 
-    public void setPietanze(List<Pietanza> pietanze) {
+    public void setPietanze(List<EntityPietanza> pietanze) {
         this.pietanze = pietanze;
     }
 

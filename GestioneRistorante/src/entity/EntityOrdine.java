@@ -11,7 +11,7 @@ import database.DBOrdine;
 /**
  * Classe che rappresenta un ordine nel ristorante
  */
-public class Ordine {
+public class EntityOrdine {
     private int idOrdine;
     private int idTavolo;
     private int numPersone;
@@ -22,7 +22,7 @@ public class Ordine {
     /**
      * Costruttore vuoto
      */
-    public Ordine() {
+    public EntityOrdine() {
         this.costoTotale = 0.0;
     }
 
@@ -33,7 +33,7 @@ public class Ordine {
      * @param numPersone Numero di persone per l'ordine
      * @param stato      Stato iniziale dell'ordine
      */
-    public Ordine(int idTavolo, int numPersone, String stato) {
+    public EntityOrdine(int idTavolo, int numPersone, String stato) {
         this.idTavolo = idTavolo;
         this.numPersone = numPersone;
         this.stato = stato;
@@ -46,7 +46,7 @@ public class Ordine {
      * 
      * @param idOrdine ID dell'ordine da caricare
      */
-    public Ordine(int idOrdine) {
+    public EntityOrdine(int idOrdine) {
         DBOrdine ordine = new DBOrdine(idOrdine);
 
         this.idOrdine = idOrdine;
@@ -96,7 +96,7 @@ public class Ordine {
      * 
      * @return ArrayList di oggetti Ordine
      */
-    public static ArrayList<Ordine> getTuttiOrdini() {
+    public static ArrayList<EntityOrdine> getTuttiOrdini() {
         DBOrdine ordine = new DBOrdine();
         return ordine.getTuttiOrdini();
     }
@@ -107,7 +107,7 @@ public class Ordine {
      * @param stato lo stato degli ordini da recuperare
      * @return ArrayList di oggetti Ordine con lo stato specificato
      */
-    public static ArrayList<Ordine> getOrdiniPerStato(String stato) {
+    public static ArrayList<EntityOrdine> getOrdiniPerStato(String stato) {
         DBOrdine ordine = new DBOrdine();
         return ordine.getOrdiniPerStato(stato);
     }
@@ -118,7 +118,7 @@ public class Ordine {
      * @param stato lo stato degli ordini da recuperare
      * @return ArrayList di oggetti Ordine con lo stato specificato
      */
-    public static ArrayList<Ordine> getOrdiniByStato(String stato) {
+    public static ArrayList<EntityOrdine> getOrdiniByStato(String stato) {
         DBOrdine ordine = new DBOrdine();
         return ordine.getOrdiniByStato(stato);
     }
@@ -129,7 +129,7 @@ public class Ordine {
      * @param idTavolo l'ID del tavolo
      * @return ArrayList di oggetti Ordine per il tavolo specificato
      */
-    public static ArrayList<Ordine> getOrdiniPerTavolo(int idTavolo) {
+    public static ArrayList<EntityOrdine> getOrdiniPerTavolo(int idTavolo) {
         DBOrdine ordine = new DBOrdine();
         return ordine.getOrdiniPerTavolo(idTavolo);
     }
@@ -141,7 +141,7 @@ public class Ordine {
      * @param quantita La quantità della pietanza
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
-    public boolean aggiungiPietanza(Pietanza pietanza, int quantita) {
+    public boolean aggiungiPietanza(EntityPietanza pietanza, int quantita) {
         try {
             if (pietanza == null) {
                 System.err.println("Errore: Pietanza null");
@@ -176,9 +176,9 @@ public class Ordine {
             this.costoTotale += costoAggiuntivo;
 
             // Controlla se la pietanza è già presente nell'ordine
-            ArrayList<DettaglioOrdinePietanza> dettagliEsistenti = DettaglioOrdinePietanza
+            ArrayList<EntityDettaglioOrdinePietanza> dettagliEsistenti = EntityDettaglioOrdinePietanza
                     .getDettagliOrdine(this.idOrdine);
-            for (DettaglioOrdinePietanza dop : dettagliEsistenti) {
+            for (EntityDettaglioOrdinePietanza dop : dettagliEsistenti) {
                 if (dop.getIdPietanza() == pietanza.getIdPietanza()) {
                     // Aggiorna la quantità invece di creare un nuovo dettaglio
                     int nuovaQuantita = dop.getQuantita() + quantita;
@@ -197,7 +197,7 @@ public class Ordine {
             }
 
             // Crea il dettaglio ordine
-            DettaglioOrdinePietanza dettaglio = new DettaglioOrdinePietanza(this.idOrdine, pietanza.getIdPietanza(),
+            EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine, pietanza.getIdPietanza(),
                     quantita);
 
             // Salva il dettaglio nel database
@@ -244,7 +244,7 @@ public class Ordine {
      * @param quantita Quantità di menu fissi da aggiungere
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
-    public boolean aggiungiMenuFisso(int menuId, String nome, double prezzo, ArrayList<Pietanza> pietanze,
+    public boolean aggiungiMenuFisso(int menuId, String nome, double prezzo, ArrayList<EntityPietanza> pietanze,
             int quantita) {
         try {
             if (pietanze == null || pietanze.isEmpty()) {
@@ -276,7 +276,7 @@ public class Ordine {
             boolean tutteLeAggiunte = true;
 
             // Aggiungi ogni pietanza del menu senza considerare il suo prezzo individuale
-            for (Pietanza pietanza : pietanze) {
+            for (EntityPietanza pietanza : pietanze) {
                 // Verifica disponibilità della pietanza
                 if (!pietanza.isDisponibilePerOrdine()) {
                     System.err.println("Pietanza del menu non disponibile: " + pietanza.getNome());
@@ -292,7 +292,7 @@ public class Ordine {
                 }
 
                 // Crea il dettaglio ordine (ma non aggiunge al costo totale)
-                DettaglioOrdinePietanza dettaglio = new DettaglioOrdinePietanza(this.idOrdine, pietanza.getIdPietanza(),
+                EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine, pietanza.getIdPietanza(),
                         quantita);
                 dettaglio.setParteDiMenu(true); // Marca come parte di un menu fisso
                 dettaglio.setIdMenu(menuId); // Associa al menu fisso
@@ -341,7 +341,7 @@ public class Ordine {
 
         try {
             // Recupera tutti i dettagli dell'ordine per visualizzazione
-            ArrayList<DettaglioOrdinePietanza> dettagli = DettaglioOrdinePietanza.getDettagliOrdine(this.idOrdine);
+            ArrayList<EntityDettaglioOrdinePietanza> dettagli = EntityDettaglioOrdinePietanza.getDettagliOrdine(this.idOrdine);
 
             if (dettagli.isEmpty()) {
                 System.out.println("Nessun dettaglio trovato per l'ordine #" + this.idOrdine);
@@ -352,10 +352,10 @@ public class Ordine {
             System.out.println("Dettagli del conto per ordine #" + this.idOrdine + ":");
 
             // Raggruppa i dettagli per menu fissi per una visualizzazione migliore
-            Map<Integer, List<DettaglioOrdinePietanza>> menuItemsMap = new HashMap<>();
+            Map<Integer, List<EntityDettaglioOrdinePietanza>> menuItemsMap = new HashMap<>();
 
-            for (DettaglioOrdinePietanza dettaglio : dettagli) {
-                Pietanza pietanza = dettaglio.getPietanza();
+            for (EntityDettaglioOrdinePietanza dettaglio : dettagli) {
+                EntityPietanza pietanza = dettaglio.getPietanza();
                 int quantita = dettaglio.getQuantita();
 
                 if (dettaglio.isParteDiMenu()) {
@@ -377,9 +377,9 @@ public class Ordine {
             }
 
             // Stampa i menu fissi raggruppati
-            for (Map.Entry<Integer, List<DettaglioOrdinePietanza>> entry : menuItemsMap.entrySet()) {
+            for (Map.Entry<Integer, List<EntityDettaglioOrdinePietanza>> entry : menuItemsMap.entrySet()) {
                 int menuId = entry.getKey();
-                List<DettaglioOrdinePietanza> menuItems = entry.getValue();
+                List<EntityDettaglioOrdinePietanza> menuItems = entry.getValue();
 
                 if (!menuItems.isEmpty()) {
                     // Recupera informazioni sul menu dal database
@@ -404,8 +404,8 @@ public class Ordine {
                             String.format("%.2f", subtotaleMenu) + "€");
 
                     // Stampa le pietanze incluse nel menu
-                    for (DettaglioOrdinePietanza item : menuItems) {
-                        Pietanza pietanza = item.getPietanza();
+                    for (EntityDettaglioOrdinePietanza item : menuItems) {
+                        EntityPietanza pietanza = item.getPietanza();
                         System.out.println("    • " + pietanza.getNome() + " (incluso nel menu)");
                     }
                     System.out.println();

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.Ristorante;
+import entity.EntityRistorante;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'ristorante' nel
@@ -118,14 +118,14 @@ public class DBRistorante {
      * 
      * @return ArrayList di oggetti Ristorante
      */
-    public ArrayList<Ristorante> getTuttiRistoranti() {
-        ArrayList<Ristorante> listaRistoranti = new ArrayList<>();
+    public ArrayList<EntityRistorante> getTuttiRistoranti() {
+        ArrayList<EntityRistorante> listaRistoranti = new ArrayList<>();
         try {
             String query = "SELECT * FROM ristorante";
             ResultSet rs = DBConnection.selectQuery(query);
 
             while (rs.next()) {
-                Ristorante ristorante = new Ristorante(
+                EntityRistorante ristorante = new EntityRistorante(
                         rs.getInt("id_ristorante"),
                         rs.getString("nome"),
                         rs.getInt("numero_tavoli"),

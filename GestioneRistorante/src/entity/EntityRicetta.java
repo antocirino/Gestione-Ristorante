@@ -8,7 +8,7 @@ import database.DBRicetta;
 /**
  * Classe che rappresenta una ricetta nel sistema di gestione ristorante
  */
-public class Ricetta {
+public class EntityRicetta {
     private int idRicetta;
     private String nome;
     private String descrizione;
@@ -21,7 +21,7 @@ public class Ricetta {
     /**
      * Costruttore vuoto
      */
-    public Ricetta() {
+    public EntityRicetta() {
         this.ingredienti = new ArrayList<>();
     }
 
@@ -34,7 +34,7 @@ public class Ricetta {
      * @param tempoPreparazione Tempo di preparazione in minuti
      * @param istruzioni        Istruzioni per la preparazione
      */
-    public Ricetta(String nome, String descrizione, int idPietanza, int tempoPreparazione, String istruzioni) {
+    public EntityRicetta(String nome, String descrizione, int idPietanza, int tempoPreparazione, String istruzioni) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.idPietanza = idPietanza;
@@ -48,7 +48,7 @@ public class Ricetta {
      * 
      * @param idRicetta ID della ricetta da caricare
      */
-    public Ricetta(int idRicetta) {
+    public EntityRicetta(int idRicetta) {
         DBRicetta ricetta = new DBRicetta(idRicetta);
 
         this.idRicetta = idRicetta;
@@ -156,7 +156,7 @@ public class Ricetta {
      * 
      * @return ArrayList di oggetti Ricetta
      */
-    public static ArrayList<Ricetta> getTutteRicette() {
+    public static ArrayList<EntityRicetta> getTutteRicette() {
         DBRicetta ricetta = new DBRicetta();
         return ricetta.getTutteRicette();
     }
@@ -167,7 +167,7 @@ public class Ricetta {
      * @param idPietanza l'ID della pietanza
      * @return Ricetta associata alla pietanza o null se non esiste
      */
-    public static Ricetta getRicettaByPietanza(int idPietanza) {
+    public static EntityRicetta getRicettaByPietanza(int idPietanza) {
         DBRicetta ricetta = new DBRicetta();
         return ricetta.getRicettaByPietanza(idPietanza);
     }

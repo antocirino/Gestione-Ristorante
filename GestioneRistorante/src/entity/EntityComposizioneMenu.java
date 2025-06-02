@@ -8,16 +8,16 @@ import database.DBComposizioneMenu;
 /**
  * Classe che rappresenta un'associazione tra un menu fisso e una pietanza
  */
-public class ComposizioneMenu {
+public class EntityComposizioneMenu {
     private int idMenu;
     private int idPietanza;
-    private Pietanza pietanza;
-    private MenuFisso menuFisso;
+    private EntityPietanza pietanza;
+    private EntityMenuFisso menuFisso;
 
     /**
      * Costruttore vuoto
      */
-    public ComposizioneMenu() {
+    public EntityComposizioneMenu() {
     }
 
     /**
@@ -26,7 +26,7 @@ public class ComposizioneMenu {
      * @param idMenu     ID del menu fisso
      * @param idPietanza ID della pietanza
      */
-    public ComposizioneMenu(int idMenu, int idPietanza) {
+    public EntityComposizioneMenu(int idMenu, int idPietanza) {
         this.idMenu = idMenu;
         this.idPietanza = idPietanza;
     }
@@ -37,7 +37,7 @@ public class ComposizioneMenu {
      * @param menuFisso Menu fisso
      * @param pietanza  Pietanza
      */
-    public ComposizioneMenu(MenuFisso menuFisso, Pietanza pietanza) {
+    public EntityComposizioneMenu(EntityMenuFisso menuFisso, EntityPietanza pietanza) {
         this.menuFisso = menuFisso;
         this.pietanza = pietanza;
         this.idMenu = menuFisso.getIdMenu();
@@ -76,7 +76,7 @@ public class ComposizioneMenu {
      * @param idMenu ID del menu
      * @return ArrayList di oggetti Pietanza
      */
-    public static ArrayList<Pietanza> getPietanzeByMenu(int idMenu) {
+    public static ArrayList<EntityPietanza> getPietanzeByMenu(int idMenu) {
         DBComposizioneMenu c = new DBComposizioneMenu();
         return c.getPietanzeByMenu(idMenu);
     }
@@ -120,28 +120,28 @@ public class ComposizioneMenu {
         this.idPietanza = idPietanza;
     }
 
-    public Pietanza getPietanza() {
+    public EntityPietanza getPietanza() {
         if (this.pietanza == null && this.idPietanza > 0) {
-            this.pietanza = new Pietanza(this.idPietanza);
+            this.pietanza = new EntityPietanza(this.idPietanza);
         }
         return pietanza;
     }
 
-    public void setPietanza(Pietanza pietanza) {
+    public void setPietanza(EntityPietanza pietanza) {
         this.pietanza = pietanza;
         if (pietanza != null) {
             this.idPietanza = pietanza.getIdPietanza();
         }
     }
 
-    public MenuFisso getMenuFisso() {
+    public EntityMenuFisso getMenuFisso() {
         if (this.menuFisso == null && this.idMenu > 0) {
-            this.menuFisso = new MenuFisso(this.idMenu);
+            this.menuFisso = new EntityMenuFisso(this.idMenu);
         }
         return menuFisso;
     }
 
-    public void setMenuFisso(MenuFisso menuFisso) {
+    public void setMenuFisso(EntityMenuFisso menuFisso) {
         this.menuFisso = menuFisso;
         if (menuFisso != null) {
             this.idMenu = menuFisso.getIdMenu();

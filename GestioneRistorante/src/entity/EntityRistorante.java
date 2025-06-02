@@ -8,7 +8,7 @@ import database.DBRistorante;
 /**
  * Classe che rappresenta un ristorante
  */
-public class Ristorante {
+public class EntityRistorante {
     private int idRistorante;
     private String nome;
     private int numeroTavoli;
@@ -17,7 +17,7 @@ public class Ristorante {
     /**
      * Costruttore vuoto
      */
-    public Ristorante() {
+    public EntityRistorante() {
     }
 
     /**
@@ -27,7 +27,7 @@ public class Ristorante {
      * @param numeroTavoli Numero di tavoli disponibili
      * @param costoCoperto Costo del coperto
      */
-    public Ristorante(String nome, int numeroTavoli, double costoCoperto) {
+    public EntityRistorante(String nome, int numeroTavoli, double costoCoperto) {
         this.nome = nome;
         this.numeroTavoli = numeroTavoli;
         this.costoCoperto = costoCoperto;
@@ -41,7 +41,7 @@ public class Ristorante {
      * @param numeroTavoli Numero di tavoli disponibili
      * @param costoCoperto Costo del coperto
      */
-    public Ristorante(int idRistorante, String nome, int numeroTavoli, double costoCoperto) {
+    public EntityRistorante(int idRistorante, String nome, int numeroTavoli, double costoCoperto) {
         this.idRistorante = idRistorante;
         this.nome = nome;
         this.numeroTavoli = numeroTavoli;
@@ -53,7 +53,7 @@ public class Ristorante {
      * 
      * @param idRistorante ID del ristorante da caricare
      */
-    public Ristorante(int idRistorante) {
+    public EntityRistorante(int idRistorante) {
         DBRistorante ristorante = new DBRistorante(idRistorante);
 
         this.idRistorante = idRistorante;
@@ -98,11 +98,11 @@ public class Ristorante {
 
         boolean success = true;
         for (int i = 0; i < postiPerTavolo.length; i++) {
-            Tavolo t = new Tavolo();
+            EntityTavolo t = new EntityTavolo();
             t.setMaxPosti(postiPerTavolo[i]);
             t.setStato("libero");
             t.setIdRistorante(this.idRistorante);
-            t.setNumero(i + 1); // Numero del tavolo (1-based)
+            t.setIdRistorante(i + 1); // Numero del tavolo (1-based)
 
             if (t.scriviSuDB(0) <= 0) {
                 success = false;
@@ -126,7 +126,7 @@ public class Ristorante {
      * 
      * @return ArrayList di oggetti Ristorante
      */
-    public static ArrayList<Ristorante> getTuttiRistoranti() {
+    public static ArrayList<EntityRistorante> getTuttiRistoranti() {
         DBRistorante r = new DBRistorante();
         return r.getTuttiRistoranti();
     }
@@ -198,7 +198,7 @@ public class Ristorante {
                 }
 
                 // Crea e salva la pietanza
-                Pietanza p = new Pietanza();
+                EntityPietanza p = new EntityPietanza();
                 p.setNome(nome);
                 p.setPrezzo(prezzo);
                 p.setIdCategoria(categoria);
@@ -242,8 +242,8 @@ public class Ristorante {
      * 
      * @return Lista di ingredienti da riordinare
      */
-    public ArrayList<Ingrediente> generaReportIngredienti() {
-        return Ingrediente.getIngredientiSottoSoglia();
+    public ArrayList<EntityIngrediente> generaReportIngredienti() {
+        return EntityIngrediente.getIngredientiSottoSoglia();
     }
 
     /**
@@ -251,12 +251,12 @@ public class Ristorante {
      * 
      * @return Lista degli ordini attivi
      */
-    public ArrayList<Ordine> visualizzaOrdini() {
-        ArrayList<Ordine> ordiniAttivi = new ArrayList<>();
-        ArrayList<Ordine> tuttiOrdini = Ordine.getTuttiOrdini();
+    public ArrayList<EntityOrdine> visualizzaOrdini() {
+        ArrayList<EntityOrdine> ordiniAttivi = new ArrayList<>();
+        ArrayList<EntityOrdine> tuttiOrdini = EntityOrdine.getTuttiOrdini();
 
         // Filtra solo gli ordini che non sono stati pagati
-        for (Ordine o : tuttiOrdini) {
+        for (EntityOrdine o : tuttiOrdini) {
             if (!o.getStato().equals("pagato")) {
                 ordiniAttivi.add(o);
             }
@@ -270,9 +270,9 @@ public class Ristorante {
      * 
      * @return Lista degli ordini pronti da servire
      */
-    public ArrayList<Ordine> prelevaOrdini() {
-        ArrayList<Ordine> ordiniPronti = Ordine.getOrdiniByStato("pronto");
-        for (Ordine o : ordiniPronti) {
+    public ArrayList<EntityOrdine> prelevaOrdini() {
+        ArrayList<EntityOrdine> ordiniPronti = EntityOrdine.getOrdiniByStato("pronto");
+        for (EntityOrdine o : ordiniPronti) {
             o.aggiornaStato("consegnato");
         }
         return ordiniPronti;
@@ -284,9 +284,9 @@ public class Ristorante {
      * @param idTavolo ID del tavolo da selezionare
      * @return Il tavolo selezionato o null se non esiste
      */
-    public Tavolo selezionaTavolo(int idTavolo) {
+    public EntityTavolo selezionaTavolo(int idTavolo) {
         try {
-            return new Tavolo(idTavolo);
+            return new EntityTavolo(idTavolo);
         } catch (Exception e) {
             System.err.println("Errore nella selezione del tavolo: " + e.getMessage());
             return null;

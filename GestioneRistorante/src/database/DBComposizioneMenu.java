@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.Pietanza;
+import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'composizione_menu'
@@ -114,8 +114,8 @@ public class DBComposizioneMenu {
      * @param idMenu ID del menu
      * @return ArrayList di oggetti Pietanza
      */
-    public ArrayList<Pietanza> getPietanzeByMenu(int idMenu) {
-        ArrayList<Pietanza> listaPietanze = new ArrayList<>();
+    public ArrayList<EntityPietanza> getPietanzeByMenu(int idMenu) {
+        ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
         try {
             String query = "SELECT p.* FROM pietanza p " +
                     "JOIN composizione_menu c ON p.id_pietanza = c.id_pietanza " +
@@ -123,7 +123,7 @@ public class DBComposizioneMenu {
             ResultSet rs = DBConnection.selectQuery(query);
 
             while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
+                EntityPietanza pietanza = new EntityPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),

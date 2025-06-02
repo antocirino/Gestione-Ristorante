@@ -8,14 +8,14 @@ import database.DBCategoriaPietanza;
 /**
  * Classe che rappresenta una categoria di pietanze nel ristorante
  */
-public class CategoriaPietanza {
+public class EntityCategoriaPietanza {
     private int idCategoria;
     private String nome;
 
     /**
      * Costruttore vuoto
      */
-    public CategoriaPietanza() {
+    public EntityCategoriaPietanza() {
     }
 
     /**
@@ -23,7 +23,7 @@ public class CategoriaPietanza {
      * 
      * @param nome Nome della categoria
      */
-    public CategoriaPietanza(String nome) {
+    public EntityCategoriaPietanza(String nome) {
         this.nome = nome;
     }
 
@@ -32,7 +32,7 @@ public class CategoriaPietanza {
      * 
      * @param idCategoria ID della categoria da caricare
      */
-    public CategoriaPietanza(int idCategoria) {
+    public EntityCategoriaPietanza(int idCategoria) {
         DBCategoriaPietanza categoria = new DBCategoriaPietanza(idCategoria);
 
         this.idCategoria = idCategoria;
@@ -76,7 +76,7 @@ public class CategoriaPietanza {
      * 
      * @return ArrayList di oggetti CategoriaPietanza
      */
-    public static ArrayList<CategoriaPietanza> getTutteCategorie() {
+    public static ArrayList<EntityCategoriaPietanza> getTutteCategorie() {
         DBCategoriaPietanza categoria = new DBCategoriaPietanza();
         return categoria.getTutteCategorie();
     }

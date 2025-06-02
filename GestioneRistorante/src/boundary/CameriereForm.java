@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
-import entity.Pietanza;
-import entity.Tavolo;
+import entity.EntityPietanza;
+import entity.EntityTavolo;
 
 /**
  * Schermata per il cameriere che permette di visualizzare il menu
@@ -356,15 +356,15 @@ public class CameriereForm extends JFrame {
     private void caricaTavoli() {
         try {
             Controller controller = Controller.getInstance();
-            List<Tavolo> tavoli = controller.getAllTavoli();
+            List<EntityTavolo> tavoli = controller.getAllTavoli();
 
             tavoliComboBox.removeAllItems();
-            for (Tavolo tavolo : tavoli) {
+            for (EntityTavolo tavolo : tavoli) {
                 if (!tavolo.isOccupato()) {
                     int idTavolo = tavolo.getIdTavolo();
                     int maxPosti = tavolo.getMaxPosti();
                     tavoliComboBox.addItem(
-                            idTavolo + " - Tavolo " + tavolo.getNumero() + " (max " + maxPosti + " posti)");
+                            idTavolo + " - Tavolo " + " (max " + maxPosti + " posti)");
                 }
             }
         } catch (Exception e) {
@@ -382,7 +382,7 @@ public class CameriereForm extends JFrame {
             Controller controller = Controller.getInstance();
             String categoriaSelezionata = (String) categorieComboBox.getSelectedItem();
 
-            List<Pietanza> pietanze;
+            List<EntityPietanza> pietanze;
             Map<Integer, String> categorie = controller.getCategoriePietanze();
             Map<String, Integer> categorieInverse = new HashMap<>();
 
@@ -407,7 +407,7 @@ public class CameriereForm extends JFrame {
             model.setRowCount(0);
 
             // Popolo la tabella e la mappa dei prezzi
-            for (Pietanza pietanza : pietanze) {
+            for (EntityPietanza pietanza : pietanze) {
                 int idPietanza = pietanza.getIdPietanza();
                 String nome = pietanza.getNome();
                 String categoria = pietanza.getNomeCategoria();

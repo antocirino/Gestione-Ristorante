@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.Pietanza;
+import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'pietanza' nel
@@ -134,8 +134,8 @@ public class DBPietanza {
      * 
      * @return ArrayList di oggetti Pietanza
      */
-    public ArrayList<Pietanza> getTuttePietanze() {
-        ArrayList<Pietanza> listaPietanze = new ArrayList<>();
+    public ArrayList<EntityPietanza> getTuttePietanze() {
+        ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
         String query = "SELECT p.*, c.nome as nome_categoria " +
                 "FROM pietanza p " +
                 "JOIN categoria_pietanza c ON p.id_categoria = c.id_categoria " +
@@ -144,7 +144,7 @@ public class DBPietanza {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
+                EntityPietanza pietanza = new EntityPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
@@ -166,8 +166,8 @@ public class DBPietanza {
      * @param idCategoria ID della categoria per cui filtrare
      * @return ArrayList di oggetti Pietanza della categoria specificata
      */
-    public ArrayList<Pietanza> getPietanzePerCategoria(int idCategoria) {
-        ArrayList<Pietanza> listaPietanze = new ArrayList<>();
+    public ArrayList<EntityPietanza> getPietanzePerCategoria(int idCategoria) {
+        ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
         String query = "SELECT p.*, c.nome as nome_categoria " +
                 "FROM pietanza p " +
                 "JOIN categoria_pietanza c ON p.id_categoria = c.id_categoria " +
@@ -177,7 +177,7 @@ public class DBPietanza {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
+                EntityPietanza pietanza = new EntityPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),

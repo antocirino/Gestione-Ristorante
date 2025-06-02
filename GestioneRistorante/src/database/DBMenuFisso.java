@@ -8,8 +8,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.MenuFisso;
-import entity.Pietanza;
+import entity.EntityMenuFisso;
+import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'menu_fisso' nel
@@ -151,8 +151,8 @@ public class DBMenuFisso {
      * 
      * @return Lista di oggetti Pietanza che compongono il menu
      */
-    public ArrayList<Pietanza> getPietanze() {
-        ArrayList<Pietanza> pietanze = new ArrayList<>();
+    public ArrayList<EntityPietanza> getPietanze() {
+        ArrayList<EntityPietanza> pietanze = new ArrayList<>();
         String query = "SELECT p.* FROM pietanza p " +
                 "JOIN composizione_menu cm ON p.id_pietanza = cm.id_pietanza " +
                 "WHERE cm.id_menu = " + this.idMenu + " " +
@@ -161,7 +161,7 @@ public class DBMenuFisso {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
+                EntityPietanza pietanza = new EntityPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
@@ -180,14 +180,14 @@ public class DBMenuFisso {
      * 
      * @return ArrayList di oggetti MenuFisso
      */
-    public ArrayList<MenuFisso> getTuttiMenuFissi() {
-        ArrayList<MenuFisso> listaMenu = new ArrayList<>();
+    public ArrayList<EntityMenuFisso> getTuttiMenuFissi() {
+        ArrayList<EntityMenuFisso> listaMenu = new ArrayList<>();
         String query = "SELECT * FROM menu_fisso ORDER BY nome";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                MenuFisso menu = new MenuFisso();
+                EntityMenuFisso menu = new EntityMenuFisso();
                 menu.setIdMenu(rs.getInt("id_menu"));
                 menu.setNome(rs.getString("nome"));
                 menu.setPrezzo(rs.getDouble("prezzo"));

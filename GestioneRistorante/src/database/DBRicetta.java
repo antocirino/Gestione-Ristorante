@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.Ricetta;
+import entity.EntityRicetta;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'ricetta' nel database
@@ -55,7 +55,7 @@ public class DBRicetta {
                 this.tempoPreparazione = rs.getInt("tempo_preparazione");
                 this.istruzioni = rs.getString("istruzioni");
             } else {
-                throw new SQLException("Ricetta non trovata con ID: " + this.idRicetta);
+                throw new SQLException("EntityRicetta non trovata con ID: " + this.idRicetta);
             }
         } catch (ClassNotFoundException e) {
             System.err.println("Driver JDBC non trovato: " + e.getMessage());
@@ -184,8 +184,8 @@ public class DBRicetta {
      * 
      * @return ArrayList di oggetti Ricetta
      */
-    public ArrayList<Ricetta> getTutteRicette() {
-        ArrayList<Ricetta> listaRicette = new ArrayList<>();
+    public ArrayList<EntityRicetta> getTutteRicette() {
+        ArrayList<EntityRicetta> listaRicette = new ArrayList<>();
         String query = "SELECT r.*, p.nome as nome_pietanza " +
                 "FROM ricetta r " +
                 "JOIN pietanza p ON r.id_pietanza = p.id_pietanza " +
@@ -194,7 +194,7 @@ public class DBRicetta {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                Ricetta ricetta = new Ricetta();
+                EntityRicetta ricetta = new EntityRicetta();
                 ricetta.setIdRicetta(rs.getInt("id_ricetta"));
                 ricetta.setNome(rs.getString("nome"));
                 ricetta.setDescrizione(rs.getString("descrizione"));
@@ -217,14 +217,14 @@ public class DBRicetta {
      * @param idPietanza l'ID della pietanza
      * @return Ricetta associata alla pietanza o null se non esiste
      */
-    public Ricetta getRicettaByPietanza(int idPietanza) {
-        Ricetta ricetta = null;
+    public EntityRicetta getRicettaByPietanza(int idPietanza) {
+        EntityRicetta ricetta = null;
         String query = "SELECT * FROM ricetta WHERE id_pietanza = " + idPietanza;
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
-                ricetta = new Ricetta();
+                ricetta = new EntityRicetta();
                 ricetta.setIdRicetta(rs.getInt("id_ricetta"));
                 ricetta.setNome(rs.getString("nome"));
                 ricetta.setDescrizione(rs.getString("descrizione"));

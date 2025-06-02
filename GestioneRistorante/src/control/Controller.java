@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.Pietanza;
-import entity.Tavolo;
+import entity.EntityPietanza;
+import entity.EntityTavolo;
 
 /**
  * Controller principale del sistema che implementa il pattern Singleton.
@@ -110,8 +110,8 @@ public class Controller {
      * @param idCategoria ID della categoria per filtrare le pietanze
      * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
      */
-    public List<Pietanza> getPietanzeByCategoria(int idCategoria) {
-        List<Pietanza> pietanze = new ArrayList<>();
+    public List<EntityPietanza> getPietanzeByCategoria(int idCategoria) {
+        List<EntityPietanza> pietanze = new ArrayList<>();
 
         try {
             String query = "SELECT p.id_pietanza, p.nome, p.prezzo, p.id_categoria, c.nome as nome_categoria " +
@@ -122,7 +122,7 @@ public class Controller {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
+                EntityPietanza pietanza = new EntityPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
@@ -145,8 +145,8 @@ public class Controller {
      * 
      * @return Lista di tutte le pietanze
      */
-    public List<Pietanza> getAllPietanze() {
-        List<Pietanza> pietanze = new ArrayList<>();
+    public List<EntityPietanza> getAllPietanze() {
+        List<EntityPietanza> pietanze = new ArrayList<>();
 
         try {
             String query = "SELECT p.id_pietanza, p.nome, p.prezzo, p.id_categoria, c.nome as nome_categoria " +
@@ -156,7 +156,7 @@ public class Controller {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
+                EntityPietanza pietanza = new EntityPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
@@ -212,19 +212,18 @@ public class Controller {
      * 
      * @return Lista di oggetti Tavolo
      */
-    public List<Tavolo> getAllTavoli() {
-        List<Tavolo> tavoli = new ArrayList<>();
+    public List<EntityTavolo> getAllTavoli() {
+        List<EntityTavolo> tavoli = new ArrayList<>();
 
         try {
-            String query = "SELECT id_tavolo, numero, max_posti, stato, id_ristorante FROM tavolo ORDER BY numero";
+            String query = "SELECT id_tavolo,max_posti, stato, id_ristorante FROM tavolo ORDER BY id_tavolo";
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 String stato = rs.getString("stato");
-                Tavolo tavolo = new Tavolo(
+                EntityTavolo tavolo = new EntityTavolo(
                         rs.getInt("id_tavolo"),
-                        rs.getInt("numero"),
                         rs.getInt("max_posti"),
                         stato,
                         rs.getInt("id_ristorante"));

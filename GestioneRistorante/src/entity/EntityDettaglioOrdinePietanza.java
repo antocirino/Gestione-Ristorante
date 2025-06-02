@@ -8,19 +8,19 @@ import database.DBDettaglioOrdinePietanza;
 /**
  * Classe che rappresenta un dettaglio di un ordine di pietanza
  */
-public class DettaglioOrdinePietanza {
+public class EntityDettaglioOrdinePietanza {
     private int idDettaglio;
     private int idOrdine;
     private int idPietanza;
     private int quantita;
-    private Pietanza pietanza;
+    private EntityPietanza pietanza;
     private boolean parteDiMenu; // Flag per indicare se la pietanza fa parte di un menu fisso
     private int idMenu; // ID del menu fisso di cui fa parte (se applicabile)
 
     /**
      * Costruttore vuoto
      */
-    public DettaglioOrdinePietanza() {
+    public EntityDettaglioOrdinePietanza() {
         this.parteDiMenu = false;
         this.idMenu = 0;
     }
@@ -32,7 +32,7 @@ public class DettaglioOrdinePietanza {
      * @param idPietanza ID della pietanza
      * @param quantita   Quantità ordinata
      */
-    public DettaglioOrdinePietanza(int idOrdine, int idPietanza, int quantita) {
+    public EntityDettaglioOrdinePietanza(int idOrdine, int idPietanza, int quantita) {
         this.idOrdine = idOrdine;
         this.idPietanza = idPietanza;
         this.quantita = quantita;
@@ -47,7 +47,7 @@ public class DettaglioOrdinePietanza {
      * @param pietanza Oggetto pietanza
      * @param quantita Quantità ordinata
      */
-    public DettaglioOrdinePietanza(int idOrdine, Pietanza pietanza, int quantita) {
+    public EntityDettaglioOrdinePietanza(int idOrdine, EntityPietanza pietanza, int quantita) {
         this.idOrdine = idOrdine;
         this.pietanza = pietanza;
         this.idPietanza = pietanza.getIdPietanza();
@@ -61,14 +61,14 @@ public class DettaglioOrdinePietanza {
      * 
      * @param idDettaglio ID del dettaglio ordine da caricare
      */
-    public DettaglioOrdinePietanza(int idDettaglio) {
+    public EntityDettaglioOrdinePietanza(int idDettaglio) {
         DBDettaglioOrdinePietanza dettaglio = new DBDettaglioOrdinePietanza(idDettaglio);
 
         this.idDettaglio = idDettaglio;
         this.idOrdine = dettaglio.getIdOrdine();
         this.idPietanza = dettaglio.getIdPietanza();
         this.quantita = dettaglio.getQuantita();
-        this.pietanza = new Pietanza(this.idPietanza);
+        this.pietanza = new EntityPietanza(this.idPietanza);
         this.parteDiMenu = dettaglio.isParteDiMenu();
         this.idMenu = dettaglio.getIdMenu();
     }
@@ -114,7 +114,7 @@ public class DettaglioOrdinePietanza {
      * @param idOrdine ID dell'ordine
      * @return ArrayList di oggetti DettaglioOrdinePietanza
      */
-    public static ArrayList<DettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
+    public static ArrayList<EntityDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
         DBDettaglioOrdinePietanza d = new DBDettaglioOrdinePietanza();
         return d.getDettagliOrdine(idOrdine);
     }
@@ -140,7 +140,7 @@ public class DettaglioOrdinePietanza {
             return this.pietanza.getPrezzo() * this.quantita;
         } else {
             // Carica la pietanza se non è già caricata
-            this.pietanza = new Pietanza(this.idPietanza);
+            this.pietanza = new EntityPietanza(this.idPietanza);
             return this.pietanza.getPrezzo() * this.quantita;
         }
     }
@@ -178,14 +178,14 @@ public class DettaglioOrdinePietanza {
         this.quantita = quantita;
     }
 
-    public Pietanza getPietanza() {
+    public EntityPietanza getPietanza() {
         if (this.pietanza == null && this.idPietanza > 0) {
-            this.pietanza = new Pietanza(this.idPietanza);
+            this.pietanza = new EntityPietanza(this.idPietanza);
         }
         return pietanza;
     }
 
-    public void setPietanza(Pietanza pietanza) {
+    public void setPietanza(EntityPietanza pietanza) {
         this.pietanza = pietanza;
         if (pietanza != null) {
             this.idPietanza = pietanza.getIdPietanza();

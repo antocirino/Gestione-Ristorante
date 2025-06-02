@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.CategoriaPietanza;
+import entity.EntityCategoriaPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'categoria_pietanza'
@@ -120,14 +120,14 @@ public class DBCategoriaPietanza {
      * 
      * @return ArrayList di oggetti CategoriaPietanza
      */
-    public ArrayList<CategoriaPietanza> getTutteCategorie() {
-        ArrayList<CategoriaPietanza> listaCategorie = new ArrayList<>();
+    public ArrayList<EntityCategoriaPietanza> getTutteCategorie() {
+        ArrayList<EntityCategoriaPietanza> listaCategorie = new ArrayList<>();
         String query = "SELECT * FROM categoria_pietanza ORDER BY nome";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                CategoriaPietanza categoria = new CategoriaPietanza();
+                EntityCategoriaPietanza categoria = new EntityCategoriaPietanza();
                 categoria.setIdCategoria(rs.getInt("id_categoria"));
                 categoria.setNome(rs.getString("nome"));
                 listaCategorie.add(categoria);

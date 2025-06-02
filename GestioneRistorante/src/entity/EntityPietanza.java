@@ -8,7 +8,7 @@ import database.DBPietanza;
 /**
  * Classe che rappresenta una pietanza del menu
  */
-public class Pietanza {
+public class EntityPietanza {
     private int idPietanza;
     private String nome;
     private double prezzo;
@@ -18,12 +18,12 @@ public class Pietanza {
     private List<Object> ingredienti;
 
     // Costruttori
-    public Pietanza() {
+    public EntityPietanza() {
         this.ingredienti = new ArrayList<Object>();
         this.disponibile = true;
     }
 
-    public Pietanza(int idPietanza, String nome, double prezzo, int idCategoria) {
+    public EntityPietanza(int idPietanza, String nome, double prezzo, int idCategoria) {
         this.idPietanza = idPietanza;
         this.nome = nome;
         this.prezzo = prezzo;
@@ -37,7 +37,7 @@ public class Pietanza {
      * 
      * @param idPietanza ID della pietanza da caricare
      */
-    public Pietanza(int idPietanza) {
+    public EntityPietanza(int idPietanza) {
         DBPietanza pietanza = new DBPietanza(idPietanza);
 
         this.idPietanza = idPietanza;
@@ -134,8 +134,8 @@ public class Pietanza {
      * 
      * @return Ricetta associata o null se non esiste
      */
-    public Ricetta getRicetta() {
-        return Ricetta.getRicettaByPietanza(this.idPietanza);
+    public EntityRicetta getRicetta() {
+        return EntityRicetta.getRicettaByPietanza(this.idPietanza);
     }
 
     /**
@@ -152,19 +152,19 @@ public class Pietanza {
         }
 
         // Recupera la ricetta della pietanza
-        Ricetta ricetta = this.getRicetta();
+        EntityRicetta ricetta = this.getRicetta();
         if (ricetta == null) {
             // Se non c'è una ricetta, consideriamo la pietanza disponibile
             return true;
         }
 
         // Controlla la disponibilità di tutti gli ingredienti necessari
-        List<Ricetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
-        for (Ricetta.IngredienteQuantita ing : ingredientiRicetta) {
+        List<EntityRicetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
+        for (EntityRicetta.IngredienteQuantita ing : ingredientiRicetta) {
             int idIngrediente = ing.getIdIngrediente();
             float quantitaNecessaria = ing.getQuantita();
 
-            Ingrediente ingrediente = new Ingrediente(idIngrediente);
+            EntityIngrediente ingrediente = new EntityIngrediente(idIngrediente);
             if (!ingrediente.isDisponibile(quantitaNecessaria)) {
                 // Aggiorna lo stato della pietanza
                 this.disponibile = false;
@@ -183,7 +183,7 @@ public class Pietanza {
      * @return true se la prenotazione è avvenuta con successo, false altrimenti
      */
     public boolean prenotaIngredienti(int quantita) {
-        Ricetta ricetta = this.getRicetta();
+        EntityRicetta ricetta = this.getRicetta();
         if (ricetta == null) {
             // Se non c'è una ricetta, consideriamo l'operazione riuscita
             return true;
@@ -194,13 +194,13 @@ public class Pietanza {
 
         try {
             // Prenota tutti gli ingredienti necessari
-            List<Ricetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
-            for (Ricetta.IngredienteQuantita ing : ingredientiRicetta) {
+            List<EntityRicetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
+            for (EntityRicetta.IngredienteQuantita ing : ingredientiRicetta) {
                 int idIngrediente = ing.getIdIngrediente();
                 float quantitaUnitaria = ing.getQuantita();
                 float quantitaTotale = quantitaUnitaria * quantita;
 
-                Ingrediente ingrediente = new Ingrediente(idIngrediente);
+                EntityIngrediente ingrediente = new EntityIngrediente(idIngrediente);
                 if (ingrediente.prenotaIngrediente(quantitaTotale)) {
                     ingredientiPrenotati.add(idIngrediente);
                 } else {
