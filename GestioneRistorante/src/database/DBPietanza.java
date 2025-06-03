@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'pietanza' nel
@@ -36,6 +35,25 @@ public class DBPietanza {
      */
     public DBPietanza() {
         // Costruttore vuoto
+    }
+
+    /**
+     * Costruttore per creare una nuova pietanza con i dati specificati
+     * 
+     * @param idPietanza ID della pietanza
+     * @param nome       Nome della pietanza
+     * @param prezzo     Prezzo della pietanza
+     * @param idCategoria ID della categoria a cui appartiene la pietanza
+     * @param disponibile Stato di disponibilità della pietanza
+     * @param nomeCategoria Nome della categoria della pietanza
+     */
+    public DBPietanza(int idPietanza, String nome, double prezzo, int idCategoria, boolean disponibile, String nomeCategoria) {
+        this.idPietanza = idPietanza;
+        this.nome = nome;
+        this.prezzo = prezzo;
+        this.idCategoria = idCategoria;
+        this.disponibile = disponibile; // Imposta disponibile a true per default
+        this.nomeCategoria = nomeCategoria; // Inizializza il nome della categoria come vuoto
     }
 
     /**
@@ -134,8 +152,9 @@ public class DBPietanza {
      * 
      * @return ArrayList di oggetti Pietanza
      */
-    public ArrayList<EntityPietanza> getTuttePietanze() {
-        ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
+    public ArrayList<DBPietanza> getTuttePietanze() {
+        ArrayList<DBPietanza> listaPietanze = new ArrayList<>();
+        
         String query = "SELECT p.*, c.nome as nome_categoria " +
                 "FROM pietanza p " +
                 "JOIN categoria_pietanza c ON p.id_categoria = c.id_categoria " +
@@ -144,13 +163,15 @@ public class DBPietanza {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityPietanza pietanza = new EntityPietanza(
+                DBPietanza pietanza = new DBPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanza.setDisponibile(rs.getBoolean("disponibile"));
-                pietanza.setNomeCategoria(rs.getString("nome_categoria"));
+                        rs.getInt("id_categoria"),
+                        rs.getBoolean("disponibile"),
+                        rs.getString("nome_categoria")
+                        );
+
                 listaPietanze.add(pietanza);
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -166,8 +187,8 @@ public class DBPietanza {
      * @param idCategoria ID della categoria per cui filtrare
      * @return ArrayList di oggetti Pietanza della categoria specificata
      */
-    public ArrayList<EntityPietanza> getPietanzePerCategoria(int idCategoria) {
-        ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
+    public ArrayList<DBPietanza> getPietanzePerCategoria(int idCategoria) {
+        ArrayList<DBPietanza> listaPietanze = new ArrayList<>();
         String query = "SELECT p.*, c.nome as nome_categoria " +
                 "FROM pietanza p " +
                 "JOIN categoria_pietanza c ON p.id_categoria = c.id_categoria " +
@@ -177,13 +198,14 @@ public class DBPietanza {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityPietanza pietanza = new EntityPietanza(
+                DBPietanza pietanza = new DBPietanza(
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanza.setDisponibile(rs.getBoolean("disponibile"));
-                pietanza.setNomeCategoria(rs.getString("nome_categoria"));
+                        rs.getInt("id_categoria"),
+                        rs.getBoolean("disponibile"),
+                        rs.getString("nome_categoria")
+                        );
                 listaPietanze.add(pietanza);
             }
         } catch (ClassNotFoundException | SQLException e) {

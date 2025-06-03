@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import CFG.DBConnection;
+import DTO.DTOPietanza;
 import entity.EntityPietanza;
 import entity.EntityTavolo;
 
@@ -20,35 +21,42 @@ import entity.EntityTavolo;
  * tutte le operazioni di business logic e l'accesso ai dati.
  */
 public class Controller {
-    // Istanza singleton
-    private static Controller instance = null;
+
+    /**
+     * Recupera tutte le pietanze dal database
+     * 
+     * @return Lista di tutte le pietanze
+     */
+    public List<DTOPietanza> getAllPietanze() {
+        List<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
+
+        dto_pietanze_liste = EntityPietanza.getAllPietanze();
+        System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
+        System.out.println("Pietanze: " + dto_pietanze_liste);
+        return dto_pietanze_liste;
+    }
+
+        /**
+     * Recupera le pietanze filtrate per categoria
+     * 
+     * @param idCategoria ID della categoria per filtrare le pietanze
+     * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
+     */
+    public List<DTOPietanza> getPietanzeByCategoria(int idCategoria) {
+        
+        List<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
+
+        dto_pietanze_liste = EntityPietanza.getPietanzePerCategoria(idCategoria);
+        System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
+        System.out.println("Pietanze: " + dto_pietanze_liste);
+        
+        return dto_pietanze_liste;
+           
+    }
+
 
     // Connessione al database
     private Connection connection;
-
-    /**
-     * Costruttore privato per implementare il pattern Singleton
-     */
-    private Controller() {
-        try {
-            this.connection = DBConnection.getConnection();
-        } catch (SQLException e) {
-            System.err.println("Errore nell'inizializzazione del controller: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Metodo per ottenere l'istanza singleton del controller
-     * 
-     * @return Istanza singleton del controller
-     */
-    public static synchronized Controller getInstance() {
-        if (instance == null) {
-            instance = new Controller();
-        }
-        return instance;
-    }
-
     /**
      * Testa la connessione al database
      * 
@@ -104,75 +112,6 @@ public class Controller {
         return categorie;
     }
 
-    /**
-     * Recupera le pietanze filtrate per categoria
-     * 
-     * @param idCategoria ID della categoria per filtrare le pietanze
-     * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
-     */
-    public List<EntityPietanza> getPietanzeByCategoria(int idCategoria) {
-        List<EntityPietanza> pietanze = new ArrayList<>();
-
-        try {
-            String query = "SELECT p.id_pietanza, p.nome, p.prezzo, p.id_categoria, c.nome as nome_categoria " +
-                    "FROM pietanza p JOIN categoria c ON p.id_categoria = c.id_categoria " +
-                    "WHERE p.id_categoria = ? ORDER BY p.nome";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, idCategoria);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                EntityPietanza pietanza = new EntityPietanza(
-                        rs.getInt("id_pietanza"),
-                        rs.getString("nome"),
-                        rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanza.setNomeCategoria(rs.getString("nome_categoria"));
-                pietanze.add(pietanza);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero delle pietanze: " + e.getMessage());
-        }
-
-        return pietanze;
-    }
-
-    /**
-     * Recupera tutte le pietanze dal database
-     * 
-     * @return Lista di tutte le pietanze
-     */
-    public List<EntityPietanza> getAllPietanze() {
-        List<EntityPietanza> pietanze = new ArrayList<>();
-
-        try {
-            String query = "SELECT p.id_pietanza, p.nome, p.prezzo, p.id_categoria, c.nome as nome_categoria " +
-                    "FROM pietanza p JOIN categoria c ON p.id_categoria = c.id_categoria " +
-                    "ORDER BY p.nome";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                EntityPietanza pietanza = new EntityPietanza(
-                        rs.getInt("id_pietanza"),
-                        rs.getString("nome"),
-                        rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanza.setNomeCategoria(rs.getString("nome_categoria"));
-                pietanze.add(pietanza);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero di tutte le pietanze: " + e.getMessage());
-        }
-
-        return pietanze;
-    }
 
     /**
      * Recupera tutti i menu fissi dal database
