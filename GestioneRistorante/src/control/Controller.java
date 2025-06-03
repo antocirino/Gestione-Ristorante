@@ -18,6 +18,7 @@ import DTO.DTOPietanza;
 import DTO.DTOTavolo;
 import entity.EntityCategoriaPietanza;
 import entity.EntityMenuFisso;
+import entity.EntityOrdine;
 import entity.EntityPietanza;
 import entity.EntityTavolo;
 
@@ -56,6 +57,7 @@ public class Controller {
         return instance;
     }
 
+    /////PIETANZE////////////////////////////////////////////////////////////////////
     /**
      * Recupera tutte le pietanze dal database
      * 
@@ -87,7 +89,7 @@ public class Controller {
         return dto_pietanze_liste;
            
     }
-
+      /////TAVOLI////////////////////////////////////////////////////////////////////
         /**
      * Recupera tutti i tavoli dal database
      * 
@@ -105,6 +107,7 @@ public class Controller {
                    
     }
 
+      /////MENUFISSI////////////////////////////////////////////////////////////////////
     /**
      * Recuperare tutti i menu fissi dal database
      * @return
@@ -120,6 +123,7 @@ public class Controller {
         return dto_menu_fissi_liste;
     }
 
+      /////CATEGORIAPIETANZA////////////////////////////////////////////////////////////////////
         /**
      * Recupera tutte le categorie di pietanze dal database
      * 
@@ -137,6 +141,25 @@ public class Controller {
         
     }
 
+    /////ORDINE////////////////////////////////////////////////////////////////////
+    /**
+     * Aggiorna lo stato di un ordine
+     * 
+     * @param idOrdine   ID dell'ordine da aggiornare
+     * @param nuovoStato Nuovo stato dell'ordine
+     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
+     */
+    public boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
+        EntityOrdine  ordine= new EntityOrdine(idOrdine);
+        int result = ordine.aggiornaStato(nuovoStato);
+        if (result == 0) {
+            System.err.println("Errore nell'aggiornamento dello stato dell'ordine con ID: " + idOrdine);
+            return false;
+        }
+        System.out.println("Stato dell'ordine con ID " + idOrdine + " aggiornato a: " + nuovoStato);
+        return true;
+
+    }
 
     ///////////////ACHTUNG/////////////////////////////////////////////////////
     ///////////////ANCORA DA MODIFICARE/////////////////////////////////////////////////////
@@ -618,28 +641,6 @@ public class Controller {
         return dettagli;
     }
 
-    /**
-     * Aggiorna lo stato di un ordine
-     * 
-     * @param idOrdine   ID dell'ordine da aggiornare
-     * @param nuovoStato Nuovo stato dell'ordine
-     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
-     */
-    public boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
-        try {
-            String query = "UPDATE ordine SET stato = ? WHERE id_ordine = ?";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, nuovoStato);
-            pstmt.setInt(2, idOrdine);
-            int result = pstmt.executeUpdate();
-
-            pstmt.close();
-            return result > 0;
-        } catch (SQLException e) {
-            System.err.println("Errore nell'aggiornamento dello stato dell'ordine: " + e.getMessage());
-            return false;
-        }
-    }
 
     /**
      * Recupera gli ingredienti di una pietanza

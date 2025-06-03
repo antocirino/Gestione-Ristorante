@@ -55,6 +55,16 @@ public class OrdineTest {
     }
 
     @Test
+    public void testAggiornaStato() {
+        int id_ordine = 100; // Supponiamo che l'ordine con ID 100 non esista nel database
+        String nuovo_stato = "in_corso";
+        ordine = new EntityOrdine(id_ordine);
+        int i = ordine.aggiornaStato(nuovo_stato);
+        assertEquals(i, 0);
+        assertEquals(nuovo_stato, ordine.getStato());
+    }
+
+    @Test
     public void testCalcolaConto() {
         EntityOrdine ordine = new EntityOrdine(1, 5, "in_attesa");
         int nuovoIdOrdine = ordine.scriviSuDB();
