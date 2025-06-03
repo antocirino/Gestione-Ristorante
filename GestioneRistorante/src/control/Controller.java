@@ -1,5 +1,6 @@
 package control;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import CFG.DBConnection;
 import DTO.DTOPietanza;
+import DTO.DTOTavolo;
 import entity.EntityPietanza;
 import entity.EntityTavolo;
 
@@ -27,8 +29,8 @@ public class Controller {
      * 
      * @return Lista di tutte le pietanze
      */
-    public List<DTOPietanza> getAllPietanze() {
-        List<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
+    public ArrayList<DTOPietanza> getAllPietanze() {
+        ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
 
         dto_pietanze_liste = EntityPietanza.getAllPietanze();
         System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
@@ -42,9 +44,9 @@ public class Controller {
      * @param idCategoria ID della categoria per filtrare le pietanze
      * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
      */
-    public List<DTOPietanza> getPietanzeByCategoria(int idCategoria) {
+    public ArrayList<DTOPietanza> getPietanzeByCategoria(int idCategoria) {
         
-        List<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
+        ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
 
         dto_pietanze_liste = EntityPietanza.getPietanzePerCategoria(idCategoria);
         System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
@@ -54,6 +56,25 @@ public class Controller {
            
     }
 
+        /**
+     * Recupera tutti i tavoli dal database
+     * 
+     * @return Lista di oggetti Tavolo
+     */
+    public ArrayList<DTOTavolo> getAllTavoli() {
+        
+        ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
+
+        dto_tavoli_liste = EntityTavolo.getAllTavoli();
+        System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
+        System.out.println("Tavoli: " + dto_tavoli_liste);
+        
+        return dto_tavoli_liste;
+                   
+    }
+
+    ///////////////ACHTUNG/////////////////////////////////////////////////////
+    ///////////////ANCORA DA MODIFICARE/////////////////////////////////////////////////////
 
     // Connessione al database
     private Connection connection;
@@ -146,37 +167,7 @@ public class Controller {
         return menuFissi;
     }
 
-    /**
-     * Recupera tutti i tavoli dal database
-     * 
-     * @return Lista di oggetti Tavolo
-     */
-    public List<EntityTavolo> getAllTavoli() {
-        List<EntityTavolo> tavoli = new ArrayList<>();
 
-        try {
-            String query = "SELECT id_tavolo,max_posti, stato, id_ristorante FROM tavolo ORDER BY id_tavolo";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                String stato = rs.getString("stato");
-                EntityTavolo tavolo = new EntityTavolo(
-                        rs.getInt("id_tavolo"),
-                        rs.getInt("max_posti"),
-                        stato,
-                        rs.getInt("id_ristorante"));
-                tavoli.add(tavolo);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero dei tavoli: " + e.getMessage());
-        }
-
-        return tavoli;
-    }
 
     /**
      * Inserisce un nuovo ordine nel database

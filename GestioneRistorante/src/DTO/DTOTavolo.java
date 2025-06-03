@@ -5,6 +5,7 @@ public class DTOTavolo {
     private int idTavolo;
     private int maxPosti;
     private String stato;
+    //non mostriamo l'idRistorante in DTO nell'interfaccia, ma lo usiamo per le operazioni di database
 
     //COSTRUTTORE
     public DTOTavolo(int idTavolo, int maxPosti, String stato) {
