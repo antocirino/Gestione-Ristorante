@@ -87,6 +87,20 @@ public class DBDettaglioOrdinePietanza {
                         + this.idOrdine + ", " + this.idPietanza + ", " + this.quantita
                         + ", " + (this.parteDiMenu ? "TRUE" : "FALSE")
                         + ", " + this.idMenu + ")";
+
+                System.out.println("Query di inserimento: " + query);
+
+                // Utilizziamo il metodo updateQueryReturnGeneratedKey invece di updateQuery
+                // per ottenere l'ID generato automaticamente
+                Integer generatedId = DBConnection.updateQueryReturnGeneratedKey(query);
+
+                if (generatedId != null && generatedId > 0) {
+                    System.out.println("Dettaglio ordine inserito con ID generato: " + generatedId);
+                    return generatedId;
+                } else {
+                    System.err.println("Errore: Nessun ID generato dopo l'inserimento del dettaglio ordine");
+                    return -1;
+                }
             } else {
                 // Aggiornamento dettaglio ordine esistente
                 query = "UPDATE dettaglio_ordine_pietanza SET id_ordine = " + this.idOrdine
@@ -95,25 +109,24 @@ public class DBDettaglioOrdinePietanza {
                         + ", parte_di_menu = " + (this.parteDiMenu ? "TRUE" : "FALSE")
                         + ", id_menu = " + this.idMenu
                         + " WHERE id_dettaglio = " + idDettaglio;
-            }
 
-            System.out.println(query); // Per debug
+                System.out.println("Query di aggiornamento: " + query);
 
-            int affectedRows = DBConnection.updateQuery(query);
-
-            if (affectedRows > 0 && idDettaglio == 0) {
-                // Recupero l'ID del nuovo dettaglio ordine inserito
-                ResultSet rs = DBConnection.selectQuery("SELECT LAST_INSERT_ID()");
-                if (rs.next()) {
-                    return rs.getInt(1);
+                int affectedRows = DBConnection.updateQuery(query);
+                if (affectedRows > 0) {
+                    System.out.println("Dettaglio ordine aggiornato con successo (ID: " + idDettaglio + ")");
+                    return idDettaglio;
+                } else {
+                    System.err
+                            .println("Errore: Nessuna riga aggiornata per il dettaglio ordine con ID: " + idDettaglio);
+                    return -1;
                 }
-            } else if (affectedRows > 0) {
-                return idDettaglio;
             }
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nel salvataggio del dettaglio ordine nel database: " + e.getMessage());
+            e.printStackTrace();
+            return -1; // Errore
         }
-        return -1; // Errore
     }
 
     /**

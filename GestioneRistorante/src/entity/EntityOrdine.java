@@ -44,12 +44,13 @@ public class EntityOrdine {
     /**
      * Costruttore con tutti i parametri
      *
-     * @param idOrdine ID dell'ordine da caricare
+     * @param idOrdine   ID dell'ordine da caricare
      * @param idTavolo   ID del tavolo associato all'ordine
      * @param numPersone Numero di persone per l'ordine
      * @param stato      Stato iniziale dell'ordine
      */
-        public EntityOrdine(int idOrdine, int idTavolo, int numPersone, String stato) {this.idTavolo = idTavolo;
+    public EntityOrdine(int idOrdine, int idTavolo, int numPersone, String stato) {
+        this.idTavolo = idTavolo;
         this.idOrdine = idOrdine;
         this.numPersone = numPersone;
         this.stato = stato;
@@ -191,6 +192,7 @@ public class EntityOrdine {
             double prezzoPietanza = pietanza.getPrezzo();
             double costoAggiuntivo = prezzoPietanza * quantita;
             this.costoTotale += costoAggiuntivo;
+            System.out.println("Aggiornamento del costo totale a seguito dell'aggiunta: " + this.costoTotale);
 
             // Controlla se la pietanza è già presente nell'ordine
             ArrayList<EntityDettaglioOrdinePietanza> dettagliEsistenti = EntityDettaglioOrdinePietanza
@@ -214,11 +216,14 @@ public class EntityOrdine {
             }
 
             // Crea il dettaglio ordine
-            EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine, pietanza.getIdPietanza(),
+            System.out.println("Creazione del dettaglio ordine per la pietanza: " + pietanza.getNome());
+            EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine,
+                    pietanza.getIdPietanza(),
                     quantita);
 
             // Salva il dettaglio nel database
             int dettaglioId = dettaglio.scriviSuDB(0);
+            System.out.println("Dettaglio ordine salvato con ID: " + dettaglioId);
             if (dettaglioId > 0) {
                 // Se il salvataggio è riuscito, prenota gli ingredienti e aggiorna il costo
                 // totale
@@ -309,7 +314,8 @@ public class EntityOrdine {
                 }
 
                 // Crea il dettaglio ordine (ma non aggiunge al costo totale)
-                EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine, pietanza.getIdPietanza(),
+                EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine,
+                        pietanza.getIdPietanza(),
                         quantita);
                 dettaglio.setParteDiMenu(true); // Marca come parte di un menu fisso
                 dettaglio.setIdMenu(menuId); // Associa al menu fisso
@@ -353,12 +359,14 @@ public class EntityOrdine {
      * @return il totale del conto
      */
     public double calcolaConto(boolean includiCoperto) {
-        double totale = this.costoTotale; // Utilizziamo direttamente il costoTotale memorizzato
+        double totale = this.costoTotale;
+        System.out.println(this.costoTotale); // Utilizziamo direttamente il costoTotale memorizzato
         double sconto = 0.0;
 
         try {
             // Recupera tutti i dettagli dell'ordine per visualizzazione
-            ArrayList<EntityDettaglioOrdinePietanza> dettagli = EntityDettaglioOrdinePietanza.getDettagliOrdine(this.idOrdine);
+            ArrayList<EntityDettaglioOrdinePietanza> dettagli = EntityDettaglioOrdinePietanza
+                    .getDettagliOrdine(this.idOrdine);
 
             if (dettagli.isEmpty()) {
                 System.out.println("Nessun dettaglio trovato per l'ordine #" + this.idOrdine);

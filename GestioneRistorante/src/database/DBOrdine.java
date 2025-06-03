@@ -84,10 +84,10 @@ public class DBOrdine {
                 new java.sql.Timestamp(this.dataOrdine.getTime()),
                 this.idRistorante, this.costoTotale);
 
-
         System.out.println(query);
         try {
             nuovoId = insertAndGetId(query);
+            System.out.println("Nuovo ordine inserito con ID: " + nuovoId);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
