@@ -40,6 +40,20 @@ public class DBPietanza {
     /**
      * Costruttore per creare una nuova pietanza con i dati specificati
      * 
+     * @param nome       Nome della pietanza
+     * @param prezzo     Prezzo della pietanza
+     * @param idCategoria ID della categoria a cui appartiene la pietanza
+     */
+    public DBPietanza(int idPietanza, String nome, double prezzo, String Categoria) {
+        this.idPietanza = idPietanza;
+        this.nome = nome;
+        this.prezzo = prezzo;
+        this.nomeCategoria = Categoria; // Inizializza il nome della categoria
+    }
+
+    /**
+     * Costruttore per creare una nuova pietanza con i dati specificati
+     * 
      * @param idPietanza ID della pietanza
      * @param nome       Nome della pietanza
      * @param prezzo     Prezzo della pietanza

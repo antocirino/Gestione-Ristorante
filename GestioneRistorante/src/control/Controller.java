@@ -12,8 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import CFG.DBConnection;
+import DTO.DTOCategoriaPietanza;
+import DTO.DTOMenuFisso;
 import DTO.DTOPietanza;
 import DTO.DTOTavolo;
+import entity.EntityCategoriaPietanza;
+import entity.EntityMenuFisso;
 import entity.EntityPietanza;
 import entity.EntityTavolo;
 
@@ -23,6 +27,34 @@ import entity.EntityTavolo;
  * tutte le operazioni di business logic e l'accesso ai dati.
  */
 public class Controller {
+
+    private static Controller instance = null;
+
+    // Connessione al database
+    private Connection connection;
+
+    /**
+     * Costruttore privato per implementare il pattern Singleton
+     */
+    private Controller() {
+        try {
+            connection = DBConnection.getConnection();
+        } catch (SQLException e) {
+            System.err.println("Errore nell'inizializzazione del controller: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Metodo per ottenere l'istanza singleton del controller
+     * 
+     * @return Istanza singleton del controller
+     */
+    public static synchronized Controller getInstance() {
+        if (instance == null) {
+            instance = new Controller();
+        }
+        return instance;
+    }
 
     /**
      * Recupera tutte le pietanze dal database
@@ -73,11 +105,43 @@ public class Controller {
                    
     }
 
+    /**
+     * Recuperare tutti i menu fissi dal database
+     * @return
+     */
+    public ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
+        ArrayList<DTOMenuFisso> dto_menu_fissi_liste = new ArrayList<>();
+
+        dto_menu_fissi_liste = EntityMenuFisso.getTuttiMenuFissi();
+        // Stampa per debug
+        System.out.println("Menu fissi recuperati: " + dto_menu_fissi_liste.size());
+        System.out.println("Menu fissi: " + dto_menu_fissi_liste);
+        
+        return dto_menu_fissi_liste;
+    }
+
+        /**
+     * Recupera tutte le categorie di pietanze dal database
+     * 
+     * @return Lista di categorie come Map<Integer, String> (id, nome)
+     */
+    public ArrayList<DTOCategoriaPietanza> getCategoriePietanze() {
+        ArrayList<DTOCategoriaPietanza> dto_categorie_liste = new ArrayList<>();
+
+        dto_categorie_liste = EntityCategoriaPietanza.getTutteCategorie();
+        // Stampa per debug
+        System.out.println("Categorie pietanze recuperate: " + dto_categorie_liste.size());
+        System.out.println("Categorie pietanze: " + dto_categorie_liste);
+        
+        return dto_categorie_liste;
+        
+    }
+
+
     ///////////////ACHTUNG/////////////////////////////////////////////////////
     ///////////////ANCORA DA MODIFICARE/////////////////////////////////////////////////////
 
     // Connessione al database
-    private Connection connection;
     /**
      * Testa la connessione al database
      * 
@@ -105,41 +169,17 @@ public class Controller {
         }
     }
 
+
+   ///ACHTUNG --> VALUTARE SE ELIMINARE QUESTO METODO
     /**
-     * Recupera tutte le categorie di pietanze dal database
      * 
-     * @return Lista di categorie come Map<Integer, String> (id, nome)
-     */
-    public Map<Integer, String> getCategoriePietanze() {
-        Map<Integer, String> categorie = new HashMap<>();
-
-        try {
-            String query = "SELECT id_categoria, nome FROM categoria ORDER BY nome";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id_categoria");
-                String nome = rs.getString("nome");
-                categorie.put(id, nome);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero delle categorie: " + e.getMessage());
-        }
-
-        return categorie;
-    }
-
-
-    /**
      * Recupera tutti i menu fissi dal database
      * 
      * @return Mappa con chiave l'ID del menu e valore un oggetto Map con le
      *         informazioni del menu
-     */
+    
+
+
     public Map<Integer, Map<String, Object>> getMenuFissi() {
         Map<Integer, Map<String, Object>> menuFissi = new HashMap<>();
 
@@ -167,7 +207,7 @@ public class Controller {
         return menuFissi;
     }
 
-
+     */
 
     /**
      * Inserisce un nuovo ordine nel database

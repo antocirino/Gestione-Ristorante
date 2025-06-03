@@ -165,9 +165,13 @@ public class DBMenuFisso {
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanze.add(pietanza);
+                        rs.getInt("id_categoria")
+                        );
+                        
+                        pietanze.add(pietanza);
             }
+           
+
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nel recupero delle pietanze del menu: " + e.getMessage());
         }
@@ -180,14 +184,14 @@ public class DBMenuFisso {
      * 
      * @return ArrayList di oggetti MenuFisso
      */
-    public ArrayList<EntityMenuFisso> getTuttiMenuFissi() {
-        ArrayList<EntityMenuFisso> listaMenu = new ArrayList<>();
+    public ArrayList<DBMenuFisso> getTuttiMenuFissi() {
+        ArrayList<DBMenuFisso> listaMenu = new ArrayList<>();
         String query = "SELECT * FROM menu_fisso ORDER BY nome";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityMenuFisso menu = new EntityMenuFisso();
+                DBMenuFisso menu = new DBMenuFisso();
                 menu.setIdMenu(rs.getInt("id_menu"));
                 menu.setNome(rs.getString("nome"));
                 menu.setPrezzo(rs.getDouble("prezzo"));

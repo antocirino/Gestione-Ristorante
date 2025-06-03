@@ -122,14 +122,14 @@ public class DBCategoriaPietanza {
      * 
      * @return ArrayList di oggetti CategoriaPietanza
      */
-    public ArrayList<EntityCategoriaPietanza> getTutteCategorie() {
-        ArrayList<EntityCategoriaPietanza> listaCategorie = new ArrayList<>();
+    public ArrayList<DBCategoriaPietanza> getTutteCategorie() {
+        ArrayList<DBCategoriaPietanza> listaCategorie = new ArrayList<>();
         String query = "SELECT * FROM categoria_pietanza ORDER BY nome";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityCategoriaPietanza categoria = new EntityCategoriaPietanza();
+                DBCategoriaPietanza categoria = new DBCategoriaPietanza();
                 categoria.setIdCategoria(rs.getInt("id_categoria"));
                 categoria.setNome(rs.getString("nome"));
                 listaCategorie.add(categoria);

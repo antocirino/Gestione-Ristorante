@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import DTO.DTOMenuFisso;
 import database.DBMenuFisso;
 
 /**
@@ -124,9 +125,23 @@ public class EntityMenuFisso {
      * 
      * @return ArrayList di oggetti MenuFisso
      */
-    public static ArrayList<EntityMenuFisso> getTuttiMenuFissi() {
+    public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
+        
+        ArrayList<DTOMenuFisso> listaMenu = new ArrayList<>();
         DBMenuFisso menu = new DBMenuFisso();
-        return menu.getTuttiMenuFissi();
+        ArrayList<DBMenuFisso> menuFissi = menu.getTuttiMenuFissi();
+
+        for (DBMenuFisso m : menuFissi) {
+            DTOMenuFisso dto = new DTOMenuFisso();
+            dto.setIdMenu(m.getIdMenu());
+            dto.setNome(m.getNome());
+            dto.setPrezzo(m.getPrezzo());
+            dto.setDescrizione(m.getDescrizione());
+            dto.setPietanze(m.getPietanze());
+            listaMenu.add(dto);
+        }
+         
+        return listaMenu;
     }
 
     /**

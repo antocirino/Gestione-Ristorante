@@ -14,6 +14,7 @@ public class DTOMenuFisso {
     private List<EntityPietanza> pietanze;
 
     // GETTER E SETTER
+
     public int getIdMenu() {
         return idMenu;
     }
@@ -57,8 +58,7 @@ public class DTOMenuFisso {
     // METODO toString
     @Override
     public String toString() {
-        return "DTOMenuFisso{" +
-                "idMenu=" + idMenu +
+        return "{" +
                 ", nome='" + nome + '\'' +
                 ", prezzo=" + prezzo +
                 ", descrizione='" + descrizione + '\'' +

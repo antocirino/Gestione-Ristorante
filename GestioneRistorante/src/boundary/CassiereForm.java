@@ -1,6 +1,9 @@
 package boundary;
 
 import javax.swing.*;
+
+import DTO.DTOTavolo;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -138,9 +141,9 @@ public class CassiereForm extends JFrame {
 
         try {
             Controller controller = Controller.getInstance();
-            List<EntityTavolo> tavoli = controller.getAllTavoli();
+            List<DTOTavolo> tavoli = controller.getAllTavoli();
 
-            for (EntityTavolo tavolo : tavoli) {
+            for (DTOTavolo tavolo : tavoli) {
                 int idTavolo = tavolo.getIdTavolo();
                 int maxPosti = tavolo.getMaxPosti();
                 boolean occupato = tavolo.isOccupato();

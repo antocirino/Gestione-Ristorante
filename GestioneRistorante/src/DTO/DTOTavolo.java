@@ -47,4 +47,8 @@ public class DTOTavolo {
                 ", stato='" + stato + '\'' +
                 '}';
     }
+    public boolean isOccupato() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isOccupato'");
+    }
 }

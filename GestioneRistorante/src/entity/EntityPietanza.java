@@ -33,6 +33,7 @@ public class EntityPietanza {
         this.ingredienti = new ArrayList<Object>();
     }
 
+
     /**
      * Costruttore che carica una pietanza dal database per ID
      * 
@@ -77,7 +78,7 @@ public class EntityPietanza {
     public static ArrayList<DTOPietanza> getAllPietanze() {
         ArrayList<DTOPietanza> pietanze = new ArrayList<>();
         DBPietanza dbPietanza = new DBPietanza();
-        List<DBPietanza> listaPietanze = dbPietanza.getTuttePietanze();
+        ArrayList<DBPietanza> listaPietanze = dbPietanza.getTuttePietanze();
 
         for (DBPietanza p : listaPietanze) {
             DTOPietanza dto = new DTOPietanza();

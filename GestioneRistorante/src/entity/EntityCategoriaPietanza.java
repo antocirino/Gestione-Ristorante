@@ -2,6 +2,8 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import DTO.DTOCategoriaPietanza;
 import database.DBCategoriaPietanza;
 
 /**
@@ -72,9 +74,20 @@ public class EntityCategoriaPietanza {
      * 
      * @return ArrayList di oggetti CategoriaPietanza
      */
-    public static ArrayList<EntityCategoriaPietanza> getTutteCategorie() {
+    public static ArrayList<DTOCategoriaPietanza> getTutteCategorie() {
         DBCategoriaPietanza categoria = new DBCategoriaPietanza();
-        return categoria.getTutteCategorie();
+        ArrayList<DTOCategoriaPietanza> categorie = new ArrayList<>();
+        ArrayList<DBCategoriaPietanza> dbCategorie = categoria.getTutteCategorie();
+
+        for (DBCategoriaPietanza dbCategoria : dbCategorie) {
+            DTOCategoriaPietanza dto = new DTOCategoriaPietanza();
+            dto.setIdCategoria(dbCategoria.getIdCategoria());
+            dto.setNome(dbCategoria.getNome());
+            categorie.add(dto);
+        }
+
+        return categorie;
+
     }
 
     /**
