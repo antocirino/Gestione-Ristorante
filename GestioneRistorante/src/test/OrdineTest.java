@@ -65,7 +65,7 @@ public class OrdineTest {
         EntityDettaglioOrdinePietanza dettaglioOrdinePietanza = new EntityDettaglioOrdinePietanza(idOrdine, pietanza, quantita);
         int id_dettaglio_ordine_pietanza = 0;//aggiunge automaticamente l'id
         int val = dettaglioOrdinePietanza.scriviSuDB(id_dettaglio_ordine_pietanza);
-
+        ordine.aggiungiPietanza(pietanza, 1);
         EntityRistorante ristorante = new EntityRistorante(1);
         double costoCoperto = ristorante.getCostoCoperto();
         boolean includiCoperto = true;
