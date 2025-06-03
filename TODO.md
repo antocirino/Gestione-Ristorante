@@ -16,3 +16,8 @@
         - Eventuali sconti o maggiorazioni
     - Rivedere i test unitari per assicurarsi che i valori attesi siano corretti
     - Nel test `testCalcolaConto()`, il valore atteso è 17.50 ma sembra non corrispondere al calcolo effettivo
+
+3. **Creazione delle classi DTO**
+    - È necessario creare una classe DTO per ogni Entity per cui l'interfaccia richiede una lista di quell'Entity.
+    - In particolare, implementare DTO per: Ordine, Pietanza, MenuFisso.
+    - Le DTO dovranno essere utilizzate per il trasferimento dati tra backend e frontend, ottimizzando la serializzazione e la sicurezza delle informazioni esposte.
