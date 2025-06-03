@@ -36,6 +36,21 @@ public class DBTavolo {
     }
 
     /**
+     * Costruttore per creare un nuovo tavolo con i dati specificati
+     * 
+     * @param idTavolo    ID del tavolo
+     * @param maxPosti    Numero massimo di posti a sedere
+     * @param stato       Stato del tavolo ('libero' o 'occupato')
+     * @param idRistorante ID del ristorante a cui appartiene il tavolo
+     */
+    public DBTavolo(int idTavolo, int maxPosti, String stato, int idRistorante) {
+        this.idTavolo = idTavolo;
+        this.maxPosti = maxPosti;
+        this.stato = stato;
+        this.idRistorante = idRistorante;
+    }
+
+    /**
      * Carica i dati del tavolo dal database
      */
     public void caricaDaDB() {
@@ -124,18 +139,19 @@ public class DBTavolo {
      * 
      * @return ArrayList di oggetti Tavolo
      */
-    public ArrayList<EntityTavolo> getTuttiTavoli() {
-        ArrayList<EntityTavolo> listaTavoli = new ArrayList<>();
+    public ArrayList<DBTavolo> getAllTavoli() {
+        ArrayList<DBTavolo> listaTavoli = new ArrayList<>();
         String query = "SELECT * FROM tavolo ORDER BY numero";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityTavolo tavolo = new EntityTavolo();
-                tavolo.setIdTavolo(rs.getInt("id_tavolo"));
-                tavolo.setMaxPosti(rs.getInt("max_posti"));
-                tavolo.setStato(rs.getString("stato"));
-                tavolo.setIdRistorante(rs.getInt("id_ristorante"));
+                DBTavolo tavolo = new DBTavolo(
+                rs.getInt("id_tavolo"),
+                rs.getInt("max_posti"),
+                rs.getString("stato"),
+                rs.getInt("id_ristorante")
+                );
                 listaTavoli.add(tavolo);
             }
         } catch (ClassNotFoundException | SQLException e) {

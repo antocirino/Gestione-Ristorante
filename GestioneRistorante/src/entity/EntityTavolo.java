@@ -1,5 +1,8 @@
 package entity;
 
+import java.util.ArrayList;
+
+import DTO.DTOTavolo;
 import database.DBTavolo;
 
 /**
@@ -71,6 +74,28 @@ public class EntityTavolo {
         return t.aggiornaStato(stato);
     }
 
+    /**
+     * Recupera tutti i tavoli dal database
+     * @return
+     */
+    public static ArrayList<DTOTavolo> getAllTavoli() {
+        
+        DBTavolo dbTavolo = new DBTavolo();
+        ArrayList<DBTavolo> listaDBTavoli = dbTavolo.getAllTavoli();
+        
+        ArrayList<DTOTavolo> listaTavoli = new ArrayList<>();
+
+        for (DBTavolo db : listaDBTavoli) {
+            DTOTavolo tavolo = new DTOTavolo(
+                    db.getIdTavolo(),
+                    db.getMaxPosti(),
+                    db.getStato()
+            );
+            listaTavoli.add(tavolo);
+        }
+
+        return listaTavoli;
+    }
     // Getters e setters
     public int getIdTavolo() {
         return idTavolo;

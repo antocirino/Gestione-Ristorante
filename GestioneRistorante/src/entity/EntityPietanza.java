@@ -3,6 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import DTO.DTOPietanza;
 import database.DBPietanza;
 
 /**
@@ -66,6 +67,53 @@ public class EntityPietanza {
         int i = p.salvaInDB(idPietanza);
 
         return i;
+    }
+
+    /**
+     * Recupera tutte le pietanze dal database
+     * 
+     * @return ArrayList di oggetti DTOPietanza con tutte le pietanze
+     */
+    public static ArrayList<DTOPietanza> getAllPietanze() {
+        ArrayList<DTOPietanza> pietanze = new ArrayList<>();
+        DBPietanza dbPietanza = new DBPietanza();
+        List<DBPietanza> listaPietanze = dbPietanza.getTuttePietanze();
+
+        for (DBPietanza p : listaPietanze) {
+            DTOPietanza dto = new DTOPietanza();
+            dto.setIdPietanza(p.getIdPietanza());
+            dto.setNome(p.getNome());
+            dto.setPrezzo(p.getPrezzo());
+            dto.setIdCategoria(p.getIdCategoria());
+            dto.setNomeCategoria(p.getNomeCategoria());
+            dto.setDisponibile(p.isDisponibile());
+            pietanze.add(dto);
+        }
+
+        return pietanze;
+    }
+
+    /**
+     * Recupera le pietanze per categoria
+     * 
+     * @param idCategoria ID della categoria per cui filtrare
+     * @return ArrayList di oggetti Pietanza della categoria specificata
+     */
+    public static ArrayList<DTOPietanza> getPietanzePerCategoria(int idCategoria) {
+        ArrayList<DTOPietanza> listaPietanze = new ArrayList<>();
+        DBPietanza dbPietanza = new DBPietanza();
+        List<DBPietanza> listaDBPietanze = dbPietanza.getPietanzePerCategoria(idCategoria);
+        for (DBPietanza p : listaDBPietanze) {
+            DTOPietanza dto = new DTOPietanza();
+            dto.setIdPietanza(p.getIdPietanza());
+            dto.setNome(p.getNome());
+            dto.setPrezzo(p.getPrezzo());
+            dto.setIdCategoria(p.getIdCategoria());
+            dto.setNomeCategoria(p.getNomeCategoria());
+            dto.setDisponibile(p.isDisponibile());
+            listaPietanze.add(dto);
+        }
+        return listaPietanze;
     }
 
     // Getters e setters
