@@ -10,20 +10,20 @@ import static org.junit.Assert.assertEquals;
 
 public class OrdineTest {
 
-     private EntityOrdine ordine;
+    private EntityOrdine ordine;
 
     @Before
     public void setUp() throws Exception {
-       ordine = new EntityOrdine();
+        ordine = new EntityOrdine();
     }
 
     @After
     public void tearDown() throws Exception {
-       ordine = null;
+        ordine = null;
     }
 
     @Test
-    public void testCostruttore(){
+    public void testCostruttore() {
         int id_tavolo = 1;
         int num_persone = 4;
         String stato = "in_attesa";
@@ -35,18 +35,18 @@ public class OrdineTest {
     }
 
     @Test
-    public void testScriviSuDB(){
+    public void testScriviSuDB() {
         int id_ordine = 1;
         int id_tavolo = 1;
         int num_persone = 4;
         String stato = "in_attesa";
         ordine = new EntityOrdine(id_ordine, id_tavolo, num_persone, stato);
         int i = ordine.scriviSuDB();
-        assertEquals(i,1);
+        assertEquals(i, 1);
     }
 
     @Test
-    public void testCostruttoreDaDatabase(){
+    public void testCostruttoreDaDatabase() {
         int id_ordine = 1;
         ordine = new EntityOrdine(id_ordine);
         System.out.println(ordine);
@@ -55,23 +55,39 @@ public class OrdineTest {
     }
 
     @Test
-    public void testCalcolaConto(){
-        int idOrdine = 10;
-        EntityOrdine ordine = new EntityOrdine(idOrdine, 1, 5, "in_attesa");
-        ordine.scriviSuDB();
-        EntityPietanza pietanza = new EntityPietanza(190, "Pizza Margherita", 7.5, 2);
-        pietanza.scriviSuDB(190);
+    public void testCalcolaConto() {
+        EntityOrdine ordine = new EntityOrdine(1, 5, "in_attesa");
+        int nuovoIdOrdine = ordine.scriviSuDB();
+        System.out.println("Nuovo ordine creato con ID: " + nuovoIdOrdine);
+        EntityPietanza pietanza1 = new EntityPietanza(190, "Pizza Margherita", 7.5, 2);
+        EntityPietanza pietanza2 = new EntityPietanza(191, "Spaghetti Carbonara", 8.0, 1);
+        EntityPietanza pietanza3 = new EntityPietanza(192, "Tiramisu", 5.0, 1);
+        int idPietanza = pietanza1.scriviSuDB(0); // Usa 0 per generare un nuovo ID
+        int idPietanza2 = pietanza2.scriviSuDB(0);
+        int idPietanza3 = pietanza3.scriviSuDB(0);
+        System.out.println("Pietanza inserita con ID: " + idPietanza);
+        System.out.println("Pietanza inserita con ID: " + idPietanza2);
+        System.out.println("Pietanza inserita con ID: " + idPietanza3);
         int quantita = 1;
-        EntityDettaglioOrdinePietanza dettaglioOrdinePietanza = new EntityDettaglioOrdinePietanza(idOrdine, pietanza, quantita);
-        int id_dettaglio_ordine_pietanza = 0;//aggiunge automaticamente l'id
-        int val = dettaglioOrdinePietanza.scriviSuDB(id_dettaglio_ordine_pietanza);
-        ordine.aggiungiPietanza(pietanza, 1);
+        boolean risultatoAggiunta = ordine.aggiungiPietanza(pietanza1, quantita);
+        boolean risultatoAggiunta2 = ordine.aggiungiPietanza(pietanza2, quantita);
+        boolean risultatoAggiunta3 = ordine.aggiungiPietanza(pietanza3, quantita);
+        System.out.println("Risultato aggiunta pietanza 1: " + risultatoAggiunta);
+        System.out.println("Risultato aggiunta pietanza 2: " + risultatoAggiunta2);
+        System.out.println("Risultato aggiunta pietanza 3: " + risultatoAggiunta3);
+        System.out.println("Costo totale dell'ordine dopo aggiunta: " + ordine.getCostoTotale());
         EntityRistorante ristorante = new EntityRistorante(1);
         double costoCoperto = ristorante.getCostoCoperto();
+        System.out.println("Costo coperto per persona: " + costoCoperto);
+        double costoPrevistoSenzaCoperto = pietanza1.getPrezzo() * quantita;
+        costoPrevistoSenzaCoperto += pietanza2.getPrezzo() * quantita;
+        costoPrevistoSenzaCoperto += pietanza3.getPrezzo() * quantita;
+        System.out.println("Costo previsto senza coperto: " + costoPrevistoSenzaCoperto);
+        double costoPrevistoConCoperto = costoPrevistoSenzaCoperto + (costoCoperto * ordine.getNumPersone());
+        System.out.println("Costo previsto con coperto: " + costoPrevistoConCoperto);
         boolean includiCoperto = true;
-        double costo = ordine.calcolaConto(includiCoperto);
-        System.out.println("il costo totale è di" + costo);
-        double costoTotale= 50.0 + costoCoperto*5;
-        assertEquals(costo, 17.50);
+        double costoEffettivo = ordine.calcolaConto(includiCoperto);
+        System.out.println("Costo effettivo calcolato: " + costoEffettivo);
+        assertEquals(33.00, costoEffettivo, 0);
     }
 }
