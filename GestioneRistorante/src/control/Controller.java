@@ -14,6 +14,7 @@ import java.util.Map;
 import CFG.DBConnection;
 import DTO.DTOCategoriaPietanza;
 import DTO.DTOMenuFisso;
+import DTO.DTOOrdine;
 import DTO.DTOPietanza;
 import DTO.DTOTavolo;
 import entity.EntityCategoriaPietanza;
@@ -63,7 +64,7 @@ public class Controller {
      * 
      * @return Lista di tutte le pietanze
      */
-    public ArrayList<DTOPietanza> getAllPietanze() {
+    public static ArrayList<DTOPietanza> getAllPietanze() {
         ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
 
         dto_pietanze_liste = EntityPietanza.getAllPietanze();
@@ -78,7 +79,7 @@ public class Controller {
      * @param idCategoria ID della categoria per filtrare le pietanze
      * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
      */
-    public ArrayList<DTOPietanza> getPietanzeByCategoria(int idCategoria) {
+    public static ArrayList<DTOPietanza> getPietanzeByCategoria(int idCategoria) {
         
         ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
 
@@ -95,7 +96,7 @@ public class Controller {
      * 
      * @return Lista di oggetti Tavolo
      */
-    public ArrayList<DTOTavolo> getAllTavoli() {
+    public static ArrayList<DTOTavolo> getAllTavoli() {
         
         ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
 
@@ -112,7 +113,7 @@ public class Controller {
      * Recuperare tutti i menu fissi dal database
      * @return
      */
-    public ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
+    public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
         ArrayList<DTOMenuFisso> dto_menu_fissi_liste = new ArrayList<>();
 
         dto_menu_fissi_liste = EntityMenuFisso.getTuttiMenuFissi();
@@ -129,7 +130,7 @@ public class Controller {
      * 
      * @return Lista di categorie come Map<Integer, String> (id, nome)
      */
-    public ArrayList<DTOCategoriaPietanza> getCategoriePietanze() {
+    public static ArrayList<DTOCategoriaPietanza> getCategoriePietanze() {
         ArrayList<DTOCategoriaPietanza> dto_categorie_liste = new ArrayList<>();
 
         dto_categorie_liste = EntityCategoriaPietanza.getTutteCategorie();
@@ -149,7 +150,7 @@ public class Controller {
      * @param nuovoStato Nuovo stato dell'ordine
      * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
      */
-    public boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
+    public static boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
         EntityOrdine  ordine= new EntityOrdine(idOrdine);
         int result = ordine.aggiornaStato(nuovoStato);
         if (result == 0) {
@@ -161,6 +162,22 @@ public class Controller {
 
     }
 
+    /**
+     * Recupera tutti gli ordini dal database IN BASE ALLO STATO
+     * 
+     * @return Lista di oggetti Ordine
+     */
+    public static ArrayList<DTOOrdine> getOrdiniByStato(String stato) {
+        ArrayList<DTOOrdine> dto_ordini_liste = new ArrayList<>();
+
+        dto_ordini_liste = EntityOrdine.getOrdiniPerStato(stato);
+        System.out.println("Ordini recuperati: " + dto_ordini_liste.size());
+        System.out.println("Ordini: " + dto_ordini_liste);
+        
+        return dto_ordini_liste;
+
+    }
+   
     ///////////////ACHTUNG/////////////////////////////////////////////////////
     ///////////////ANCORA DA MODIFICARE/////////////////////////////////////////////////////
 
@@ -544,7 +561,7 @@ public class Controller {
      * @param stato Stato degli ordini da recuperare
      * @return Lista di ordini come Map<String, Object>
      */
-    public List<Map<String, Object>> getOrdiniByStato(String stato) {
+    /*public List<Map<String, Object>> getOrdiniByStato(String stato) {
         List<Map<String, Object>> ordini = new ArrayList<>();
 
         try {
@@ -574,6 +591,7 @@ public class Controller {
 
         return ordini;
     }
+        */
 
     /**
      * Recupera i dettagli di un ordine specifico

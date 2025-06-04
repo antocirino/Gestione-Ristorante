@@ -248,19 +248,20 @@ public class DBOrdine {
      * @param statoFiltro lo stato per cui filtrare
      * @return ArrayList di oggetti Ordine che corrispondono al filtro
      */
-    public ArrayList<EntityOrdine> getOrdiniPerStato(String statoFiltro) {
-        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
+    public ArrayList<DBOrdine> getOrdiniPerStato(String statoFiltro) {
+        ArrayList<DBOrdine> listaOrdini = new ArrayList<>();
         String query = "SELECT * FROM ordine WHERE stato = '" + statoFiltro + "' ORDER BY data_ordine DESC";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityOrdine ordine = new EntityOrdine();
+               DBOrdine ordine = new DBOrdine();
                 ordine.setIdOrdine(rs.getInt("id_ordine"));
                 ordine.setIdTavolo(rs.getInt("id_tavolo"));
                 ordine.setNumPersone(rs.getInt("num_persone"));
                 ordine.setDataOrdine(rs.getTimestamp("data_ordine"));
                 ordine.setStato(rs.getString("stato"));
+                ordine.setCostoTotale(rs.getDouble("costo_totale")); 
                 listaOrdini.add(ordine);
             }
         } catch (ClassNotFoundException | SQLException e) {
