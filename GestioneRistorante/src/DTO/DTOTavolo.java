@@ -48,7 +48,6 @@ public class DTOTavolo {
                 '}';
     }
     public boolean isOccupato() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isOccupato'");
+        return "occupato".equalsIgnoreCase(this.stato);
     }
 }
