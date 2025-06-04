@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import DTO.DTOMenuFisso;
+import DTO.DTOPietanza;
 import database.DBMenuFisso;
 
 /**
@@ -126,7 +127,7 @@ public class EntityMenuFisso {
      * @return ArrayList di oggetti MenuFisso
      */
     public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
-        
+
         ArrayList<DTOMenuFisso> listaMenu = new ArrayList<>();
         DBMenuFisso menu = new DBMenuFisso();
         ArrayList<DBMenuFisso> menuFissi = menu.getTuttiMenuFissi();
@@ -137,10 +138,22 @@ public class EntityMenuFisso {
             dto.setNome(m.getNome());
             dto.setPrezzo(m.getPrezzo());
             dto.setDescrizione(m.getDescrizione());
-            dto.setPietanze(m.getPietanze());
+
+            dto.setPietanze(new ArrayList<>());
+            // Aggiungiamo le pietanze del menu
+            for (EntityPietanza p : m.getPietanze()) {
+                DTOPietanza dtoPietanza = new DTOPietanza();
+                dtoPietanza.setIdPietanza(p.getIdPietanza());
+                dtoPietanza.setNome(p.getNome());
+                dtoPietanza.setPrezzo(p.getPrezzo());
+                dtoPietanza.setIdCategoria(p.getIdCategoria());
+                dtoPietanza.setNomeCategoria(p.getNomeCategoria());
+                dtoPietanza.setDisponibile(p.isDisponibile());
+                dto.getPietanze().add(dtoPietanza);
+            }
             listaMenu.add(dto);
         }
-         
+
         return listaMenu;
     }
 

@@ -67,6 +67,7 @@ public class ComposizioneMenuTest {
         assertEquals(i,0);
     }
 
+    /*
     @Test
     public void testGetPietanzaDaMenu(){
         int idMenu = 1;
@@ -75,6 +76,7 @@ public class ComposizioneMenuTest {
         int quantitaPietanzePresentiNelMenuConIdMenu = 5;
         assertEquals(quantitaPietanzePresentiNelMenuConIdMenu, array.size());
     }
+    */
 
     @Test
     public void testGetMenuDaPietanza(){

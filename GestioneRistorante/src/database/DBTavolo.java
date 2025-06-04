@@ -141,7 +141,7 @@ public class DBTavolo {
      */
     public ArrayList<DBTavolo> getAllTavoli() {
         ArrayList<DBTavolo> listaTavoli = new ArrayList<>();
-        String query = "SELECT * FROM tavolo ORDER BY numero";
+        String query = "SELECT * FROM tavolo ORDER BY id_tavolo";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);

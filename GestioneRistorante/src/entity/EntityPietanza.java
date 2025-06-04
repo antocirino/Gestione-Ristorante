@@ -24,13 +24,14 @@ public class EntityPietanza {
         this.disponibile = true;
     }
 
-    public EntityPietanza(int idPietanza, String nome, double prezzo, int idCategoria) {
+    public EntityPietanza(int idPietanza, String nome, double prezzo, int idCategoria, String nomeCategoria) {
         this.idPietanza = idPietanza;
         this.nome = nome;
         this.prezzo = prezzo;
         this.idCategoria = idCategoria;
         this.disponibile = true;
         this.ingredienti = new ArrayList<Object>();
+        this.nomeCategoria = nomeCategoria;
     }
 
     /**

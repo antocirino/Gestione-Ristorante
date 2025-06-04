@@ -31,7 +31,8 @@ public class Controller {
 
     private static Controller instance = null;
 
-    private Controller(){};
+    private Controller() {
+    };
 
     /**
      * Metodo per ottenere l'istanza singleton del controller
@@ -45,7 +46,7 @@ public class Controller {
         return instance;
     }
 
-    /////PIETANZE////////////////////////////////////////////////////////////////////
+    ///// PIETANZE////////////////////////////////////////////////////////////////////
     /**
      * Recupera tutte le pietanze dal database
      * 
@@ -60,44 +61,46 @@ public class Controller {
         return dto_pietanze_liste;
     }
 
-        /**
+    /**
      * Recupera le pietanze filtrate per categoria
      * 
      * @param idCategoria ID della categoria per filtrare le pietanze
      * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
      */
     public static ArrayList<DTOPietanza> getPietanzeByCategoria(int idCategoria) {
-        
+
         ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
 
         dto_pietanze_liste = EntityPietanza.getPietanzePerCategoria(idCategoria);
         System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
         System.out.println("Pietanze: " + dto_pietanze_liste);
-        
+
         return dto_pietanze_liste;
-           
+
     }
-      /////TAVOLI////////////////////////////////////////////////////////////////////
-        /**
+
+    ///// TAVOLI////////////////////////////////////////////////////////////////////
+    /**
      * Recupera tutti i tavoli dal database
      * 
      * @return Lista di oggetti Tavolo
      */
     public static ArrayList<DTOTavolo> getAllTavoli() {
-        
+
         ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
 
         dto_tavoli_liste = EntityTavolo.getAllTavoli();
         System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
         System.out.println("Tavoli: " + dto_tavoli_liste);
-        
+
         return dto_tavoli_liste;
-                   
+
     }
 
-      /////MENUFISSI////////////////////////////////////////////////////////////////////
+    ///// MENUFISSI////////////////////////////////////////////////////////////////////
     /**
      * Recuperare tutti i menu fissi dal database
+     * 
      * @return
      */
     public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
@@ -107,12 +110,12 @@ public class Controller {
         // Stampa per debug
         System.out.println("Menu fissi recuperati: " + dto_menu_fissi_liste.size());
         System.out.println("Menu fissi: " + dto_menu_fissi_liste);
-        
+
         return dto_menu_fissi_liste;
     }
 
-      /////CATEGORIAPIETANZA////////////////////////////////////////////////////////////////////
-        /**
+    ///// CATEGORIAPIETANZA////////////////////////////////////////////////////////////////////
+    /**
      * Recupera tutte le categorie di pietanze dal database
      * 
      * @return Lista di categorie come Map<Integer, String> (id, nome)
@@ -124,12 +127,12 @@ public class Controller {
         // Stampa per debug
         System.out.println("Categorie pietanze recuperate: " + dto_categorie_liste.size());
         System.out.println("Categorie pietanze: " + dto_categorie_liste);
-        
+
         return dto_categorie_liste;
-        
+
     }
 
-    /////ORDINE////////////////////////////////////////////////////////////////////
+    ///// ORDINE////////////////////////////////////////////////////////////////////
     /**
      * Aggiorna lo stato di un ordine
      * 
@@ -138,7 +141,7 @@ public class Controller {
      * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
      */
     public static boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
-        EntityOrdine  ordine= new EntityOrdine(idOrdine);
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
         int result = ordine.aggiornaStato(nuovoStato);
         if (result == 0) {
             System.err.println("Errore nell'aggiornamento dello stato dell'ordine con ID: " + idOrdine);
@@ -160,15 +163,17 @@ public class Controller {
         dto_ordini_liste = EntityOrdine.getOrdiniPerStato(stato);
         System.out.println("Ordini recuperati: " + dto_ordini_liste.size());
         System.out.println("Ordini: " + dto_ordini_liste);
-        
+
         return dto_ordini_liste;
 
     }
-   
-    ///////////////ACHTUNG/////////////////////////////////////////////////////
-    ///////////////ANCORA DA MODIFICARE/////////////////////////////////////////////////////
 
-     private Connection connection;
+    /////////////// ACHTUNG/////////////////////////////////////////////////////
+    /////////////// ANCORA DA
+    /////////////// MODIFICARE/////////////////////////////////////////////////////
+
+    private Connection connection;
+
     // Connessione al database
     /**
      * Testa la connessione al database
@@ -177,18 +182,23 @@ public class Controller {
      */
     public boolean testDatabaseConnection() {
         try {
+            System.out.println("Testing database connection...");
             if (connection == null || connection.isClosed()) {
-                ;
+                System.out.println("Connection is null or closed, creating a new connection.");
                 connection = DBConnection.getConnection();
+                System.out.println("New connection created: " + connection);
             }
 
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM tavolo");
 
+            System.out.println("Executing test query on tavolo table...");
             boolean result = rs.next();
 
             rs.close();
             stmt.close();
+
+            System.out.println("Database connection test successful: " + result);
 
             return result;
         } catch (SQLException e) {
@@ -197,44 +207,45 @@ public class Controller {
         }
     }
 
-
-   ///ACHTUNG --> VALUTARE SE ELIMINARE QUESTO METODO
+    /// ACHTUNG --> VALUTARE SE ELIMINARE QUESTO METODO
     /**
      * 
      * Recupera tutti i menu fissi dal database
      * 
      * @return Mappa con chiave l'ID del menu e valore un oggetto Map con le
      *         informazioni del menu
-    
-
-
-    public Map<Integer, Map<String, Object>> getMenuFissi() {
-        Map<Integer, Map<String, Object>> menuFissi = new HashMap<>();
-
-        try {
-            String query = "SELECT id_menu, nome, prezzo, descrizione FROM menu_fisso ORDER BY nome";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                int idMenu = rs.getInt("id_menu");
-                Map<String, Object> menuInfo = new HashMap<>();
-                menuInfo.put("nome", rs.getString("nome"));
-                menuInfo.put("prezzo", rs.getDouble("prezzo"));
-                menuInfo.put("descrizione", rs.getString("descrizione"));
-
-                menuFissi.put(idMenu, menuInfo);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero dei menu fissi: " + e.getMessage());
-        }
-
-        return menuFissi;
-    }
-
+     * 
+     * 
+     * 
+     *         public Map<Integer, Map<String, Object>> getMenuFissi() {
+     *         Map<Integer, Map<String, Object>> menuFissi = new HashMap<>();
+     * 
+     *         try {
+     *         String query = "SELECT id_menu, nome, prezzo, descrizione FROM
+     *         menu_fisso ORDER BY nome";
+     *         PreparedStatement pstmt = connection.prepareStatement(query);
+     *         ResultSet rs = pstmt.executeQuery();
+     * 
+     *         while (rs.next()) {
+     *         int idMenu = rs.getInt("id_menu");
+     *         Map<String, Object> menuInfo = new HashMap<>();
+     *         menuInfo.put("nome", rs.getString("nome"));
+     *         menuInfo.put("prezzo", rs.getDouble("prezzo"));
+     *         menuInfo.put("descrizione", rs.getString("descrizione"));
+     * 
+     *         menuFissi.put(idMenu, menuInfo);
+     *         }
+     * 
+     *         rs.close();
+     *         pstmt.close();
+     *         } catch (SQLException e) {
+     *         System.err.println("Errore nel recupero dei menu fissi: " +
+     *         e.getMessage());
+     *         }
+     * 
+     *         return menuFissi;
+     *         }
+     * 
      */
 
     /**
@@ -549,37 +560,40 @@ public class Controller {
      * @param stato Stato degli ordini da recuperare
      * @return Lista di ordini come Map<String, Object>
      */
-    /*public List<Map<String, Object>> getOrdiniByStato(String stato) {
-        List<Map<String, Object>> ordini = new ArrayList<>();
-
-        try {
-            String query = "SELECT o.id_ordine, o.id_tavolo, o.data_ordine, o.stato, t.numero AS numero_tavolo " +
-                    "FROM ordine o JOIN tavolo t ON o.id_tavolo = t.id_tavolo " +
-                    "WHERE o.stato = ? " +
-                    "ORDER BY o.data_ordine";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, stato);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Map<String, Object> ordine = new HashMap<>();
-                ordine.put("idOrdine", rs.getInt("id_ordine"));
-                ordine.put("idTavolo", rs.getInt("id_tavolo"));
-                ordine.put("numeroTavolo", rs.getInt("numero_tavolo"));
-                ordine.put("dataOrdine", rs.getTimestamp("data_ordine"));
-                ordine.put("stato", rs.getString("stato"));
-                ordini.add(ordine);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero degli ordini: " + e.getMessage());
-        }
-
-        return ordini;
-    }
-        */
+    /*
+     * public List<Map<String, Object>> getOrdiniByStato(String stato) {
+     * List<Map<String, Object>> ordini = new ArrayList<>();
+     * 
+     * try {
+     * String query =
+     * "SELECT o.id_ordine, o.id_tavolo, o.data_ordine, o.stato, t.numero AS numero_tavolo "
+     * +
+     * "FROM ordine o JOIN tavolo t ON o.id_tavolo = t.id_tavolo " +
+     * "WHERE o.stato = ? " +
+     * "ORDER BY o.data_ordine";
+     * PreparedStatement pstmt = connection.prepareStatement(query);
+     * pstmt.setString(1, stato);
+     * ResultSet rs = pstmt.executeQuery();
+     * 
+     * while (rs.next()) {
+     * Map<String, Object> ordine = new HashMap<>();
+     * ordine.put("idOrdine", rs.getInt("id_ordine"));
+     * ordine.put("idTavolo", rs.getInt("id_tavolo"));
+     * ordine.put("numeroTavolo", rs.getInt("numero_tavolo"));
+     * ordine.put("dataOrdine", rs.getTimestamp("data_ordine"));
+     * ordine.put("stato", rs.getString("stato"));
+     * ordini.add(ordine);
+     * }
+     * 
+     * rs.close();
+     * pstmt.close();
+     * } catch (SQLException e) {
+     * System.err.println("Errore nel recupero degli ordini: " + e.getMessage());
+     * }
+     * 
+     * return ordini;
+     * }
+     */
 
     /**
      * Recupera i dettagli di un ordine specifico
@@ -646,7 +660,6 @@ public class Controller {
 
         return dettagli;
     }
-
 
     /**
      * Recupera gli ingredienti di una pietanza

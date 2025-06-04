@@ -152,8 +152,9 @@ public class DBMenuFisso {
      */
     public ArrayList<EntityPietanza> getPietanze() {
         ArrayList<EntityPietanza> pietanze = new ArrayList<>();
-        String query = "SELECT p.* FROM pietanza p " +
+        String query = "SELECT p.*, cp.nome as nome_categoria FROM pietanza p " +
                 "JOIN composizione_menu cm ON p.id_pietanza = cm.id_pietanza " +
+                "JOIN categoria_pietanza cp ON p.id_categoria = cp.id_categoria " +
                 "WHERE cm.id_menu = " + this.idMenu + " " +
                 "ORDER BY p.nome";
 
@@ -164,12 +165,11 @@ public class DBMenuFisso {
                         rs.getInt("id_pietanza"),
                         rs.getString("nome"),
                         rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria")
-                        );
-                        
-                        pietanze.add(pietanza);
+                        rs.getInt("id_categoria"),
+                        rs.getString("nome_categoria"));
+
+                pietanze.add(pietanza);
             }
-           
 
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nel recupero delle pietanze del menu: " + e.getMessage());

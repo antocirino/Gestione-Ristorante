@@ -117,28 +117,28 @@ public class DBComposizioneMenu {
      * @param idMenu ID del menu
      * @return ArrayList di oggetti Pietanza
      */
-    public ArrayList<EntityPietanza> getPietanzeByMenu(int idMenu) {
-        ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
-        try {
-            String query = "SELECT p.* FROM pietanza p " +
-                    "JOIN composizione_menu c ON p.id_pietanza = c.id_pietanza " +
-                    "WHERE c.id_menu = " + idMenu;
-            ResultSet rs = DBConnection.selectQuery(query);
+    // public ArrayList<EntityPietanza> getPietanzeByMenu(int idMenu) {
+    //     ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
+    //     try {
+    //         String query = "SELECT p.* FROM pietanza p " +
+    //                 "JOIN composizione_menu c ON p.id_pietanza = c.id_pietanza " +
+    //                 "WHERE c.id_menu = " + idMenu;
+    //         ResultSet rs = DBConnection.selectQuery(query);
 
-            while (rs.next()) {
-                EntityPietanza pietanza = new EntityPietanza(
-                        rs.getInt("id_pietanza"),
-                        rs.getString("nome"),
-                        rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanza.setDisponibile(rs.getBoolean("disponibile"));
-                listaPietanze.add(pietanza);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero delle pietanze del menu: " + e.getMessage());
-        }
-        return listaPietanze;
-    }
+    //         while (rs.next()) {
+    //             EntityPietanza pietanza = new EntityPietanza(
+    //                     rs.getInt("id_pietanza"),
+    //                     rs.getString("nome"),
+    //                     rs.getDouble("prezzo"),
+    //                     rs.getInt("id_categoria"));
+    //             pietanza.setDisponibile(rs.getBoolean("disponibile"));
+    //             listaPietanze.add(pietanza);
+    //         }
+    //     } catch (ClassNotFoundException | SQLException e) {
+    //         System.err.println("Errore nel recupero delle pietanze del menu: " + e.getMessage());
+    //     }
+    //     return listaPietanze;
+    // }
 
     /**
      * Recupera tutti i menu che contengono una specifica pietanza

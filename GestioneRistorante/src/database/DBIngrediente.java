@@ -26,6 +26,22 @@ public class DBIngrediente {
     }
 
     /**
+     * Costruttore per creare un ingrediente con i suoi attributi
+     * 
+     * @param nome                Nome dell'ingrediente
+     * @param quantitaDisponibile Quantità disponibile dell'ingrediente
+     * @param unitaMisura         Unità di misura dell'ingrediente
+     * @param sogliaRiordino      Soglia di riordino dell'ingrediente
+     */
+    public DBIngrediente(int id, String nome, float quantitaDisponibile, String unitaMisura, float sogliaRiordino) {
+        this.idIngrediente = id;
+        this.nome = nome;
+        this.quantitaDisponibile = quantitaDisponibile;
+        this.unitaMisura = unitaMisura;
+        this.sogliaRiordino = sogliaRiordino;
+    }
+
+    /**
      * Metodo per caricare un ingrediente dal database tramite il suo ID
      */
     public void caricaDaDB() {

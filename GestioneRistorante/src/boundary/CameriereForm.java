@@ -3,6 +3,8 @@ package boundary;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import DTO.DTOCategoriaPietanza;
+import DTO.DTOMenuFisso;
 import DTO.DTOPietanza;
 import DTO.DTOTavolo;
 
@@ -17,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import control.Controller;
 import entity.EntityPietanza;
-import entity.EntityTavolo;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
@@ -47,13 +48,13 @@ public class CameriereForm extends JFrame {
     private JSpinner quantitaSpinner;
 
     // Colori e font moderni - versioni più contrastate
-    private Color primaryColor = new Color(41, 128, 185);     // Blu più scuro
-    private Color accentColor = new Color(52, 152, 219);      // Blu accent
-    private Color textColor = new Color(44, 62, 80);          // Grigio scuro
-    private Color lightColor = new Color(236, 240, 241);      // Grigio chiaro
-    private Color successColor = new Color(39, 174, 96);      // Verde più vivido
-    private Color warningColor = new Color(230, 126, 34);     // Arancione più vivido
-    private Color dangerColor = new Color(192, 57, 43);       // Rosso più vivido
+    private Color primaryColor = new Color(41, 128, 185); // Blu più scuro
+    private Color accentColor = new Color(52, 152, 219); // Blu accent
+    private Color textColor = new Color(44, 62, 80); // Grigio scuro
+    private Color lightColor = new Color(236, 240, 241); // Grigio chiaro
+    private Color successColor = new Color(39, 174, 96); // Verde più vivido
+    private Color warningColor = new Color(230, 126, 34); // Arancione più vivido
+    private Color dangerColor = new Color(192, 57, 43); // Rosso più vivido
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 26);
     private Font headerFont = new Font("Segoe UI", Font.BOLD, 18);
     private Font regularFont = new Font("Segoe UI", Font.PLAIN, 16);
@@ -79,21 +80,21 @@ public class CameriereForm extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(primaryColor);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));
-        
+
         JLabel titleLabel = new JLabel("GESTIONE ORDINI - CAMERIERE");
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(titleFont);
-        
+
         // Aggiunge l'icona SVG al titolo
         ImageIcon svgIcon = loadSVGIcon("person.svg", 32, 32);
         JLabel iconLabel = new JLabel(svgIcon);
         iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
-        
+
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         titlePanel.setBackground(primaryColor);
         titlePanel.add(iconLabel);
         titlePanel.add(titleLabel);
-        
+
         headerPanel.add(titlePanel, BorderLayout.WEST);
 
         // Creazione del tabbed pane con stile moderno
@@ -127,14 +128,14 @@ public class CameriereForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Chiude la finestra generando un evento di chiusura
                 CameriereForm.this.dispatchEvent(new java.awt.event.WindowEvent(
-                    CameriereForm.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
+                        CameriereForm.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
             }
         });
 
         JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         leftButtonPanel.setBackground(new Color(245, 247, 250));
         leftButtonPanel.add(indietroButton);
-        
+
         buttonPanel.add(leftButtonPanel, BorderLayout.WEST);
 
         // Assemblaggio pannelli
@@ -167,7 +168,7 @@ public class CameriereForm extends JFrame {
         JLabel categoriaLabel = new JLabel("Filtra per categoria:");
         categoriaLabel.setFont(regularFont);
         categoriaLabel.setForeground(textColor);
-        
+
         categorieComboBox = new JComboBox<>();
         categorieComboBox.addItem("Tutte le categorie");
         styleComboBox(categorieComboBox);
@@ -199,7 +200,7 @@ public class CameriereForm extends JFrame {
         JLabel quantitaLabel = new JLabel("Quantità:");
         quantitaLabel.setFont(regularFont);
         quantitaLabel.setForeground(textColor);
-        
+
         SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 20, 1);
         quantitaSpinner = new JSpinner(spinnerModel);
         styleSpinner(quantitaSpinner);
@@ -207,7 +208,7 @@ public class CameriereForm extends JFrame {
         JLabel noteLabel = new JLabel("Note:");
         noteLabel.setFont(regularFont);
         noteLabel.setForeground(textColor);
-        
+
         noteField = new JTextField(20);
         styleTextField(noteField);
 
@@ -313,7 +314,7 @@ public class CameriereForm extends JFrame {
         JLabel quantitaMenuLabel = new JLabel("Quantità:");
         quantitaMenuLabel.setFont(regularFont);
         quantitaMenuLabel.setForeground(textColor);
-        
+
         SpinnerModel spinnerModelMenu = new SpinnerNumberModel(1, 1, 20, 1);
         JSpinner quantitaMenuSpinner = new JSpinner(spinnerModelMenu);
         styleSpinner(quantitaMenuSpinner);
@@ -355,7 +356,7 @@ public class CameriereForm extends JFrame {
         JLabel tavoloLabel = new JLabel("Seleziona tavolo:");
         tavoloLabel.setFont(headerFont);
         tavoloLabel.setForeground(textColor);
-        
+
         tavoliComboBox = new JComboBox<>();
         styleComboBox(tavoliComboBox);
 
@@ -426,36 +427,33 @@ public class CameriereForm extends JFrame {
         button.setOpaque(true);
         button.setBorderPainted(true);
         button.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(backgroundColor.darker(), 2, true),
-            BorderFactory.createEmptyBorder(12, 20, 12, 20)
-        ));
+                new LineBorder(backgroundColor.darker(), 2, true),
+                BorderFactory.createEmptyBorder(12, 20, 12, 20)));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
+
         // Effetti hover più evidenti
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(backgroundColor.brighter());
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(backgroundColor.darker().darker(), 2, true),
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
-                ));
+                        new LineBorder(backgroundColor.darker().darker(), 2, true),
+                        BorderFactory.createEmptyBorder(12, 20, 12, 20)));
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(backgroundColor);
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(backgroundColor.darker(), 2, true),
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
-                ));
+                        new LineBorder(backgroundColor.darker(), 2, true),
+                        BorderFactory.createEmptyBorder(12, 20, 12, 20)));
             }
-            
+
             @Override
             public void mousePressed(MouseEvent e) {
                 button.setBackground(backgroundColor.darker());
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (button.contains(e.getPoint())) {
@@ -465,7 +463,7 @@ public class CameriereForm extends JFrame {
                 }
             }
         });
-        
+
         return button;
     }
 
@@ -485,9 +483,8 @@ public class CameriereForm extends JFrame {
 
     private void styleScrollPane(JScrollPane scrollPane) {
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+                new LineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         scrollPane.getViewport().setBackground(Color.WHITE);
     }
 
@@ -497,23 +494,22 @@ public class CameriereForm extends JFrame {
         comboBox.setForeground(textColor);
         comboBox.setPreferredSize(new Dimension(250, 40));
         comboBox.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(149, 165, 166), 2, true),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-        
+                new LineBorder(new Color(149, 165, 166), 2, true),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)));
+
         // Migliora l'aspetto del dropdown
         comboBox.setOpaque(true);
-        
+
         // Personalizza il renderer per le opzioni nel dropdown
         comboBox.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value,
                     int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                
+
                 setFont(regularFont);
                 setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
-                
+
                 if (isSelected) {
                     setBackground(accentColor);
                     setForeground(Color.WHITE);
@@ -521,27 +517,25 @@ public class CameriereForm extends JFrame {
                     setBackground(Color.WHITE);
                     setForeground(textColor);
                 }
-                
+
                 return this;
             }
         });
-        
+
         // Aggiungi effetti hover per il ComboBox
         comboBox.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 comboBox.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(accentColor, 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(accentColor, 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 comboBox.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(149, 165, 166), 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(new Color(149, 165, 166), 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
         });
     }
@@ -552,26 +546,23 @@ public class CameriereForm extends JFrame {
         textField.setForeground(textColor);
         textField.setPreferredSize(new Dimension(200, 40));
         textField.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(149, 165, 166), 2, true),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-        
+                new LineBorder(new Color(149, 165, 166), 2, true),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)));
+
         // Aggiungi effetti focus per il TextField
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
                 textField.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(accentColor, 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(accentColor, 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
-            
+
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
                 textField.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(149, 165, 166), 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(new Color(149, 165, 166), 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
         });
     }
@@ -580,10 +571,9 @@ public class CameriereForm extends JFrame {
         spinner.setFont(regularFont);
         spinner.setPreferredSize(new Dimension(80, 40));
         spinner.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(149, 165, 166), 2, true),
-            BorderFactory.createEmptyBorder(4, 8, 4, 8)
-        ));
-        
+                new LineBorder(new Color(149, 165, 166), 2, true),
+                BorderFactory.createEmptyBorder(4, 8, 4, 8)));
+
         JComponent editor = spinner.getEditor();
         if (editor instanceof JSpinner.DefaultEditor) {
             JTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
@@ -593,23 +583,21 @@ public class CameriereForm extends JFrame {
             textField.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
             textField.setHorizontalAlignment(JTextField.CENTER);
         }
-        
+
         // Aggiungi effetti focus per lo Spinner
         spinner.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
                 spinner.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(accentColor, 2, true),
-                    BorderFactory.createEmptyBorder(4, 8, 4, 8)
-                ));
+                        new LineBorder(accentColor, 2, true),
+                        BorderFactory.createEmptyBorder(4, 8, 4, 8)));
             }
-            
+
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
                 spinner.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(149, 165, 166), 2, true),
-                    BorderFactory.createEmptyBorder(4, 8, 4, 8)
-                ));
+                        new LineBorder(new Color(149, 165, 166), 2, true),
+                        BorderFactory.createEmptyBorder(4, 8, 4, 8)));
             }
         });
     }
@@ -618,9 +606,8 @@ public class CameriereForm extends JFrame {
         JPanel panel = new JPanel();
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        ));
+                new LineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)));
         return panel;
     }
 
@@ -629,11 +616,10 @@ public class CameriereForm extends JFrame {
      */
     private void caricaCategorie() {
         try {
-            Controller controller = Controller.getInstance();
-            Map<Integer, String> categorie = (Map<Integer, String>) controller.getCategoriePietanze();
+            ArrayList<DTOCategoriaPietanza> categorie = Controller.getCategoriePietanze();
 
-            for (String nomeCategoria : categorie.values()) {
-                categorieComboBox.addItem(nomeCategoria);
+            for (DTOCategoriaPietanza categoria : categorie) {
+                categorieComboBox.addItem(categoria.getNome());
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -647,8 +633,8 @@ public class CameriereForm extends JFrame {
      */
     private void caricaTavoli() {
         try {
-            Controller controller = Controller.getInstance();
-            List<DTOTavolo> tavoli = controller.getAllTavoli();
+
+            List<DTOTavolo> tavoli = Controller.getAllTavoli();
 
             tavoliComboBox.removeAllItems();
             for (DTOTavolo tavolo : tavoli) {
@@ -671,24 +657,23 @@ public class CameriereForm extends JFrame {
      */
     private void caricaPietanze() {
         try {
-            Controller controller = Controller.getInstance();
             String categoriaSelezionata = (String) categorieComboBox.getSelectedItem();
 
             List<DTOPietanza> pietanze;
-            Map<Integer, String> categorie = (Map<Integer, String>) controller.getCategoriePietanze();
+            ArrayList<DTOCategoriaPietanza> categorie = Controller.getCategoriePietanze();
             Map<String, Integer> categorieInverse = new HashMap<>();
 
             // Creiamo una mappa inversa da nome categoria a ID categoria
-            for (Map.Entry<Integer, String> entry : categorie.entrySet()) {
-                categorieInverse.put(entry.getValue(), entry.getKey());
+            for (DTOCategoriaPietanza categoria : categorie) {
+                categorieInverse.put(categoria.getNome(), categoria.getIdCategoria());
             }
 
             if (categoriaSelezionata == null || categoriaSelezionata.equals("Tutte le categorie")) {
-                pietanze = controller.getAllPietanze();
+                pietanze = Controller.getAllPietanze();
             } else {
                 Integer idCategoria = categorieInverse.get(categoriaSelezionata);
                 if (idCategoria != null) {
-                    pietanze = controller.getPietanzeByCategoria(idCategoria);
+                    pietanze = Controller.getPietanzeByCategoria(idCategoria);
                 } else {
                     pietanze = new ArrayList<>();
                 }
@@ -723,25 +708,31 @@ public class CameriereForm extends JFrame {
      */
     private void caricaMenuFissi() {
         try {
-            Controller controller = Controller.getInstance();
-            Map<Integer, Map<String, Object>> menuFissi = (Map<Integer, Map<String, Object>>) controller.getTuttiMenuFissi();
+
+            ArrayList<DTOMenuFisso> menuFissi = Controller.getTuttiMenuFissi();
 
             // Svuoto la tabella
             DefaultTableModel model = (DefaultTableModel) menuFissiTable.getModel();
             model.setRowCount(0);
 
-            // Popolo la tabella e la mappa dei prezzi
-            for (Map.Entry<Integer, Map<String, Object>> entry : menuFissi.entrySet()) {
-                int idMenu = entry.getKey();
-                Map<String, Object> menuInfo = entry.getValue();
-
-                String nome = (String) menuInfo.get("nome");
-                String descrizione = (String) menuInfo.get("descrizione");
-                double prezzo = (Double) menuInfo.get("prezzo");
+            for (DTOMenuFisso menu : menuFissi) {
+                int idMenu = menu.getIdMenu();
+                String nome = menu.getNome();
+                String descrizione = menu.getDescrizione();
+                double prezzo = menu.getPrezzo();
 
                 // Dettagli menu - per ora utilizziamo solo la descrizione
-                String dettagliMenu = descrizione
-                        + "\n\nPIETANZE INCLUSE:\nIl dettaglio delle pietanze è disponibile nel controller";
+                String dettagliMenu = descrizione;
+
+                List<DTOPietanza> pietanze = menu.getPietanze();
+                if (pietanze != null && !pietanze.isEmpty()) {
+                    dettagliMenu += "\n\nPietanze incluse:\n";
+                    for (DTOPietanza pietanza : pietanze) {
+                        dettagliMenu += pietanza.getNomeCategoria() + " - " + pietanza.getNome() + "\n";
+                    }
+                } else {
+                    dettagliMenu += "\n\nNessuna pietanza inclusa.";
+                }
 
                 model.addRow(new Object[] { idMenu, nome, dettagliMenu, String.format("%.2f", prezzo) });
 
@@ -940,32 +931,31 @@ public class CameriereForm extends JFrame {
     private ImageIcon loadSVGIcon(String filename, int width, int height) {
         return loadSVGIcon(filename, width, height, Color.WHITE);
     }
-    
+
     // Metodo sovraccaricato per specificare il colore dell'icona
     private ImageIcon loadSVGIcon(String filename, int width, int height, Color color) {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
             String[] possiblePaths = {
-                "bin/resources/icons/" + filename,                    // Nel container/dopo compilazione
-                "resources/icons/" + filename,                       // Percorso relativo nel container
-                "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
-                "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
-                "src/resources/icons/" + filename                    // Durante sviluppo
+                    "bin/resources/icons/" + filename, // Nel container/dopo compilazione
+                    "resources/icons/" + filename, // Percorso relativo nel container
+                    "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
+                    "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
+                    "src/resources/icons/" + filename // Durante sviluppo
             };
-            
+
             java.io.File svgFile = null;
             String usedPath = null;
-            
+
             for (String path : possiblePaths) {
                 java.io.File testFile = new java.io.File(path);
                 if (testFile.exists()) {
                     svgFile = testFile;
                     usedPath = path;
-                    System.out.println("Icona SVG trovata: " + usedPath);
                     break;
                 }
             }
-            
+
             // Se non trovato con percorsi diretti, prova con il class loader
             if (svgFile == null || !svgFile.exists()) {
                 try {
@@ -975,91 +965,87 @@ public class CameriereForm extends JFrame {
                     }
                     if (resourceUrl != null) {
                         svgFile = new java.io.File(resourceUrl.toURI());
-                        System.out.println("Icona SVG trovata via class loader: " + resourceUrl);
                     }
                 } catch (Exception e) {
                     // Ignora e usa fallback
                 }
             }
-            
+
             if (svgFile == null || !svgFile.exists()) {
-                System.out.println("File SVG non trovato in nessuno dei percorsi: " + filename);
                 return createFallbackIcon(filename, width, height, color);
             }
-            
+
             SVGUniverse svgUniverse = new SVGUniverse();
             java.net.URI svgUri = svgFile.toURI();
             SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(svgUri.toURL()));
-            
+
             if (diagram == null) {
-                System.out.println("Impossibile caricare il diagramma SVG: " + filename);
                 return createFallbackIcon(filename, width, height, color);
             }
-            
+
             // Imposta dimensioni
             diagram.setIgnoringClipHeuristic(true);
-            
+
             // Renderizza SVG come BufferedImage con sfondo trasparente
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = image.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            
+
             // Pulisci lo sfondo
             g2.setComposite(AlphaComposite.Clear);
             g2.fillRect(0, 0, width, height);
             g2.setComposite(AlphaComposite.SrcOver);
-            
+
             // Imposta il colore dell'SVG
             g2.setColor(color);
-            
+
             // Scala e centra l'SVG
             java.awt.geom.Rectangle2D bounds = diagram.getViewRect();
             double scaleX = (double) width / bounds.getWidth();
             double scaleY = (double) height / bounds.getHeight();
             double scale = Math.min(scaleX, scaleY);
-            
+
             int scaledWidth = (int) (bounds.getWidth() * scale);
             int scaledHeight = (int) (bounds.getHeight() * scale);
             int x = (width - scaledWidth) / 2;
             int y = (height - scaledHeight) / 2;
-            
+
             g2.translate(x, y);
             g2.scale(scale, scale);
-            
+
             diagram.render(g2);
             g2.dispose();
-            
-            System.out.println("Icona SVG caricata con successo: " + filename);
+
             return new ImageIcon(image);
-            
+
         } catch (Exception e) {
             System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
             e.printStackTrace();
             return createFallbackIcon(filename, width, height, color);
         }
     }
-    
+
     // Metodo per creare icone di fallback
     private ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
         // Imposta colore e font
         g2.setColor(color);
         g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, Math.min(width, height) - 4));
-        
+
         String icon = getUnicodeIcon(filename);
         FontMetrics fm = g2.getFontMetrics();
         int textWidth = fm.stringWidth(icon);
         int textHeight = fm.getHeight();
         int x = (width - textWidth) / 2;
         int y = (height - textHeight) / 2 + fm.getAscent();
-        
+
         g2.drawString(icon, x, y);
         g2.dispose();
-        
+
         return new ImageIcon(image);
     }
 

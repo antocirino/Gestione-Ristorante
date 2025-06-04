@@ -1,8 +1,6 @@
 package DTO;
 
-import entity.EntityPietanza;
-
-import java.util.List;
+import java.util.ArrayList;
 
 public class DTOMenuFisso {
 
@@ -11,7 +9,7 @@ public class DTOMenuFisso {
     private String nome;
     private double prezzo;
     private String descrizione;
-    private List<EntityPietanza> pietanze;
+    private ArrayList<DTOPietanza> pietanze;
 
     // GETTER E SETTER
 
@@ -47,11 +45,11 @@ public class DTOMenuFisso {
         this.descrizione = descrizione;
     }
 
-    public List<EntityPietanza> getPietanze() {
+    public ArrayList<DTOPietanza> getPietanze() {
         return pietanze;
     }
 
-    public void setPietanze(List<EntityPietanza> pietanze) {
+    public void setPietanze(ArrayList<DTOPietanza> pietanze) {
         this.pietanze = pietanze;
     }
 
@@ -66,4 +64,3 @@ public class DTOMenuFisso {
                 '}';
     }
 }
-

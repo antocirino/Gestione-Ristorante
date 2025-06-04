@@ -13,11 +13,11 @@ public class PietanzaTest {
 
     private EntityPietanza pietanza;
 
-    @Before
-    public void setUp() throws Exception {
-        pietanza = new EntityPietanza(1, "Pizza Margherita", 7.5, 2);
+    // @Before
+    // public void setUp() throws Exception {
+    //     pietanza = new EntityPietanza(1, "Pizza Margherita", 7.5, 2);
 
-    }
+    // }
 
     @After
     public void tearDown() throws Exception {

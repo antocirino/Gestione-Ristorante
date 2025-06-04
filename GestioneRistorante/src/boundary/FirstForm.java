@@ -24,10 +24,10 @@ public class FirstForm extends JFrame {
     private Font smallFont = new Font("Segoe UI", Font.PLAIN, 14);
 
     public FirstForm() {
-        setTitle("Ristorante Manager");
+        setTitle("Ristorante Manager 222");
         setSize(900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         // Imposta il colore di sfondo principale
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(0, 0));
@@ -37,7 +37,7 @@ public class FirstForm extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(primaryColor);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
-        
+
         JLabel titleLabel = new JLabel("GESTIONE RISTORANTE");
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(titleFont);
@@ -53,7 +53,7 @@ public class FirstForm extends JFrame {
         JPanel welcomePanel = new JPanel(new BorderLayout());
         welcomePanel.setBackground(lightColor);
         welcomePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 25, 0));
-        
+
         JLabel welcomeLabel = new JLabel("Benvenuto nel sistema di gestione del ristorante");
         welcomeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 24));
         welcomeLabel.setForeground(textColor);
@@ -70,7 +70,7 @@ public class FirstForm extends JFrame {
         cuocoButton = createModernButton("Cuoco", "restaurant_menu");
         cassiereButton = createModernButton("Cassiere", "payment");
         direttoreButton = createModernButton("Direttore", "admin_panel_settings");
-        
+
         ruoliPanel.add(cameriereButton);
         ruoliPanel.add(cuocoButton);
         ruoliPanel.add(cassiereButton);
@@ -80,7 +80,7 @@ public class FirstForm extends JFrame {
         JPanel testPanel = new JPanel(new GridLayout(1, 2, 15, 0));
         testPanel.setBackground(lightColor);
         testPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 0, 40));
-        
+
         JButton testDbButton = new JButton("Verifica connessione database");
         styleButton(testDbButton);
         testDbButton.setPreferredSize(new Dimension(250, 40));
@@ -98,7 +98,7 @@ public class FirstForm extends JFrame {
                 }
             }
         });
-        
+
         JButton exitButton = new JButton("Esci dall'applicazione");
         exitButton.setPreferredSize(new Dimension(250, 40));
         exitButton.setFont(smallFont);
@@ -106,58 +106,52 @@ public class FirstForm extends JFrame {
         exitButton.setForeground(Color.WHITE);
         exitButton.setFocusPainted(false);
         exitButton.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(192, 57, 43), 1, true), // Bordo rosso più scuro
-            new EmptyBorder(14, 15, 14, 15)
-        ));
-        
+                new LineBorder(new Color(192, 57, 43), 1, true), // Bordo rosso più scuro
+                new EmptyBorder(14, 15, 14, 15)));
+
         // Effetti hover personalizzati per il pulsante rosso
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 exitButton.setBackground(new Color(192, 57, 43)); // Rosso più scuro
                 exitButton.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(169, 50, 38), 1, true),
-                    new EmptyBorder(14, 15, 14, 15)
-                ));
+                        new LineBorder(new Color(169, 50, 38), 1, true),
+                        new EmptyBorder(14, 15, 14, 15)));
                 exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 exitButton.setBackground(new Color(231, 76, 60)); // Rosso originale
                 exitButton.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(192, 57, 43), 1, true),
-                    new EmptyBorder(14, 15, 14, 15)
-                ));
+                        new LineBorder(new Color(192, 57, 43), 1, true),
+                        new EmptyBorder(14, 15, 14, 15)));
             }
-            
+
             @Override
             public void mousePressed(MouseEvent e) {
                 exitButton.setBackground(new Color(169, 50, 38)); // Rosso molto scuro
                 exitButton.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(146, 43, 33), 2, true),
-                    new EmptyBorder(15, 15, 13, 15)
-                ));
+                        new LineBorder(new Color(146, 43, 33), 2, true),
+                        new EmptyBorder(15, 15, 13, 15)));
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (exitButton.contains(e.getPoint())) {
                     exitButton.setBackground(new Color(192, 57, 43)); // Ritorna al rosso scuro
                     exitButton.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(new Color(169, 50, 38), 1, true),
-                        new EmptyBorder(14, 15, 14, 15)
-                    ));
+                            new LineBorder(new Color(169, 50, 38), 1, true),
+                            new EmptyBorder(14, 15, 14, 15)));
                 } else {
                     exitButton.setBackground(new Color(231, 76, 60)); // Ritorna al rosso originale
                     exitButton.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(new Color(192, 57, 43), 1, true),
-                        new EmptyBorder(14, 15, 14, 15)
-                    ));
+                            new LineBorder(new Color(192, 57, 43), 1, true),
+                            new EmptyBorder(14, 15, 14, 15)));
                 }
             }
         });
-        
+
         exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Crea una finestra di dialogo personalizzata
@@ -165,29 +159,29 @@ public class FirstForm extends JFrame {
                 confirmDialog.setSize(400, 150);
                 confirmDialog.setLocationRelativeTo(FirstForm.this);
                 confirmDialog.setResizable(false);
-                
+
                 JPanel dialogPanel = new JPanel(new BorderLayout(10, 10));
                 dialogPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
                 dialogPanel.setBackground(Color.WHITE);
-                
+
                 // Icona e messaggio
                 JPanel messagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
                 messagePanel.setBackground(Color.WHITE);
-                
+
                 JLabel iconLabel = new JLabel("⚠️");
                 iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
-                
+
                 JLabel messageLabel = new JLabel("Sei sicuro di voler uscire dall'applicazione?");
                 messageLabel.setFont(regularFont);
                 messageLabel.setForeground(textColor);
-                
+
                 messagePanel.add(iconLabel);
                 messagePanel.add(messageLabel);
-                
+
                 // Pulsanti
                 JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
                 buttonPanel.setBackground(Color.WHITE);
-                
+
                 JButton noButton = new JButton("No");
                 noButton.setPreferredSize(new Dimension(80, 35));
                 noButton.setFont(smallFont);
@@ -197,7 +191,7 @@ public class FirstForm extends JFrame {
                         confirmDialog.dispose();
                     }
                 });
-                
+
                 JButton yesButton = new JButton("Sì");
                 yesButton.setPreferredSize(new Dimension(80, 35));
                 yesButton.setFont(smallFont);
@@ -205,9 +199,8 @@ public class FirstForm extends JFrame {
                 yesButton.setForeground(Color.WHITE);
                 yesButton.setFocusPainted(false);
                 yesButton.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(192, 57, 43), 1, true),
-                    new EmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(new Color(192, 57, 43), 1, true),
+                        new EmptyBorder(8, 12, 8, 12)));
                 yesButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         confirmDialog.dispose();
@@ -220,18 +213,18 @@ public class FirstForm extends JFrame {
                         });
                     }
                 });
-                
+
                 buttonPanel.add(noButton);
                 buttonPanel.add(yesButton);
-                
+
                 dialogPanel.add(messagePanel, BorderLayout.CENTER);
                 dialogPanel.add(buttonPanel, BorderLayout.SOUTH);
-                
+
                 confirmDialog.add(dialogPanel);
                 confirmDialog.setVisible(true);
             }
         });
-        
+
         testPanel.add(testDbButton);
         testPanel.add(exitButton);
 
@@ -288,30 +281,30 @@ public class FirstForm extends JFrame {
         add(mainPanel);
         setLocationRelativeTo(null);
     }
-    
+
     // Metodo per creare button moderni con icone SVG
     private JButton createModernButton(String text, String iconName) {
         JButton button = new JButton();
-        
+
         // Layout per posizionare icona e testo verticalmente
         button.setLayout(new BorderLayout(0, 10));
-        
+
         // Carica icona SVG
         ImageIcon svgIcon = loadSVGIcon(iconName + ".svg", 40, 40);
         JLabel iconLabel = new JLabel(svgIcon, SwingConstants.CENTER);
-        
+
         // Etichetta per il testo
         JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
         textLabel.setFont(regularFont);
         textLabel.setForeground(textColor);
-        
+
         // Aggiungi componenti al pulsante
         button.add(iconLabel, BorderLayout.CENTER);
         button.add(textLabel, BorderLayout.SOUTH);
-        
+
         button.setPreferredSize(new Dimension(180, 120));
         styleButton(button);
-        
+
         // Aggiungi azione appropriata
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -319,7 +312,7 @@ public class FirstForm extends JFrame {
                 openRoleWindow(role);
             }
         });
-        
+
         return button;
     }
 
@@ -328,16 +321,16 @@ public class FirstForm extends JFrame {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
             String[] possiblePaths = {
-                "bin/resources/icons/" + filename,                    // Nel container/dopo compilazione
-                "resources/icons/" + filename,                       // Percorso relativo nel container
-                "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
-                "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
-                "src/resources/icons/" + filename                    // Durante sviluppo
+                    "bin/resources/icons/" + filename, // Nel container/dopo compilazione
+                    "resources/icons/" + filename, // Percorso relativo nel container
+                    "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
+                    "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
+                    "src/resources/icons/" + filename // Durante sviluppo
             };
-            
+
             java.io.File svgFile = null;
             String usedPath = null;
-            
+
             for (String path : possiblePaths) {
                 java.io.File testFile = new java.io.File(path);
                 if (testFile.exists()) {
@@ -347,10 +340,10 @@ public class FirstForm extends JFrame {
                     break;
                 }
             }
-            
+
             // Se non trovato con percorsi diretti, prova con il class loader
             if (svgFile == null || !svgFile.exists()) {
-        try {
+                try {
                     java.net.URL resourceUrl = getClass().getClassLoader().getResource("icons/" + filename);
                     if (resourceUrl == null) {
                         resourceUrl = getClass().getClassLoader().getResource("resources/icons/" + filename);
@@ -363,7 +356,7 @@ public class FirstForm extends JFrame {
                     // Ignora e usa fallback
                 }
             }
-            
+
             if (svgFile == null || !svgFile.exists()) {
                 System.out.println("File SVG non trovato in nessuno dei percorsi: " + filename);
                 for (String path : possiblePaths) {
@@ -371,77 +364,77 @@ public class FirstForm extends JFrame {
                 }
                 return createFallbackIcon(filename, width, height);
             }
-            
+
             SVGUniverse svgUniverse = new SVGUniverse();
             java.net.URI svgUri = svgFile.toURI();
             SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(svgUri.toURL()));
-            
+
             if (diagram == null) {
                 System.out.println("Impossibile caricare il diagramma SVG: " + filename);
                 return createFallbackIcon(filename, width, height);
             }
-            
+
             // Imposta dimensioni
             diagram.setIgnoringClipHeuristic(true);
-            
+
             // Renderizza SVG come BufferedImage
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = image.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            
+
             // Pulisci lo sfondo
             g2.setComposite(AlphaComposite.Clear);
             g2.fillRect(0, 0, width, height);
             g2.setComposite(AlphaComposite.SrcOver);
-            
+
             // Scala e centra l'SVG
             java.awt.geom.Rectangle2D bounds = diagram.getViewRect();
             double scaleX = (double) width / bounds.getWidth();
             double scaleY = (double) height / bounds.getHeight();
             double scale = Math.min(scaleX, scaleY);
-            
+
             int scaledWidth = (int) (bounds.getWidth() * scale);
             int scaledHeight = (int) (bounds.getHeight() * scale);
             int x = (width - scaledWidth) / 2;
             int y = (height - scaledHeight) / 2;
-            
+
             g2.translate(x, y);
             g2.scale(scale, scale);
-            
+
             diagram.render(g2);
             g2.dispose();
-            
+
             System.out.println("Icona SVG caricata con successo: " + filename);
             return new ImageIcon(image);
-            
+
         } catch (Exception e) {
             System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
             e.printStackTrace();
             return createFallbackIcon(filename, width, height);
         }
     }
-    
+
     // Metodo per creare icone di fallback
     private ImageIcon createFallbackIcon(String filename, int width, int height) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
         // Imposta colore e font
         g2.setColor(accentColor);
         g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
-        
+
         String icon = getUnicodeIcon(filename);
         FontMetrics fm = g2.getFontMetrics();
         int textWidth = fm.stringWidth(icon);
         int textHeight = fm.getHeight();
         int x = (width - textWidth) / 2;
         int y = (height - textHeight) / 2 + fm.getAscent();
-        
+
         g2.drawString(icon, x, y);
-            g2.dispose();
-            
+        g2.dispose();
+
         return new ImageIcon(image);
     }
 
@@ -461,7 +454,7 @@ public class FirstForm extends JFrame {
             return "📋";
         }
     }
-    
+
     // Metodo per stilizzare i pulsanti
     private void styleButton(JButton button) {
         button.setFont(regularFont);
@@ -469,75 +462,69 @@ public class FirstForm extends JFrame {
         button.setBackground(Color.WHITE);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(224, 224, 224), 1, true), // Bordi arrotondati
-            new EmptyBorder(14, 15, 14, 15)
-        ));
-        
+                new LineBorder(new Color(224, 224, 224), 1, true), // Bordi arrotondati
+                new EmptyBorder(14, 15, 14, 15)));
+
         // Aggiunta effetto hover e animazioni
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(new Color(245, 247, 250));
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(accentColor, 1, true),
-                    new EmptyBorder(14, 15, 14, 15)
-                ));
+                        new LineBorder(accentColor, 1, true),
+                        new EmptyBorder(14, 15, 14, 15)));
                 button.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(Color.WHITE);
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(224, 224, 224), 1, true),
-                    new EmptyBorder(14, 15, 14, 15)
-                ));
+                        new LineBorder(new Color(224, 224, 224), 1, true),
+                        new EmptyBorder(14, 15, 14, 15)));
             }
-            
+
             @Override
             public void mousePressed(MouseEvent e) {
                 button.setBackground(new Color(235, 237, 240));
                 // Effetto di pressione: bordo più scuro e spostamento leggero
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(41, 128, 185), 2, true),
-                    new EmptyBorder(15, 15, 13, 15)  // Spostamento verso il basso
+                        new LineBorder(new Color(41, 128, 185), 2, true),
+                        new EmptyBorder(15, 15, 13, 15) // Spostamento verso il basso
                 ));
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (button.contains(e.getPoint())) {
                     button.setBackground(new Color(245, 247, 250));
                     button.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(accentColor, 1, true),
-                        new EmptyBorder(14, 15, 14, 15)
-                    ));
+                            new LineBorder(accentColor, 1, true),
+                            new EmptyBorder(14, 15, 14, 15)));
                 } else {
                     button.setBackground(Color.WHITE);
                     button.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(new Color(224, 224, 224), 1, true),
-                        new EmptyBorder(14, 15, 14, 15)
-                    ));
+                            new LineBorder(new Color(224, 224, 224), 1, true),
+                            new EmptyBorder(14, 15, 14, 15)));
                 }
             }
         });
-        
+
         // Aggiungere effetto elevato con ombreggiatura
         button.setBorder(new CompoundBorder(
-            new SoftBevelBorder(SoftBevelBorder.RAISED, 
-                              new Color(250, 250, 250), 
-                              new Color(230, 230, 230), 
-                              new Color(210, 210, 210), 
-                              new Color(230, 230, 230)),
-            new EmptyBorder(12, 14, 12, 14)
-        ));
+                new SoftBevelBorder(SoftBevelBorder.RAISED,
+                        new Color(250, 250, 250),
+                        new Color(230, 230, 230),
+                        new Color(210, 210, 210),
+                        new Color(230, 230, 230)),
+                new EmptyBorder(12, 14, 12, 14)));
     }
 
     public static void main(String[] args) {
         try {
             // Imposta il look and feel
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            
+
             // Migliora l'aspetto dei componenti Swing
             UIManager.put("Button.arc", 10);
             UIManager.put("Component.arc", 10);
@@ -553,7 +540,7 @@ public class FirstForm extends JFrame {
             }
         });
     }
-    
+
     // Dichiarazione dei pulsanti
     private JButton cameriereButton;
     private JButton cuocoButton;
@@ -563,7 +550,7 @@ public class FirstForm extends JFrame {
     // Metodo per aprire le finestre dei ruoli gestendo correttamente la visibilità
     private void openRoleWindow(String role) {
         JFrame roleWindow = null;
-        
+
         // Crea la finestra appropriata
         if (role.equals("Cameriere")) {
             roleWindow = new CameriereForm();
@@ -574,16 +561,16 @@ public class FirstForm extends JFrame {
         } else if (role.equals("Direttore")) {
             roleWindow = new DirettoreForm();
         }
-        
+
         if (roleWindow != null) {
             final JFrame finalRoleWindow = roleWindow;
-            
+
             // Nascondi FirstForm
             this.setVisible(false);
-            
+
             // Configura la finestra del ruolo
             finalRoleWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            
+
             // Aggiungi listener per gestire la chiusura
             finalRoleWindow.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
@@ -596,7 +583,7 @@ public class FirstForm extends JFrame {
                     FirstForm.this.requestFocus();
                 }
             });
-            
+
             // Mostra la finestra del ruolo
             finalRoleWindow.setVisible(true);
             finalRoleWindow.toFront();

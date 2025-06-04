@@ -19,7 +19,7 @@ public class DBPietanza {
     private int idCategoria;
     private boolean disponibile;
     private String nomeCategoria; // Campo aggiuntivo per memorizzare il nome della categoria
-
+    private ArrayList<DBIngrediente> ingredienti;
     /**
      * Costruttore che carica una pietanza dal database tramite il suo ID
      * 
@@ -187,6 +187,7 @@ public class DBPietanza {
                         rs.getBoolean("disponibile"),
                         rs.getString("nome_categoria"));
 
+                pietanza.setIngredienti(this.getIngredientiDaPietanza());
                 listaPietanze.add(pietanza);
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -229,6 +230,44 @@ public class DBPietanza {
         return listaPietanze;
     }
 
+    public ArrayList<DBIngrediente> getIngredientiDaPietanza() {
+
+        ArrayList<DBIngrediente> ingredienti = new ArrayList<>();
+
+        try {
+            // 1. Recupero id_ricetta per la pietanza
+            String queryRicetta = "SELECT id_ricetta FROM ricetta WHERE id_pietanza = " + this.idPietanza;
+            ResultSet rsRicetta = DBConnection.selectQuery(queryRicetta);
+
+            if (rsRicetta.next()) {
+                int idRicetta = rsRicetta.getInt("id_ricetta");
+
+                // 2. Recupero ingredienti dalla ricetta (join con tabella ingrediente)
+                String queryIngredienti = "SELECT i.* FROM ingrediente i " +
+                        "JOIN ricetta_ingrediente ir ON i.id_ingrediente = ir.id_ingrediente " +
+                        "WHERE ir.id_ricetta = " + idRicetta;
+
+                ResultSet rsIng = DBConnection.selectQuery(queryIngredienti);
+
+                while (rsIng.next()) {
+                    DBIngrediente ingr = new DBIngrediente(
+                            rsIng.getInt("id_ingrediente"),
+                            rsIng.getString("nome"),
+                            rsIng.getFloat("quantita_disponibile"),
+                            rsIng.getString("unita_misura"),
+                            rsIng.getFloat("soglia_riordino"));
+
+                    ingredienti.add(ingr);
+                }
+            }
+
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nel recupero ingredienti della pietanza: " + e.getMessage());
+        }
+
+        return ingredienti;
+    }
+
     // Getters e setters
     public int getIdPietanza() {
         return idPietanza;
@@ -268,6 +307,10 @@ public class DBPietanza {
 
     public void setDisponibile(boolean disponibile) {
         this.disponibile = disponibile;
+    }
+
+    public void setIngredienti(ArrayList<DBIngrediente> array){
+        this.ingredienti = array;
     }
 
     public String getNomeCategoria() {

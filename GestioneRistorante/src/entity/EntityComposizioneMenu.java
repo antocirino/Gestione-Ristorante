@@ -77,10 +77,10 @@ public class EntityComposizioneMenu {
      * @param idMenu ID del menu
      * @return ArrayList di oggetti Pietanza
      */
-    public static ArrayList<EntityPietanza> getPietanzeByMenu(int idMenu) {
-        DBComposizioneMenu c = new DBComposizioneMenu();
-        return c.getPietanzeByMenu(idMenu);
-    }
+    // public static ArrayList<EntityPietanza> getPietanzeByMenu(int idMenu) {
+    // DBComposizioneMenu c = new DBComposizioneMenu();
+    // return c.getPietanzeByMenu(idMenu);
+    // }
 
     /**
      * Recupera tutti i menu che contengono una specifica pietanza
