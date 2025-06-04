@@ -1,8 +1,6 @@
 package test;
 
 import entity.EntityDettaglioOrdinePietanza;
-import entity.EntityOrdine;
-import entity.EntityPietanza;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

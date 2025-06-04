@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
-import entity.EntityPietanza;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;

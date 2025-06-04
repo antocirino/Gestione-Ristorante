@@ -2,7 +2,6 @@ package boundary;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.border.*;
 import javax.swing.Timer; // Import specifico per evitare ambiguità
 import java.awt.*;

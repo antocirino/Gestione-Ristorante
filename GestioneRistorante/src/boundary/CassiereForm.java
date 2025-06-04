@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
-import entity.EntityTavolo;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;

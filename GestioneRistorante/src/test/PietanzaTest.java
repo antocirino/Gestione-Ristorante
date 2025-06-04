@@ -13,11 +13,11 @@ public class PietanzaTest {
 
     private EntityPietanza pietanza;
 
-    // @Before
-    // public void setUp() throws Exception {
-    //     pietanza = new EntityPietanza(1, "Pizza Margherita", 7.5, 2);
+    @Before
+    public void setUp() throws Exception {
+        pietanza = new EntityPietanza(1, "Pizza Margherita", 7.5, 2, "primi");
 
-    // }
+    }
 
     @After
     public void tearDown() throws Exception {
@@ -64,15 +64,15 @@ public class PietanzaTest {
     }
 
     @Test
-    public void testAggiornaDisponibilità(){
+    public void testAggiornaDisponibilità() {
         pietanza = new EntityPietanza(1);
         pietanza.aggiornaDisponibilita(false);
         System.out.println(pietanza);
-        assertEquals(pietanza.isDisponibile(),false);
+        assertEquals(pietanza.isDisponibile(), false);
     }
 
     @Test
-    public void prenotaIngredienti(){
+    public void prenotaIngredienti() {
         pietanza = new EntityPietanza(2);
         System.out.println(pietanza);
         boolean verifia = pietanza.prenotaIngredienti(1);
@@ -80,8 +80,3 @@ public class PietanzaTest {
     }
 
 }
-
-
-
-
-

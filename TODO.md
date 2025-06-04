@@ -1,10 +1,9 @@
 ### TODO
 
-# Testing
+# Alta priorità
 
-- Aggiungere metodi di testing per la classe `Ingrediente`
-- Capire i metodi necessari alla GUI, quindi testarli
-- Aggiungere classe di test per il controller
+- veirfica disponibilita ingredienti e prenota
+- controlla script e eliman i non necessari
 
 # Entity/DAO
 

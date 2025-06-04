@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'composizione_menu'
