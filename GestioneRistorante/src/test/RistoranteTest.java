@@ -1,7 +1,6 @@
 package test;
 
 import entity.EntityRistorante;
-import entity.EntityTavolo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

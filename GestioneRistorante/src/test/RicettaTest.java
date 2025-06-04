@@ -1,6 +1,5 @@
 package test;
 
-import entity.EntityPietanza;
 import entity.EntityRicetta;
 import org.junit.After;
 import org.junit.Before;
@@ -64,8 +63,7 @@ public class RicettaTest {
 
     @Test
     public void testGetTutteRicette() {
-        ricetta = new EntityRicetta(1);
-        ArrayList<EntityRicetta> ricette = ricetta.getTutteRicette();
+        ArrayList<EntityRicetta> ricette = EntityRicetta.getTutteRicette();
         assertNotEquals(0, ricette.size());
         System.out.println(ricette);
     }

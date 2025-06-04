@@ -1,7 +1,6 @@
 package test;
 
 import entity.EntityDettaglioOrdinePietanza;
-import entity.EntityMenuFisso;
 import entity.EntityOrdine;
 import entity.EntityPietanza;
 import org.junit.After;

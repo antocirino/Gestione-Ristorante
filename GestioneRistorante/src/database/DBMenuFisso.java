@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.EntityMenuFisso;
 import entity.EntityPietanza;
 
 /**

@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.EntityCategoriaPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'categoria_pietanza'

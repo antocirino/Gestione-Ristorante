@@ -56,16 +56,16 @@ public class MenuFissoTest {
 
     @Test
     public void testGetMenuFissiMap(){
-        menuFisso = new EntityMenuFisso();
-        var map = menuFisso.getMenuFissiMap();
+        
+        var map = EntityMenuFisso.getMenuFissiMap();
         assertTrue(map.size() > 0);
         System.out.println(map);
     }
 
     @Test
     public void testGetMenuFissiList(){
-        menuFisso = new EntityMenuFisso();
-        var list = menuFisso.getTuttiMenuFissi();
+    
+        var list = EntityMenuFisso.getTuttiMenuFissi();
         assertTrue(list.size() > 0);
         System.out.println(list);
         
