@@ -200,7 +200,7 @@ public class CuocoForm extends JFrame {
      */
     private void caricaOrdini() {
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
+            Connection conn = DBConnection.getConnection();
             String query = "SELECT o.id_ordine, t.id_tavolo, o.num_persone, o.data_ordine, o.stato " +
                     "FROM ordine o " +
                     "JOIN tavolo t ON o.id_tavolo = t.id_tavolo " +
@@ -282,7 +282,7 @@ public class CuocoForm extends JFrame {
         int idOrdine = Integer.parseInt(ordiniTable.getValueAt(selectedRow, 0).toString());
 
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
+            Connection conn = DBConnection.getConnection();
 
             // Svuoto la tabella dettagli
             DefaultTableModel model = (DefaultTableModel) dettagliTable.getModel();
@@ -397,7 +397,7 @@ public class CuocoForm extends JFrame {
         int idOrdine = Integer.parseInt(ordiniTable.getValueAt(selectedRow, 0).toString());
 
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
+            Connection conn = DBConnection.getConnection();
             String query = "UPDATE ordine SET stato = ? WHERE id_ordine = ?";
 
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -439,7 +439,7 @@ public class CuocoForm extends JFrame {
         int idOrdine = Integer.parseInt(ordiniTable.getValueAt(selectedRow, 0).toString());
 
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
+            Connection conn = DBConnection.getConnection();
 
             // Query per ottenere gli ingredienti necessari per le pietanze dell'ordine
             String query = "SELECT i.nome, SUM(r.quantita * dop.quantita) AS quantita_totale, i.unita_misura " +
