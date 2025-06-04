@@ -76,10 +76,10 @@ public class FirstForm extends JFrame {
         ruoliPanel.add(cassiereButton);
         ruoliPanel.add(direttoreButton);
 
-        // Pannello per testare la connessione al database
-        JPanel testPanel = new JPanel(new BorderLayout());
+        // Pannello per testare la connessione al database e uscire dall'applicazione
+        JPanel testPanel = new JPanel(new GridLayout(1, 2, 15, 0));
         testPanel.setBackground(lightColor);
-        testPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        testPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 0, 40));
         
         JButton testDbButton = new JButton("Verifica connessione database");
         styleButton(testDbButton);
@@ -98,7 +98,142 @@ public class FirstForm extends JFrame {
                 }
             }
         });
-        testPanel.add(testDbButton, BorderLayout.CENTER);
+        
+        JButton exitButton = new JButton("Esci dall'applicazione");
+        exitButton.setPreferredSize(new Dimension(250, 40));
+        exitButton.setFont(smallFont);
+        exitButton.setBackground(new Color(231, 76, 60)); // Colore rosso per indicare l'uscita
+        exitButton.setForeground(Color.WHITE);
+        exitButton.setFocusPainted(false);
+        exitButton.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(192, 57, 43), 1, true), // Bordo rosso più scuro
+            new EmptyBorder(14, 15, 14, 15)
+        ));
+        
+        // Effetti hover personalizzati per il pulsante rosso
+        exitButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                exitButton.setBackground(new Color(192, 57, 43)); // Rosso più scuro
+                exitButton.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(new Color(169, 50, 38), 1, true),
+                    new EmptyBorder(14, 15, 14, 15)
+                ));
+                exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                exitButton.setBackground(new Color(231, 76, 60)); // Rosso originale
+                exitButton.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(new Color(192, 57, 43), 1, true),
+                    new EmptyBorder(14, 15, 14, 15)
+                ));
+            }
+            
+            @Override
+            public void mousePressed(MouseEvent e) {
+                exitButton.setBackground(new Color(169, 50, 38)); // Rosso molto scuro
+                exitButton.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(new Color(146, 43, 33), 2, true),
+                    new EmptyBorder(15, 15, 13, 15)
+                ));
+            }
+            
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (exitButton.contains(e.getPoint())) {
+                    exitButton.setBackground(new Color(192, 57, 43)); // Ritorna al rosso scuro
+                    exitButton.setBorder(BorderFactory.createCompoundBorder(
+                        new LineBorder(new Color(169, 50, 38), 1, true),
+                        new EmptyBorder(14, 15, 14, 15)
+                    ));
+                } else {
+                    exitButton.setBackground(new Color(231, 76, 60)); // Ritorna al rosso originale
+                    exitButton.setBorder(BorderFactory.createCompoundBorder(
+                        new LineBorder(new Color(192, 57, 43), 1, true),
+                        new EmptyBorder(14, 15, 14, 15)
+                    ));
+                }
+            }
+        });
+        
+        exitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Crea una finestra di dialogo personalizzata
+                JDialog confirmDialog = new JDialog(FirstForm.this, "Conferma uscita", true);
+                confirmDialog.setSize(400, 150);
+                confirmDialog.setLocationRelativeTo(FirstForm.this);
+                confirmDialog.setResizable(false);
+                
+                JPanel dialogPanel = new JPanel(new BorderLayout(10, 10));
+                dialogPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                dialogPanel.setBackground(Color.WHITE);
+                
+                // Icona e messaggio
+                JPanel messagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+                messagePanel.setBackground(Color.WHITE);
+                
+                JLabel iconLabel = new JLabel("⚠️");
+                iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+                
+                JLabel messageLabel = new JLabel("Sei sicuro di voler uscire dall'applicazione?");
+                messageLabel.setFont(regularFont);
+                messageLabel.setForeground(textColor);
+                
+                messagePanel.add(iconLabel);
+                messagePanel.add(messageLabel);
+                
+                // Pulsanti
+                JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+                buttonPanel.setBackground(Color.WHITE);
+                
+                JButton noButton = new JButton("No");
+                noButton.setPreferredSize(new Dimension(80, 35));
+                noButton.setFont(smallFont);
+                styleButton(noButton);
+                noButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        confirmDialog.dispose();
+                    }
+                });
+                
+                JButton yesButton = new JButton("Sì");
+                yesButton.setPreferredSize(new Dimension(80, 35));
+                yesButton.setFont(smallFont);
+                yesButton.setBackground(new Color(231, 76, 60));
+                yesButton.setForeground(Color.WHITE);
+                yesButton.setFocusPainted(false);
+                yesButton.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(new Color(192, 57, 43), 1, true),
+                    new EmptyBorder(8, 12, 8, 12)
+                ));
+                yesButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        confirmDialog.dispose();
+                        statusLabel.setText("Chiusura dell'applicazione...");
+                        // Piccolo delay per mostrare il messaggio
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                System.exit(0);
+                            }
+                        });
+                    }
+                });
+                
+                buttonPanel.add(noButton);
+                buttonPanel.add(yesButton);
+                
+                dialogPanel.add(messagePanel, BorderLayout.CENTER);
+                dialogPanel.add(buttonPanel, BorderLayout.SOUTH);
+                
+                confirmDialog.add(dialogPanel);
+                confirmDialog.setVisible(true);
+            }
+        });
+        
+        testPanel.add(testDbButton);
+        testPanel.add(exitButton);
 
         // Pannello inferiore con status
         JPanel statusPanel = new JPanel(new BorderLayout());
@@ -320,6 +455,8 @@ public class FirstForm extends JFrame {
             return "💳";
         } else if (filename.contains("admin_panel_settings")) {
             return "⚙️";
+        } else if (filename.contains("exit") || filename.contains("logout")) {
+            return "🚪";
         } else {
             return "📋";
         }
