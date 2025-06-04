@@ -1,6 +1,8 @@
 package boundary;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -12,6 +14,8 @@ import entity.EntityTavolo;
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGUniverse;
+
+import DTO.DTOTavolo;
 
 /**
  * Schermata per il cassiere che permette di calcolare il conto di un tavolo
@@ -442,15 +446,14 @@ public class CassiereForm extends JFrame {
 
             for (DTOTavolo tavolo : tavoli) {
                 int idTavolo = tavolo.getIdTavolo();
-                int numeroTavolo = tavolo.getNumeroTavolo();
                 int maxPosti = tavolo.getMaxPosti();
                 boolean occupato = tavolo.isOccupato();
                 String displayText = "";
 
                 if (!occupato) {
-                    displayText = idTavolo + " - Tavolo " + numeroTavolo + " (" + maxPosti + " posti) - 🟢 LIBERO";
+                    displayText =  " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🟢 LIBERO";
                 } else {
-                    displayText = idTavolo + " - Tavolo " + numeroTavolo + " (" + maxPosti + " posti) - 🔴 OCCUPATO";
+                    displayText = " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🔴 OCCUPATO";
                 }
 
                 tavoliComboBox.addItem(displayText);
