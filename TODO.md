@@ -23,3 +23,7 @@
 # SUPER ACHTUNG
 
 - Nel diagramma di sequenza di "GeneraReport" abbiamo messo l'EntityReport e ReportDAO" ma non nel database.
+
+# COMPILAZIONE
+
+- Correggere i file -bat per avvio su Windows
