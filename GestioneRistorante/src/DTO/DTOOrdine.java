@@ -9,7 +9,7 @@ public class DTOOrdine {
     private int numPersone;
     private Date dataOrdine;
     private String stato; // in_attesa, in_preparazione, pronto, consegnato, pagato
-    private double costoTotale; // Nuovo campo per tenere traccia del costo totale
+    private double costoTotale; 
 
     // GETTER E SETTER
     public int getIdOrdine() {

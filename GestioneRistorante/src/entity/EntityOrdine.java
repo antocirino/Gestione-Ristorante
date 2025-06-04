@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import DTO.DTOMenuFisso;
+import DTO.DTOOrdine;
+import database.DBMenuFisso;
 import database.DBOrdine;
 
 /**
@@ -125,9 +128,22 @@ public class EntityOrdine {
      * @param stato lo stato degli ordini da recuperare
      * @return ArrayList di oggetti Ordine con lo stato specificato
      */
-    public static ArrayList<EntityOrdine> getOrdiniPerStato(String stato) {
+    public static ArrayList<DTOOrdine> getOrdiniPerStato(String stato) {
+        ArrayList<DTOOrdine> listaOrdini = new ArrayList<>();
         DBOrdine ordine = new DBOrdine();
-        return ordine.getOrdiniPerStato(stato);
+        ArrayList<DBOrdine> lista_ordini = ordine.getOrdiniPerStato(stato);
+        for (DBOrdine o : lista_ordini) {
+            DTOOrdine dto = new DTOOrdine();
+            dto.setIdOrdine(o.getIdOrdine());
+            dto.setIdTavolo(o.getIdTavolo());
+            dto.setNumPersone(o.getNumPersone());
+            dto.setDataOrdine(o.getDataOrdine());   
+            dto.setStato(o.getStato());
+            dto.setCostoTotale(o.getCostoTotale());
+            listaOrdini.add(dto);
+
+    }
+        return listaOrdini;
     }
 
     /**
