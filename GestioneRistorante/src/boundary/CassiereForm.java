@@ -1,14 +1,13 @@
 package boundary;
 
 import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
-import entity.Tavolo;
+import entity.EntityTavolo;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
@@ -439,9 +438,9 @@ public class CassiereForm extends JFrame {
 
         try {
             Controller controller = Controller.getInstance();
-            List<Tavolo> tavoli = controller.getAllTavoli();
+            List<DTOTavolo> tavoli = controller.getAllTavoli();
 
-            for (Tavolo tavolo : tavoli) {
+            for (DTOTavolo tavolo : tavoli) {
                 int idTavolo = tavolo.getIdTavolo();
                 int numeroTavolo = tavolo.getNumeroTavolo();
                 int maxPosti = tavolo.getMaxPosti();

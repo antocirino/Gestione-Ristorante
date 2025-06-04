@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "main",
+            "request": "launch",
+            "mainClass": "entity.main",
+            "projectName": "Gestione-Ristorante_c34d8d58"
+        },
+        {
+            "type": "java",
+            "name": "Debug main",
+            "request": "launch",
+            "mainClass": "entity.main",
+            "projectName": "GestioneRistorante",
+            "vmArgs": "-cp ${workspaceFolder}/bin/jars/mysql-connector-j-8.0.33.jar"
+        }
+    ]
+}

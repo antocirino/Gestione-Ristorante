@@ -2,6 +2,10 @@ package boundary;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import DTO.DTOPietanza;
+import DTO.DTOTavolo;
+
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.border.*;
 import java.awt.*;
@@ -12,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
-import entity.Pietanza;
-import entity.Tavolo;
+import entity.EntityPietanza;
+import entity.EntityTavolo;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
@@ -626,7 +630,7 @@ public class CameriereForm extends JFrame {
     private void caricaCategorie() {
         try {
             Controller controller = Controller.getInstance();
-            Map<Integer, String> categorie = controller.getCategoriePietanze();
+            Map<Integer, String> categorie = (Map<Integer, String>) controller.getCategoriePietanze();
 
             for (String nomeCategoria : categorie.values()) {
                 categorieComboBox.addItem(nomeCategoria);
@@ -644,15 +648,15 @@ public class CameriereForm extends JFrame {
     private void caricaTavoli() {
         try {
             Controller controller = Controller.getInstance();
-            List<Tavolo> tavoli = controller.getAllTavoli();
+            List<DTOTavolo> tavoli = controller.getAllTavoli();
 
             tavoliComboBox.removeAllItems();
-            for (Tavolo tavolo : tavoli) {
+            for (DTOTavolo tavolo : tavoli) {
                 if (!tavolo.isOccupato()) {
                     int idTavolo = tavolo.getIdTavolo();
                     int maxPosti = tavolo.getMaxPosti();
                     tavoliComboBox.addItem(
-                            idTavolo + " - Tavolo " + tavolo.getNumeroTavolo() + " (max " + maxPosti + " posti)");
+                            idTavolo + " - Tavolo " + " (max " + maxPosti + " posti)");
                 }
             }
         } catch (Exception e) {
@@ -670,8 +674,8 @@ public class CameriereForm extends JFrame {
             Controller controller = Controller.getInstance();
             String categoriaSelezionata = (String) categorieComboBox.getSelectedItem();
 
-            List<Pietanza> pietanze;
-            Map<Integer, String> categorie = controller.getCategoriePietanze();
+            List<DTOPietanza> pietanze;
+            Map<Integer, String> categorie = (Map<Integer, String>) controller.getCategoriePietanze();
             Map<String, Integer> categorieInverse = new HashMap<>();
 
             // Creiamo una mappa inversa da nome categoria a ID categoria
@@ -695,7 +699,7 @@ public class CameriereForm extends JFrame {
             model.setRowCount(0);
 
             // Popolo la tabella e la mappa dei prezzi
-            for (Pietanza pietanza : pietanze) {
+            for (DTOPietanza pietanza : pietanze) {
                 int idPietanza = pietanza.getIdPietanza();
                 String nome = pietanza.getNome();
                 String categoria = pietanza.getNomeCategoria();
@@ -720,7 +724,7 @@ public class CameriereForm extends JFrame {
     private void caricaMenuFissi() {
         try {
             Controller controller = Controller.getInstance();
-            Map<Integer, Map<String, Object>> menuFissi = controller.getMenuFissi();
+            Map<Integer, Map<String, Object>> menuFissi = (Map<Integer, Map<String, Object>>) controller.getTuttiMenuFissi();
 
             // Svuoto la tabella
             DefaultTableModel model = (DefaultTableModel) menuFissiTable.getModel();

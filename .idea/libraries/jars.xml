@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="jars">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GestioneRistorante/bin/jars/flatlaf-3.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GestioneRistorante/bin/jars/mysql-connector-j-8.0.33.jar!/" />
+      <root url="file://$PROJECT_DIR$/GestioneRistorante/bin/jars" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/GestioneRistorante/bin/jars" recursive="false" />
+  </library>
+</component>

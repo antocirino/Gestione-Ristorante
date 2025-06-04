@@ -134,7 +134,7 @@ public class DirettoreForm extends JFrame {
      */
     private void generaReport() {
         try {
-            Connection conn = DBConnection.getInstance().getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement stmt;
             ResultSet rs;
 

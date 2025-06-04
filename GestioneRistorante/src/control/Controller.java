@@ -1,5 +1,6 @@
 package control;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,8 +12,16 @@ import java.util.List;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.Pietanza;
-import entity.Tavolo;
+import DTO.DTOCategoriaPietanza;
+import DTO.DTOMenuFisso;
+import DTO.DTOOrdine;
+import DTO.DTOPietanza;
+import DTO.DTOTavolo;
+import entity.EntityCategoriaPietanza;
+import entity.EntityMenuFisso;
+import entity.EntityOrdine;
+import entity.EntityPietanza;
+import entity.EntityTavolo;
 
 /**
  * Controller principale del sistema che implementa il pattern Singleton.
@@ -20,23 +29,10 @@ import entity.Tavolo;
  * tutte le operazioni di business logic e l'accesso ai dati.
  */
 public class Controller {
-    // Istanza singleton
+
     private static Controller instance = null;
 
-    // Connessione al database
-    private Connection connection;
-
-    /**
-     * Costruttore privato per implementare il pattern Singleton
-     */
-    private Controller() {
-        try {
-            DBConnection dbInstance = DBConnection.getInstance();
-            this.connection = dbInstance.getConnection();
-        } catch (SQLException e) {
-            System.err.println("Errore nell'inizializzazione del controller: " + e.getMessage());
-        }
-    }
+    private Controller(){};
 
     /**
      * Metodo per ottenere l'istanza singleton del controller
@@ -50,6 +46,131 @@ public class Controller {
         return instance;
     }
 
+    /////PIETANZE////////////////////////////////////////////////////////////////////
+    /**
+     * Recupera tutte le pietanze dal database
+     * 
+     * @return Lista di tutte le pietanze
+     */
+    public static ArrayList<DTOPietanza> getAllPietanze() {
+        ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
+
+        dto_pietanze_liste = EntityPietanza.getAllPietanze();
+        System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
+        System.out.println("Pietanze: " + dto_pietanze_liste);
+        return dto_pietanze_liste;
+    }
+
+        /**
+     * Recupera le pietanze filtrate per categoria
+     * 
+     * @param idCategoria ID della categoria per filtrare le pietanze
+     * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
+     */
+    public static ArrayList<DTOPietanza> getPietanzeByCategoria(int idCategoria) {
+        
+        ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
+
+        dto_pietanze_liste = EntityPietanza.getPietanzePerCategoria(idCategoria);
+        System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
+        System.out.println("Pietanze: " + dto_pietanze_liste);
+        
+        return dto_pietanze_liste;
+           
+    }
+      /////TAVOLI////////////////////////////////////////////////////////////////////
+        /**
+     * Recupera tutti i tavoli dal database
+     * 
+     * @return Lista di oggetti Tavolo
+     */
+    public static ArrayList<DTOTavolo> getAllTavoli() {
+        
+        ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
+
+        dto_tavoli_liste = EntityTavolo.getAllTavoli();
+        System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
+        System.out.println("Tavoli: " + dto_tavoli_liste);
+        
+        return dto_tavoli_liste;
+                   
+    }
+
+      /////MENUFISSI////////////////////////////////////////////////////////////////////
+    /**
+     * Recuperare tutti i menu fissi dal database
+     * @return
+     */
+    public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
+        ArrayList<DTOMenuFisso> dto_menu_fissi_liste = new ArrayList<>();
+
+        dto_menu_fissi_liste = EntityMenuFisso.getTuttiMenuFissi();
+        // Stampa per debug
+        System.out.println("Menu fissi recuperati: " + dto_menu_fissi_liste.size());
+        System.out.println("Menu fissi: " + dto_menu_fissi_liste);
+        
+        return dto_menu_fissi_liste;
+    }
+
+      /////CATEGORIAPIETANZA////////////////////////////////////////////////////////////////////
+        /**
+     * Recupera tutte le categorie di pietanze dal database
+     * 
+     * @return Lista di categorie come Map<Integer, String> (id, nome)
+     */
+    public static ArrayList<DTOCategoriaPietanza> getCategoriePietanze() {
+        ArrayList<DTOCategoriaPietanza> dto_categorie_liste = new ArrayList<>();
+
+        dto_categorie_liste = EntityCategoriaPietanza.getTutteCategorie();
+        // Stampa per debug
+        System.out.println("Categorie pietanze recuperate: " + dto_categorie_liste.size());
+        System.out.println("Categorie pietanze: " + dto_categorie_liste);
+        
+        return dto_categorie_liste;
+        
+    }
+
+    /////ORDINE////////////////////////////////////////////////////////////////////
+    /**
+     * Aggiorna lo stato di un ordine
+     * 
+     * @param idOrdine   ID dell'ordine da aggiornare
+     * @param nuovoStato Nuovo stato dell'ordine
+     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
+     */
+    public static boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
+        EntityOrdine  ordine= new EntityOrdine(idOrdine);
+        int result = ordine.aggiornaStato(nuovoStato);
+        if (result == 0) {
+            System.err.println("Errore nell'aggiornamento dello stato dell'ordine con ID: " + idOrdine);
+            return false;
+        }
+        System.out.println("Stato dell'ordine con ID " + idOrdine + " aggiornato a: " + nuovoStato);
+        return true;
+
+    }
+
+    /**
+     * Recupera tutti gli ordini dal database IN BASE ALLO STATO
+     * 
+     * @return Lista di oggetti Ordine
+     */
+    public static ArrayList<DTOOrdine> getOrdiniByStato(String stato) {
+        ArrayList<DTOOrdine> dto_ordini_liste = new ArrayList<>();
+
+        dto_ordini_liste = EntityOrdine.getOrdiniPerStato(stato);
+        System.out.println("Ordini recuperati: " + dto_ordini_liste.size());
+        System.out.println("Ordini: " + dto_ordini_liste);
+        
+        return dto_ordini_liste;
+
+    }
+   
+    ///////////////ACHTUNG/////////////////////////////////////////////////////
+    ///////////////ANCORA DA MODIFICARE/////////////////////////////////////////////////////
+
+     private Connection connection;
+    // Connessione al database
     /**
      * Testa la connessione al database
      * 
@@ -58,8 +179,8 @@ public class Controller {
     public boolean testDatabaseConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                DBConnection dbInstance = DBConnection.getInstance();
-                connection = dbInstance.getConnection();
+                ;
+                connection = DBConnection.getConnection();
             }
 
             Statement stmt = connection.createStatement();
@@ -77,110 +198,17 @@ public class Controller {
         }
     }
 
+
+   ///ACHTUNG --> VALUTARE SE ELIMINARE QUESTO METODO
     /**
-     * Recupera tutte le categorie di pietanze dal database
      * 
-     * @return Lista di categorie come Map<Integer, String> (id, nome)
-     */
-    public Map<Integer, String> getCategoriePietanze() {
-        Map<Integer, String> categorie = new HashMap<>();
-
-        try {
-            String query = "SELECT id_categoria, nome FROM categoria ORDER BY nome";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id_categoria");
-                String nome = rs.getString("nome");
-                categorie.put(id, nome);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero delle categorie: " + e.getMessage());
-        }
-
-        return categorie;
-    }
-
-    /**
-     * Recupera le pietanze filtrate per categoria
-     * 
-     * @param idCategoria ID della categoria per filtrare le pietanze
-     * @return Lista di oggetti Pietanza appartenenti alla categoria specificata
-     */
-    public List<Pietanza> getPietanzeByCategoria(int idCategoria) {
-        List<Pietanza> pietanze = new ArrayList<>();
-
-        try {
-            String query = "SELECT p.id_pietanza, p.nome, p.prezzo, p.id_categoria, c.nome as nome_categoria " +
-                    "FROM pietanza p JOIN categoria c ON p.id_categoria = c.id_categoria " +
-                    "WHERE p.id_categoria = ? ORDER BY p.nome";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, idCategoria);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
-                        rs.getInt("id_pietanza"),
-                        rs.getString("nome"),
-                        rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanza.setNomeCategoria(rs.getString("nome_categoria"));
-                pietanze.add(pietanza);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero delle pietanze: " + e.getMessage());
-        }
-
-        return pietanze;
-    }
-
-    /**
-     * Recupera tutte le pietanze dal database
-     * 
-     * @return Lista di tutte le pietanze
-     */
-    public List<Pietanza> getAllPietanze() {
-        List<Pietanza> pietanze = new ArrayList<>();
-
-        try {
-            String query = "SELECT p.id_pietanza, p.nome, p.prezzo, p.id_categoria, c.nome as nome_categoria " +
-                    "FROM pietanza p JOIN categoria c ON p.id_categoria = c.id_categoria " +
-                    "ORDER BY p.nome";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Pietanza pietanza = new Pietanza(
-                        rs.getInt("id_pietanza"),
-                        rs.getString("nome"),
-                        rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"));
-                pietanza.setNomeCategoria(rs.getString("nome_categoria"));
-                pietanze.add(pietanza);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero di tutte le pietanze: " + e.getMessage());
-        }
-
-        return pietanze;
-    }
-
-    /**
      * Recupera tutti i menu fissi dal database
      * 
      * @return Mappa con chiave l'ID del menu e valore un oggetto Map con le
      *         informazioni del menu
-     */
+    
+
+
     public Map<Integer, Map<String, Object>> getMenuFissi() {
         Map<Integer, Map<String, Object>> menuFissi = new HashMap<>();
 
@@ -208,37 +236,7 @@ public class Controller {
         return menuFissi;
     }
 
-    /**
-     * Recupera tutti i tavoli dal database
-     * 
-     * @return Lista di oggetti Tavolo
      */
-    public List<Tavolo> getAllTavoli() {
-        List<Tavolo> tavoli = new ArrayList<>();
-
-        try {
-            String query = "SELECT id_tavolo, numero, max_posti, stato FROM tavolo ORDER BY numero";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                boolean occupato = "occupato".equalsIgnoreCase(rs.getString("stato"));
-                Tavolo tavolo = new Tavolo(
-                        rs.getInt("id_tavolo"),
-                        rs.getInt("numero"),
-                        rs.getInt("max_posti"),
-                        occupato);
-                tavoli.add(tavolo);
-            }
-
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nel recupero dei tavoli: " + e.getMessage());
-        }
-
-        return tavoli;
-    }
 
     /**
      * Inserisce un nuovo ordine nel database
@@ -552,7 +550,7 @@ public class Controller {
      * @param stato Stato degli ordini da recuperare
      * @return Lista di ordini come Map<String, Object>
      */
-    public List<Map<String, Object>> getOrdiniByStato(String stato) {
+    /*public List<Map<String, Object>> getOrdiniByStato(String stato) {
         List<Map<String, Object>> ordini = new ArrayList<>();
 
         try {
@@ -582,6 +580,7 @@ public class Controller {
 
         return ordini;
     }
+        */
 
     /**
      * Recupera i dettagli di un ordine specifico
@@ -649,28 +648,6 @@ public class Controller {
         return dettagli;
     }
 
-    /**
-     * Aggiorna lo stato di un ordine
-     * 
-     * @param idOrdine   ID dell'ordine da aggiornare
-     * @param nuovoStato Nuovo stato dell'ordine
-     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
-     */
-    public boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
-        try {
-            String query = "UPDATE ordine SET stato = ? WHERE id_ordine = ?";
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, nuovoStato);
-            pstmt.setInt(2, idOrdine);
-            int result = pstmt.executeUpdate();
-
-            pstmt.close();
-            return result > 0;
-        } catch (SQLException e) {
-            System.err.println("Errore nell'aggiornamento dello stato dell'ordine: " + e.getMessage());
-            return false;
-        }
-    }
 
     /**
      * Recupera gli ingredienti di una pietanza
