@@ -33,7 +33,6 @@ public class EntityPietanza {
         this.ingredienti = new ArrayList<Object>();
     }
 
-
     /**
      * Costruttore che carica una pietanza dal database per ID
      * 
@@ -60,12 +59,13 @@ public class EntityPietanza {
     public int scriviSuDB(int idPietanza) {
         DBPietanza p = new DBPietanza(); // DAO
 
+        p.setIdPietanza(idPietanza);
         p.setNome(this.nome);
         p.setPrezzo(this.prezzo);
         p.setIdCategoria(this.idCategoria);
         p.setDisponibile(this.disponibile);
 
-        int i = p.salvaInDB(idPietanza);
+        int i = p.salvaInDB();
 
         return i;
     }

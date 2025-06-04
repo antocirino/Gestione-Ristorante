@@ -82,6 +82,7 @@ public class EntityOrdine {
     public int scriviSuDB() {
         DBOrdine o = new DBOrdine(); // DAO
 
+        o.setIdOrdine(this.idOrdine); // Aggiungiamo l'id corrente
         o.setIdTavolo(this.idTavolo);
         o.setNumPersone(this.numPersone);
         o.setDataOrdine(this.dataOrdine);
@@ -89,12 +90,12 @@ public class EntityOrdine {
         o.setIdRistorante(1); // Assumiamo che il ristorante abbia ID=1 come predefinito
         o.setCostoTotale(this.costoTotale); // Inizializza il costo totale
 
-        int nuovoId = o.salvaInDB();
-        if (nuovoId > 0) {
-            this.idOrdine = nuovoId;
+        int result = o.salvaInDB();
+        if (result > 0) {
+            this.idOrdine = result;
         }
 
-        return nuovoId;
+        return result;
     }
 
     /**

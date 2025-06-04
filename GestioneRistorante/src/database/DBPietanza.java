@@ -40,8 +40,8 @@ public class DBPietanza {
     /**
      * Costruttore per creare una nuova pietanza con i dati specificati
      * 
-     * @param nome       Nome della pietanza
-     * @param prezzo     Prezzo della pietanza
+     * @param nome        Nome della pietanza
+     * @param prezzo      Prezzo della pietanza
      * @param idCategoria ID della categoria a cui appartiene la pietanza
      */
     public DBPietanza(int idPietanza, String nome, double prezzo, String Categoria) {
@@ -54,14 +54,15 @@ public class DBPietanza {
     /**
      * Costruttore per creare una nuova pietanza con i dati specificati
      * 
-     * @param idPietanza ID della pietanza
-     * @param nome       Nome della pietanza
-     * @param prezzo     Prezzo della pietanza
-     * @param idCategoria ID della categoria a cui appartiene la pietanza
-     * @param disponibile Stato di disponibilità della pietanza
+     * @param idPietanza    ID della pietanza
+     * @param nome          Nome della pietanza
+     * @param prezzo        Prezzo della pietanza
+     * @param idCategoria   ID della categoria a cui appartiene la pietanza
+     * @param disponibile   Stato di disponibilità della pietanza
      * @param nomeCategoria Nome della categoria della pietanza
      */
-    public DBPietanza(int idPietanza, String nome, double prezzo, int idCategoria, boolean disponibile, String nomeCategoria) {
+    public DBPietanza(int idPietanza, String nome, double prezzo, int idCategoria, boolean disponibile,
+            String nomeCategoria) {
         this.idPietanza = idPietanza;
         this.nome = nome;
         this.prezzo = prezzo;
@@ -105,16 +106,17 @@ public class DBPietanza {
      * @param idPietanza l'ID della pietanza (se nuova) o 0 per auto-incremento
      * @return il numero di righe modificate o -1 in caso di errore
      */
-    public int salvaInDB(int idPietanza) {
+    public int salvaInDB() {
         int ret = 0;
 
         String query;
-        if (idPietanza == 0) {
+        if (this.idPietanza == 0) {
             // Insert di una nuova pietanza con auto-incremento dell'ID
             query = String.format(Locale.US,
                     "INSERT INTO pietanza (nome, prezzo, id_categoria, disponibile) " +
                             "VALUES ('%s', %.2f, %d, %b)",
                     this.nome, this.prezzo, this.idCategoria, this.disponibile);
+
         } else {
             // Insert con ID specificato
             query = String.format(Locale.US,
@@ -168,7 +170,7 @@ public class DBPietanza {
      */
     public ArrayList<DBPietanza> getTuttePietanze() {
         ArrayList<DBPietanza> listaPietanze = new ArrayList<>();
-        
+
         String query = "SELECT p.*, c.nome as nome_categoria " +
                 "FROM pietanza p " +
                 "JOIN categoria_pietanza c ON p.id_categoria = c.id_categoria " +
@@ -183,8 +185,7 @@ public class DBPietanza {
                         rs.getDouble("prezzo"),
                         rs.getInt("id_categoria"),
                         rs.getBoolean("disponibile"),
-                        rs.getString("nome_categoria")
-                        );
+                        rs.getString("nome_categoria"));
 
                 listaPietanze.add(pietanza);
             }
@@ -218,8 +219,7 @@ public class DBPietanza {
                         rs.getDouble("prezzo"),
                         rs.getInt("id_categoria"),
                         rs.getBoolean("disponibile"),
-                        rs.getString("nome_categoria")
-                        );
+                        rs.getString("nome_categoria"));
                 listaPietanze.add(pietanza);
             }
         } catch (ClassNotFoundException | SQLException e) {
