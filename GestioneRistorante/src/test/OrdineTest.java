@@ -41,6 +41,8 @@ public class OrdineTest {
         int num_persone = 4;
         String stato = "in_attesa";
         ordine = new EntityOrdine(id_ordine, id_tavolo, num_persone, stato);
+        System.out.println("creato ordine con ID: " + id_ordine + " tavolo: " + id_tavolo + " persone: " + num_persone
+                + " stato: " + stato);
         int i = ordine.scriviSuDB();
         assertEquals(i, 1);
     }
@@ -66,7 +68,8 @@ public class OrdineTest {
 
     @Test
     public void testCalcolaConto() {
-        EntityOrdine ordine = new EntityOrdine(1, 5, "in_attesa");
+        int idOrdine = 10;
+        EntityOrdine ordine = new EntityOrdine(idOrdine, 1, 5, "in_attesa");
         int nuovoIdOrdine = ordine.scriviSuDB();
         System.out.println("Nuovo ordine creato con ID: " + nuovoIdOrdine);
         EntityPietanza pietanza1 = new EntityPietanza(190, "Pizza Margherita", 7.5, 2);
