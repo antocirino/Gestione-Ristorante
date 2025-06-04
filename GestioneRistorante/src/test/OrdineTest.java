@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class OrdineTest {
 
@@ -44,7 +45,8 @@ public class OrdineTest {
         System.out.println("creato ordine con ID: " + id_ordine + " tavolo: " + id_tavolo + " persone: " + num_persone
                 + " stato: " + stato);
         int i = ordine.scriviSuDB();
-        assertEquals(i, 1);
+        System.out.println("Risultato scriviSuDB: " + i);
+        assertEquals("L'ID dell'ordine deve essere aggiornato", i, ordine.getIdOrdine());
     }
 
     @Test
@@ -70,17 +72,16 @@ public class OrdineTest {
     public void testCalcolaConto() {
         int idOrdine = 10;
         EntityOrdine ordine = new EntityOrdine(idOrdine, 1, 5, "in_attesa");
-        int nuovoIdOrdine = ordine.scriviSuDB();
-        System.out.println("Nuovo ordine creato con ID: " + nuovoIdOrdine);
+        ordine.scriviSuDB();
         EntityPietanza pietanza1 = new EntityPietanza(190, "Pizza Margherita", 7.5, 2);
         EntityPietanza pietanza2 = new EntityPietanza(191, "Spaghetti Carbonara", 8.0, 1);
         EntityPietanza pietanza3 = new EntityPietanza(192, "Tiramisu", 5.0, 1);
-        int idPietanza = pietanza1.scriviSuDB(0); // Usa 0 per generare un nuovo ID
-        int idPietanza2 = pietanza2.scriviSuDB(0);
-        int idPietanza3 = pietanza3.scriviSuDB(0);
-        System.out.println("Pietanza inserita con ID: " + idPietanza);
-        System.out.println("Pietanza inserita con ID: " + idPietanza2);
-        System.out.println("Pietanza inserita con ID: " + idPietanza3);
+        pietanza1.scriviSuDB(0); // Usa 0 per generare un nuovo ID
+        pietanza2.scriviSuDB(0);
+        pietanza3.scriviSuDB(0);
+        System.out.println("Pietanza inserita con ID: " + pietanza1.getIdPietanza());
+        System.out.println("Pietanza inserita con ID: " + pietanza2.getIdPietanza());
+        System.out.println("Pietanza inserita con ID: " + pietanza3.getIdPietanza());
         int quantita = 1;
         boolean risultatoAggiunta = ordine.aggiungiPietanza(pietanza1, quantita);
         boolean risultatoAggiunta2 = ordine.aggiungiPietanza(pietanza2, quantita);

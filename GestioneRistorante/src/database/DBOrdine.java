@@ -70,29 +70,75 @@ public class DBOrdine {
     }
 
     /**
-     * Salva un nuovo ordine nel database e restituisce l'ID generato
+     * Salva un ordine nel database: se l'ID è 0 inserisce un nuovo record,
+     * altrimenti aggiorna un record esistente
      * 
-     * @return l'ID dell'ordine inserito o -1 in caso di errore
+     * @return l'ID dell'ordine inserito/aggiornato o -1 in caso di errore
      */
     public int salvaInDB() {
-        int nuovoId = -1;
-
-        String query = String.format(Locale.US,
-                "INSERT INTO ordine (id_tavolo, num_persone, stato, data_ordine, id_ristorante, costo_totale) " +
-                        "VALUES (%d, %d, '%s', '%s', %d, %.2f)",
-                this.idTavolo, this.numPersone, this.stato,
-                new java.sql.Timestamp(this.dataOrdine.getTime()),
-                this.idRistorante, this.costoTotale);
-
-        System.out.println(query);
         try {
-            nuovoId = insertAndGetId(query);
-            System.out.println("Nuovo ordine inserito con ID: " + nuovoId);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+            String query;
 
-        return nuovoId;
+            // Se l'ID è 0 creiamo un nuovo ordine
+            if (this.idOrdine == 0) {
+                // Insert di un nuovo ordine con auto-incremento dell'ID
+                query = String.format(Locale.US,
+                        "INSERT INTO ordine (id_tavolo, num_persone, stato, data_ordine, id_ristorante, costo_totale) "
+                                +
+                                "VALUES (%d, %d, '%s', '%s', %d, %.2f)",
+                        this.idTavolo, this.numPersone, this.stato,
+                        new java.sql.Timestamp(this.dataOrdine.getTime()),
+                        this.idRistorante, this.costoTotale);
+
+                System.out.println("Query di inserimento: " + query);
+
+                // Otteniamo l'ID generato
+                Integer generatedId = insertAndGetId(query);
+                if (generatedId != null && generatedId > 0) {
+                    System.out.println("Nuovo ordine inserito con ID: " + generatedId);
+                    return generatedId;
+                } else {
+                    System.err.println("Errore: Nessun ID generato dopo l'inserimento dell'ordine");
+                    return -1;
+                }
+            } else if (this.idOrdine > 0) {
+                // Verifichiamo prima se l'ordine esiste
+                String checkQuery = "SELECT COUNT(*) FROM ordine WHERE id_ordine = " + this.idOrdine;
+                ResultSet checkRs = DBConnection.selectQuery(checkQuery);
+
+                if (checkRs.next() && checkRs.getInt(1) > 0) {
+                    // Esiste, quindi aggiorniamo
+                    query = String.format(Locale.US,
+                            "UPDATE ordine SET id_tavolo = %d, num_persone = %d, stato = '%s', " +
+                                    "data_ordine = '%s', id_ristorante = %d, costo_totale = %.2f " +
+                                    "WHERE id_ordine = %d",
+                            this.idTavolo, this.numPersone, this.stato,
+                            new java.sql.Timestamp(this.dataOrdine.getTime()),
+                            this.idRistorante, this.costoTotale, this.idOrdine);
+
+                    System.out.println("Query di aggiornamento: " + query);
+
+                    int affectedRows = DBConnection.updateQuery(query);
+                    if (affectedRows > 0) {
+                        System.out.println("Ordine aggiornato con successo (ID: " + this.idOrdine + ")");
+                        return this.idOrdine;
+                    } else {
+                        System.err.println("Errore: Nessuna riga aggiornata per l'ordine con ID: " + this.idOrdine);
+                        return -1;
+                    }
+                } else {
+                    // Id negativo o non presente, genero un errore
+                    System.err.println("Errore: Impossibile inserire l'ordine con ID: " + this.idOrdine);
+                    return -1;
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nel salvataggio dell'ordine nel database: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
+        }
+        System.out.println("Errore: ID ordine non valido");
+        return -1; // In caso di errore generico
     }
 
     /**
