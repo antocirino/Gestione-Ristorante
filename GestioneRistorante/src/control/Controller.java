@@ -32,19 +32,7 @@ public class Controller {
 
     private static Controller instance = null;
 
-    // Connessione al database
-    private Connection connection;
-
-    /**
-     * Costruttore privato per implementare il pattern Singleton
-     */
-    private Controller() {
-        try {
-            connection = DBConnection.getConnection();
-        } catch (SQLException e) {
-            System.err.println("Errore nell'inizializzazione del controller: " + e.getMessage());
-        }
-    }
+    private Controller(){};
 
     /**
      * Metodo per ottenere l'istanza singleton del controller
@@ -181,6 +169,7 @@ public class Controller {
     ///////////////ACHTUNG/////////////////////////////////////////////////////
     ///////////////ANCORA DA MODIFICARE/////////////////////////////////////////////////////
 
+     private Connection connection;
     // Connessione al database
     /**
      * Testa la connessione al database
