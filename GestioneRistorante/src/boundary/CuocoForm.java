@@ -14,12 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.ResourceBundle.Control;
 
 import CFG.DBConnection;
 import DTO.DTOMenuFissoCuoco;
 import DTO.DTOOrdine;
-import DTO.DTOPietanza;
 import DTO.DTOPietanzaCuoco;
 import control.Controller;
 
@@ -185,32 +183,25 @@ public class CuocoForm extends JFrame {
         dettagliPanel.add(dettagliScrollPane, BorderLayout.CENTER);
 
         // Pannello pulsanti per la gestione degli ordini
-        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));
-        buttonsPanel.setBackground(lightColor);
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 0, 20));
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));
+        bottomPanel.setBackground(new Color(245, 247, 250));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
+        // Crea i pulsanti
+        indietroButton = createStyledButton("← Indietro", dangerColor);
         iniziaPreparazioneButton = createStyledButton("⏱️ Inizia Preparazione", warningColor);
         segnaCompletatoButton = createStyledButton("✅ Segna come Pronto", successColor);
         segnaConsegnatoButton = createStyledButton("🚚 Segna come Consegnato", primaryColor);
         visualizzaIngredientiButton = createStyledButton("🥕 Visualizza Ingredienti", infoColor);
+        
 
-        buttonsPanel.add(iniziaPreparazioneButton);
-        buttonsPanel.add(segnaCompletatoButton);
-        buttonsPanel.add(segnaConsegnatoButton);
-        buttonsPanel.add(visualizzaIngredientiButton);
-
-        // Pannello pulsanti in fondo con stile moderno
-        JPanel bottomButtonPanel = new JPanel(new BorderLayout());
-        bottomButtonPanel.setBackground(new Color(245, 247, 250));
-        bottomButtonPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
-
-        indietroButton = createStyledButton("← Indietro", dangerColor);
-
-        JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        leftButtonPanel.setBackground(new Color(245, 247, 250));
-        leftButtonPanel.add(indietroButton);
-
-        bottomButtonPanel.add(leftButtonPanel, BorderLayout.WEST);
+        // Aggiungi tutti i pulsanti nello stesso ordine
+        bottomPanel.add(indietroButton);
+        bottomPanel.add(iniziaPreparazioneButton);
+        bottomPanel.add(segnaCompletatoButton);
+        bottomPanel.add(segnaConsegnatoButton);
+        bottomPanel.add(visualizzaIngredientiButton);
+        
 
         // Assemblaggio pannelli
         splitPane.setTopComponent(ordiniPanel);
@@ -218,8 +209,7 @@ public class CuocoForm extends JFrame {
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         mainPanel.add(splitPane, BorderLayout.CENTER);
-        mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
-        mainPanel.add(bottomButtonPanel, BorderLayout.SOUTH);
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
         setLocationRelativeTo(null);
@@ -266,15 +256,32 @@ public class CuocoForm extends JFrame {
 
         // Carica i dati iniziali
         ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("in_attesa");
+        ArrayList<DTOOrdine> ordini_in_preparazione = Controller.getOrdiniByStato("in_preparazione");
+        ArrayList<DTOOrdine> ordini_pronti = Controller.getOrdiniByStato("pronto");
+
+        // Unisci tutte le liste
+        ordini_in_attesa.addAll(ordini_in_preparazione);
+        ordini_in_attesa.addAll(ordini_pronti);
+
+        // Stampa tutti gli ordini (in attesa + in preparazione + pronti)
         stampaOrdini(ordini_in_attesa);
         aggiornaStatoButton();
 
         // Imposta un timer per aggiornare gli ordini ogni 30 secondi
         Timer timer = new Timer(30000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Controller.getOrdiniByStato("in_attesa");
-                stampaOrdini(ordini_in_attesa);
 
+                ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("in_attesa");
+                ArrayList<DTOOrdine> ordini_in_preparazione = Controller.getOrdiniByStato("in_preparazione");
+                ArrayList<DTOOrdine> ordini_pronti = Controller.getOrdiniByStato("pronto");
+
+                // Unisci tutte le liste
+                ordini_in_attesa.addAll(ordini_in_preparazione);
+                ordini_in_attesa.addAll(ordini_pronti);
+
+                // Stampa tutti gli ordini (in attesa + in preparazione + pronti)
+                stampaOrdini(ordini_in_attesa);
+                aggiornaStatoButton();
             }
         });
         timer.start();
@@ -421,38 +428,24 @@ public class CuocoForm extends JFrame {
             return;
 
         int idOrdine = Integer.parseInt(ordiniTable.getValueAt(selectedRow, 0).toString());
+        boolean risultato = Controller.aggiornaStatoOrdine(idOrdine, nuovoStato.getCodice());
 
-        try {
-            Connection conn = DBConnection.getConnection();
-            String query = "UPDATE ordine SET stato = ? WHERE id_ordine = ?";
+        JOptionPane.showMessageDialog(this,
+                "Stato dell'ordine aggiornato con successo",
+                "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
 
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, nuovoStato.getCodice());
-            stmt.setInt(2, idOrdine);
+        // Ricarica gli ordini dopo l'aggiornamento
+        ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("in_attesa");
+        ArrayList<DTOOrdine> ordini_in_preparazione = Controller.getOrdiniByStato("in_preparazione");
+        ArrayList<DTOOrdine> ordini_pronti = Controller.getOrdiniByStato("pronto");
 
-            int rowsUpdated = stmt.executeUpdate();
-            if (rowsUpdated > 0) {
-                // Aggiorno la tabella
-                ordiniTable.setValueAt(nuovoStato.getDescrizione(), selectedRow, 4);
-                aggiornaStatoButton();
+        // Unisci tutte le liste
+        ordini_in_attesa.addAll(ordini_in_preparazione);
+        ordini_in_attesa.addAll(ordini_pronti);
 
-                JOptionPane.showMessageDialog(this,
-                        "Stato dell'ordine aggiornato con successo",
-                        "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
-
-                // Se è stato segnato come consegnato, lo rimuovo dalla lista
-                if (nuovoStato == StatoOrdine.CONSEGNATO) {
-                    ArrayList<DTOOrdine> ordini = Controller.getOrdiniByStato("in_attesa");
-                    stampaOrdini(ordini);
-                }
-            }
-
-            stmt.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Errore durante l'aggiornamento dello stato dell'ordine: " + e.getMessage(),
-                    "Errore Database", JOptionPane.ERROR_MESSAGE);
-        }
+        // Stampa tutti gli ordini (in attesa + in preparazione + pronti)
+        stampaOrdini(ordini_in_attesa);
+        aggiornaStatoButton();
     }
 
     /**

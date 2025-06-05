@@ -223,6 +223,20 @@ public class Controller {
         return menuFissiDAoRDINE = ordine.getMenuFissiDaOrdine();
     }
 
+    public static boolean aggiornaStatoOrdine(int idOrdine, String stato){
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
+        int result = ordine.aggiornaStato(stato);
+        boolean isStatoValido = false;
+        if (result >= 0) {
+            System.out.println("Stato dell'ordine con ID " + idOrdine + " aggiornato a: " + stato);
+            isStatoValido = true;
+        } else {
+            System.err.println("Errore nell'aggiornamento dello stato dell'ordine con ID: " + idOrdine);
+        
+        }
+        return isStatoValido;
+    }
+
      /////////////// INGREDIENTE//////////////////////////////////////////////////////// 
     public static ArrayList<DTOIngrediente> generaReport(){
         ArrayList<DTOIngrediente> dto_ingredienti_liste = EntityIngrediente.getIngredientiEsauriti();
