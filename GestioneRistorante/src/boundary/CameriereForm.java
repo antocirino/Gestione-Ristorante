@@ -677,6 +677,18 @@ public class CameriereForm extends JFrame {
                     pietanze = new ArrayList<>();
                 }
             }
+            
+            // Ordina le pietanze per categoria e poi per nome all'interno della stessa categoria
+            java.util.Collections.sort(pietanze, new java.util.Comparator<DTOPietanza>() {
+                @Override
+                public int compare(DTOPietanza p1, DTOPietanza p2) {
+                    int catComp = p1.getNomeCategoria().compareTo(p2.getNomeCategoria());
+                    if (catComp != 0) {
+                        return catComp; // Prima ordina per categoria
+                    }
+                    return p1.getNome().compareTo(p2.getNome()); // Poi per nome
+                }
+            });
 
             // Svuoto la tabella
             DefaultTableModel model = (DefaultTableModel) pietanzeTable.getModel();
@@ -727,7 +739,7 @@ public class CameriereForm extends JFrame {
                 if (pietanze != null && !pietanze.isEmpty()) {
                     dettagliMenu += "\n\nPietanze incluse:\n";
                     for (DTOPietanza pietanza : pietanze) {
-                        dettagliMenu += pietanza.getNomeCategoria() + " - " + pietanza.getNome() + "\n";
+                        dettagliMenu += pietanza.getNomeCategoria().toUpperCase() + ": " + pietanza.getNome() + "\n";
                     }
                 } else {
                     dettagliMenu += "\n\nNessuna pietanza inclusa.";
