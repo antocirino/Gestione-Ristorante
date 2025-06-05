@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import CFG.DBConnection;
 import DTO.DTOMenuFissoCuoco;
@@ -192,7 +194,7 @@ public class CuocoForm extends JFrame {
         iniziaPreparazioneButton = createStyledButton("Inizia Preparazione", warningColor);
         segnaCompletatoButton = createStyledButton("Segna come Pronto", successColor);
         segnaConsegnatoButton = createStyledButton("Segna come Consegnato", primaryColor);
-        visualizzaIngredientiButton = createStyledButton("Visualizza Ingredienti", infoColor);
+        visualizzaIngredientiButton = createStyledButton("Visualizza Dettagli", infoColor);
         
 
         // Aggiungi tutti i pulsanti nello stesso ordine
@@ -452,58 +454,122 @@ public class CuocoForm extends JFrame {
      * Visualizza gli ingredienti necessari per preparare l'ordine selezionato
      */
     private void visualizzaIngredienti() {
-        int selectedRow = ordiniTable.getSelectedRow();
-        if (selectedRow == -1)
+        // Verifica se è stata selezionata una pietanza dalla tabella dettagli
+        int selectedRow = dettagliTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, 
+                "Seleziona una pietanza dalla tabella dei dettagli", 
+                "Attenzione", JOptionPane.WARNING_MESSAGE);
             return;
+        }
 
-        int idOrdine = Integer.parseInt(ordiniTable.getValueAt(selectedRow, 0).toString());
-
-        try {
-            Connection conn = DBConnection.getConnection();
-
-            // Query per ottenere gli ingredienti necessari per le pietanze dell'ordine
-            String query = "SELECT i.nome, SUM(r.quantita * dop.quantita) AS quantita_totale, i.unita_misura " +
-                    "FROM dettaglio_ordine_pietanza dop " +
-                    "JOIN ricetta r ON dop.id_pietanza = r.id_pietanza " +
-                    "JOIN ingrediente i ON r.id_ingrediente = i.id_ingrediente " +
-                    "WHERE dop.id_ordine = ? " +
-                    "GROUP BY i.nome, i.unita_misura " +
-                    "ORDER BY i.nome";
-
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1, idOrdine);
-            ResultSet rs = stmt.executeQuery();
-
-            StringBuilder result = new StringBuilder();
-            result.append("Ingredienti necessari per l'ordine:\n\n");
-
-            while (rs.next()) {
-                String nomeIngrediente = rs.getString("nome");
-                double quantita = rs.getDouble("quantita_totale");
-                String unitaMisura = rs.getString("unita_misura");
-
-                result.append(String.format("- %s: %.2f %s\n",
-                        nomeIngrediente, quantita, unitaMisura));
+        // Verifica se l'elemento selezionato è una pietanza
+        String tipo = dettagliTable.getValueAt(selectedRow, 0).toString();
+        String nomeItem = dettagliTable.getValueAt(selectedRow, 1).toString();
+        
+        if (tipo.equalsIgnoreCase("Pietanza")) {
+            // Usa il Controller per ottenere i dettagli di preparazione
+            Map<String, Object> dettagli = Controller.getDettagliPreparazionePietanza(nomeItem);
+            
+            if (dettagli == null || dettagli.containsKey("errore")) {
+                String messaggio = dettagli != null ? (String)dettagli.get("errore") : "Pietanza non trovata nel database";
+                JOptionPane.showMessageDialog(this, messaggio, "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-
-            rs.close();
-            stmt.close();
-
-            // Mostro il risultato
+            
+            // Crea una visualizzazione formattata dei dettagli
+            StringBuilder result = new StringBuilder();
+            result.append("DETTAGLI DI PREPARAZIONE: " + nomeItem.toUpperCase() + "\n\n");
+            result.append("--------------------------\n\n");
+            result.append("INGREDIENTI NECESSARI:\n");
+            
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> ingredienti = (List<Map<String, Object>>) dettagli.get("ingredienti");
+            for (Map<String, Object> ingrediente : ingredienti) {
+                String nomeIngrediente = (String) ingrediente.get("nome");
+                double quantita = (Double) ingrediente.get("quantita");
+                String unitaMisura = (String) ingrediente.get("unitaMisura");
+                
+                result.append(String.format("- %s: %.2f %s\n", 
+                    nomeIngrediente, quantita, unitaMisura));
+            }
+            
+            result.append("\n--------------------------\n");
+            result.append("\nISTRUZIONI DI PREPARAZIONE:\n");
+            
+            String istruzioni = (String) dettagli.get("istruzioni");
+            result.append(istruzioni);
+            
+            // Mostra il risultato
             JTextArea textArea = new JTextArea(result.toString());
             textArea.setEditable(false);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            
             JScrollPane scrollPane = new JScrollPane(textArea);
-            scrollPane.setPreferredSize(new Dimension(400, 300));
-
+            scrollPane.setPreferredSize(new Dimension(600, 400));
+            
             JOptionPane.showMessageDialog(this,
                     scrollPane,
-                    "Ingredienti per l'Ordine",
+                    "Dettagli di Preparazione - " + nomeItem,
                     JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (SQLException e) {
+                    
+        } else if (tipo.equalsIgnoreCase("Menu Fisso")) {
+            // Usa il Controller per ottenere i dettagli di preparazione del menu
+            Map<String, Object> dettagli = Controller.getDettagliPreparazioneMenu(nomeItem);
+            
+            if (dettagli == null || dettagli.containsKey("errore")) {
+                String messaggio = dettagli != null ? (String)dettagli.get("errore") : "Menu fisso non trovato nel database";
+                JOptionPane.showMessageDialog(this, messaggio, "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Crea una visualizzazione formattata dei dettagli
+            StringBuilder result = new StringBuilder();
+            result.append("DETTAGLI DI PREPARAZIONE: " + nomeItem.toUpperCase() + "\n\n");
+            result.append("--------------------------\n\n");
+            result.append("INGREDIENTI NECESSARI:\n");
+            
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> ingredienti = (List<Map<String, Object>>) dettagli.get("ingredienti");
+            for (Map<String, Object> ingrediente : ingredienti) {
+                String nomeIngrediente = (String) ingrediente.get("nome");
+                double quantita = (Double) ingrediente.get("quantita");
+                String unitaMisura = (String) ingrediente.get("unitaMisura");
+                
+                result.append(String.format("- %s: %.2f %s\n", 
+                    nomeIngrediente, quantita, unitaMisura));
+            }
+            
+            result.append("\n--------------------------\n");
+            result.append("\nISTRUZIONI DI PREPARAZIONE PER OGNI PIETANZA DEL MENU:\n");
+            
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> istruzioniPietanze = (List<Map<String, Object>>) dettagli.get("istruzioniPietanze");
+            for (Map<String, Object> istruzionePietanza : istruzioniPietanze) {
+                String nomePietanza = (String) istruzionePietanza.get("nomePietanza");
+                String istruzioni = (String) istruzionePietanza.get("istruzioni");
+                
+                result.append("\n=== " + nomePietanza.toUpperCase() + " ===\n");
+                result.append(istruzioni);
+                result.append("\n");
+            }
+            
+            // Mostra il risultato
+            JTextArea textArea = new JTextArea(result.toString());
+            textArea.setEditable(false);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(700, 500));
+            
             JOptionPane.showMessageDialog(this,
-                    "Errore durante il recupero degli ingredienti: " + e.getMessage(),
-                    "Errore Database", JOptionPane.ERROR_MESSAGE);
+                    scrollPane,
+                    "Dettagli di Preparazione - Menu " + nomeItem,
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
