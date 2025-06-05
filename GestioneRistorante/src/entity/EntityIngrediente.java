@@ -3,9 +3,7 @@ package entity;
 import java.util.ArrayList;
 
 import DTO.DTOIngrediente;
-import DTO.DTOOrdine;
 import database.DBIngrediente;
-import database.DBOrdine;
 
 /**
  * Classe che rappresenta un ingrediente del magazzino

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.text.html.parser.Entity;
-
 import DTO.DTOMenuFissoCuoco;
 import DTO.DTOOrdine;
 import DTO.DTOPietanzaCuoco;
@@ -208,11 +206,6 @@ public class EntityOrdine {
         EntityPietanza pietanza = new EntityPietanza(idPietanza);
 
         try {
-            if (pietanza == null) {
-                System.err.println("Errore: Pietanza null");
-                return false;
-            }
-
             if (quantita <= 0) {
                 System.err.println("Errore: Quantità non valida: " + quantita);
                 return false;

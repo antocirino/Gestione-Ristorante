@@ -3,7 +3,6 @@ package test;
 import control.Controller;
 import entity.EntityOrdine;
 
-import javax.swing.text.html.parser.Entity;
 
 import org.junit.Test;
 
