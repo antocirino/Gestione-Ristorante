@@ -189,10 +189,10 @@ public class CuocoForm extends JFrame {
 
         // Crea i pulsanti
         indietroButton = createStyledButton("← Indietro", dangerColor);
-        iniziaPreparazioneButton = createStyledButton("⏱️ Inizia Preparazione", warningColor);
-        segnaCompletatoButton = createStyledButton("✅ Segna come Pronto", successColor);
-        segnaConsegnatoButton = createStyledButton("🚚 Segna come Consegnato", primaryColor);
-        visualizzaIngredientiButton = createStyledButton("🥕 Visualizza Ingredienti", infoColor);
+        iniziaPreparazioneButton = createStyledButton("Inizia Preparazione", warningColor);
+        segnaCompletatoButton = createStyledButton("Segna come Pronto", successColor);
+        segnaConsegnatoButton = createStyledButton("Segna come Consegnato", primaryColor);
+        visualizzaIngredientiButton = createStyledButton("Visualizza Ingredienti", infoColor);
         
 
         // Aggiungi tutti i pulsanti nello stesso ordine
@@ -522,40 +522,92 @@ public class CuocoForm extends JFrame {
                 BorderFactory.createEmptyBorder(12, 20, 12, 20)));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Effetti hover più evidenti
+        // Colori per stato normale e disabilitato
+        final Color normalBackground = backgroundColor;
+        final Color disabledBackground = createDisabledColor(backgroundColor);
+        final Color normalBorder = backgroundColor.darker();
+        final Color disabledBorder = createDisabledColor(backgroundColor.darker());
+
+        // Listener per gestire il cambio di stato enabled/disabled
+        button.addPropertyChangeListener("enabled", e -> {
+            boolean enabled = (Boolean) e.getNewValue();
+            if (enabled) {
+                // Stato normale
+                button.setBackground(normalBackground);
+                button.setBorder(BorderFactory.createCompoundBorder(
+                        new LineBorder(normalBorder, 2, true),
+                        BorderFactory.createEmptyBorder(12, 20, 12, 20)));
+                button.setForeground(Color.WHITE);
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            } else {
+                // Stato disabilitato con opacità ridotta
+                button.setBackground(disabledBackground);
+                button.setBorder(BorderFactory.createCompoundBorder(
+                        new LineBorder(disabledBorder, 2, true),
+                        BorderFactory.createEmptyBorder(12, 20, 12, 20)));
+                button.setForeground(new Color(255, 255, 255, 120)); // Testo bianco semi-trasparente
+                button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        // Effetti hover (solo se il pulsante è abilitato)
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(backgroundColor.brighter());
-                button.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(backgroundColor.darker().darker(), 2, true),
-                        BorderFactory.createEmptyBorder(12, 20, 12, 20)));
+                if (button.isEnabled()) {
+                    button.setBackground(normalBackground.brighter());
+                    button.setBorder(BorderFactory.createCompoundBorder(
+                            new LineBorder(normalBackground.darker().darker(), 2, true),
+                            BorderFactory.createEmptyBorder(12, 20, 12, 20)));
+                }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(backgroundColor);
-                button.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(backgroundColor.darker(), 2, true),
-                        BorderFactory.createEmptyBorder(12, 20, 12, 20)));
+                if (button.isEnabled()) {
+                    button.setBackground(normalBackground);
+                    button.setBorder(BorderFactory.createCompoundBorder(
+                            new LineBorder(normalBackground.darker(), 2, true),
+                            BorderFactory.createEmptyBorder(12, 20, 12, 20)));
+                }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                button.setBackground(backgroundColor.darker());
+                if (button.isEnabled()) {
+                    button.setBackground(normalBackground.darker());
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (button.contains(e.getPoint())) {
-                    button.setBackground(backgroundColor.brighter());
-                } else {
-                    button.setBackground(backgroundColor);
+                if (button.isEnabled()) {
+                    if (button.contains(e.getPoint())) {
+                        button.setBackground(normalBackground.brighter());
+                    } else {
+                        button.setBackground(normalBackground);
+                    }
                 }
             }
         });
 
         return button;
+    }
+    
+    // Metodo helper per creare colori con opacità ridotta per lo stato disabilitato
+    private Color createDisabledColor(Color originalColor) {
+        // Riduce la saturazione e aumenta la luminosità per un effetto "spento"
+        float[] hsb = Color.RGBtoHSB(originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue(), null);
+
+        // Riduce saturazione del 60% e aumenta luminosità del 20%
+        float newSaturation = hsb[1] * 0.4f;
+        float newBrightness = Math.min(1.0f, hsb[2] + 0.2f);
+
+        Color desaturatedColor = Color.getHSBColor(hsb[0], newSaturation, newBrightness);
+
+        // Applica anche un po' di trasparenza (alpha channel)
+        return new Color(desaturatedColor.getRed(), desaturatedColor.getGreen(),
+                desaturatedColor.getBlue(), 150); // Alpha = 150 (circa 60% opacità)
     }
 
     private void styleTable(JTable table) {

@@ -155,7 +155,7 @@ public class DirettoreForm extends JFrame {
         ));
         graphPanel.setPreferredSize(new Dimension(800, 180));
         
-        JLabel graphTitle = new JLabel("📈 Visualizzazione Grafica");
+        JLabel graphTitle = new JLabel("Visualizzazione Grafica");
         graphTitle.setFont(headerFont);
         graphTitle.setForeground(textColor);
         graphTitle.setHorizontalAlignment(SwingConstants.CENTER);
