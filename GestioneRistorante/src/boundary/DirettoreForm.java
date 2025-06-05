@@ -175,7 +175,7 @@ public class DirettoreForm extends JFrame {
         JPanel actionButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         actionButtonPanel.setBackground(new Color(245, 247, 250));
 
-        stampaReportButton = createStyledButton("🖨️ Stampa Report", warningColor);
+        stampaReportButton = createStyledButton("Stampa Report", warningColor);
         
         actionButtonPanel.add(stampaReportButton);
 
@@ -210,7 +210,7 @@ public class DirettoreForm extends JFrame {
         stampaReportButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(DirettoreForm.this,
-                        "🖨️ Report inviato alla stampante con successo!",
+                        "Report inviato alla stampante con successo!",
                         "Stampa Completata", JOptionPane.INFORMATION_MESSAGE);
             }
         });
