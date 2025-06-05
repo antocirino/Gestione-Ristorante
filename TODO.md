@@ -4,6 +4,7 @@
 
 - veirfica disponibilita ingredienti e prenota
 - controlla script e eliman i non necessari
+- aggiorna query per agginugere pietanza all'ordine con onConflict do update
 
 # Entity/DAO
 
