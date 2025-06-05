@@ -110,7 +110,7 @@ public class DirettoreForm extends JFrame {
         styleComboBox(periodoComboBox);
         periodoComboBox.setPreferredSize(new Dimension(200, 40));
 
-        generaReportButton = createStyledButton("📊 Genera Report", primaryColor);
+        generaReportButton = createStyledButton("Genera Report", primaryColor);
 
         controlPanel.add(tipoReportLabel);
         controlPanel.add(reportTypeComboBox);
@@ -391,8 +391,8 @@ public class DirettoreForm extends JFrame {
 
             while (rs.next()) {
                 String stato = rs.getDouble("quantita_disponibile") <= rs.getDouble("soglia_riordino")
-                        ? "⚠️ DA ORDINARE"
-                        : "✅ OK";
+                        ? "DA ORDINARE"
+                        : "OK";
 
                 if (stato.contains("DA ORDINARE")) {
                     ingredientiDaOrdinare++;
@@ -416,12 +416,7 @@ public class DirettoreForm extends JFrame {
 
             // Mostro un messaggio di successo
             String message = String.format(
-                "📊 Report generato con successo!\n\n" +
-                "📈 Statistiche:\n" +
-                "• Totale ingredienti: %d\n" +
-                "• Ingredienti da riordinare: %d\n" +
-                "• Ingredienti disponibili: %d",
-                totaleIngredienti, ingredientiDaOrdinare, totaleIngredienti - ingredientiDaOrdinare);
+                "Report generato con successo!");
 
             JOptionPane.showMessageDialog(this,
                     message,
@@ -444,7 +439,7 @@ public class DirettoreForm extends JFrame {
         graphPanel.removeAll();
         graphPanel.setLayout(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("📈 Statistiche Ingredienti");
+        JLabel titleLabel = new JLabel("Statistiche Ingredienti");
         titleLabel.setFont(headerFont);
         titleLabel.setForeground(textColor);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -455,14 +450,14 @@ public class DirettoreForm extends JFrame {
         statsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Statistica totale
-        JPanel totalPanel = createStatPanel("📦 Totale", String.valueOf(totaleIngredienti), primaryColor);
+        JPanel totalPanel = createStatPanel("Totale", String.valueOf(totaleIngredienti), primaryColor);
         
         // Statistica da ordinare
-        JPanel orderPanel = createStatPanel("⚠️ Da Ordinare", String.valueOf(ingredientiDaOrdinare), dangerColor);
+        JPanel orderPanel = createStatPanel("Da Ordinare", String.valueOf(ingredientiDaOrdinare), dangerColor);
         
         // Statistica disponibili
         int disponibili = totaleIngredienti - ingredientiDaOrdinare;
-        JPanel availablePanel = createStatPanel("✅ Disponibili", String.valueOf(disponibili), successColor);
+        JPanel availablePanel = createStatPanel("Disponibili", String.valueOf(disponibili), successColor);
 
         statsPanel.add(totalPanel);
         statsPanel.add(orderPanel);

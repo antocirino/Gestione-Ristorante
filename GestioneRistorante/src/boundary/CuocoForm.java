@@ -388,7 +388,7 @@ public class CuocoForm extends JFrame {
 
             // Carico i menu fissi dell'ordine
             String queryMenu = "SELECT m.nome, dom.quantita " +
-                    "FROM dettaglio_ordine_menu dom " +
+                    "FROM dettaglio_ordine_pietanza dom " +
                     "JOIN menu_fisso m ON dom.id_menu = m.id_menu " +
                     "WHERE dom.id_ordine = ?";
 

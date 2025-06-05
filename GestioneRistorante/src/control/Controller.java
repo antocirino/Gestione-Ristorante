@@ -410,7 +410,7 @@ public class Controller {
 
             // Recupera i menu ordinati
             String queryMenus = "SELECT m.nome, dom.quantita, m.prezzo " +
-                    "FROM dettaglio_ordine_menu dom " +
+                    "FROM dettaglio_ordine_pietanza dom " +
                     "JOIN menu_fisso m ON dom.id_menu = m.id_menu " +
                     "WHERE dom.id_ordine = ?";
             PreparedStatement stmtMenus = connection.prepareStatement(queryMenus);
@@ -633,7 +633,7 @@ public class Controller {
 
             // Recupera i dettagli dei menu fissi
             String queryMenus = "SELECT dom.id_dettaglio, m.id_menu, m.nome, dom.quantita, 'Menu Fisso' AS categoria " +
-                    "FROM dettaglio_ordine_menu dom " +
+                    "FROM dettaglio_ordine_pietanza dom " +
                     "JOIN menu_fisso m ON dom.id_menu = m.id_menu " +
                     "WHERE dom.id_ordine = ? " +
                     "ORDER BY m.nome";
