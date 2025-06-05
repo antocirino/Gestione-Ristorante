@@ -721,6 +721,14 @@ public class CameriereForm extends JFrame {
         try {
 
             ArrayList<DTOMenuFisso> menuFissi = Controller.getTuttiMenuFissi();
+            
+            // Ordina i menu fissi per ID
+            java.util.Collections.sort(menuFissi, new java.util.Comparator<DTOMenuFisso>() {
+                @Override
+                public int compare(DTOMenuFisso m1, DTOMenuFisso m2) {
+                    return Integer.compare(m1.getIdMenu(), m2.getIdMenu());
+                }
+            });
 
             // Svuoto la tabella
             DefaultTableModel model = (DefaultTableModel) menuFissiTable.getModel();
@@ -797,8 +805,9 @@ public class CameriereForm extends JFrame {
         quantitaSpinner.setValue(1);
         noteField.setText("");
 
-        // Vai alla tab dell'ordine
-        tabbedPane.setSelectedComponent(ordinePanel);
+        JOptionPane.showMessageDialog(this,
+                "Pietanza aggiunta all'ordine.",
+                "Pietanza aggiunta", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -834,11 +843,9 @@ public class CameriereForm extends JFrame {
         // le pietanze incluse nel menu
         // Per ora solo un messaggio informativo
         JOptionPane.showMessageDialog(this,
-                "Menu aggiunto all'ordine. In una versione completa, qui verrebbero mostrate le singole pietanze incluse nel menu.",
+                "Menu aggiunto all'ordine.",
                 "Menu aggiunto", JOptionPane.INFORMATION_MESSAGE);
 
-        // Vai alla tab dell'ordine
-        tabbedPane.setSelectedComponent(ordinePanel);
     }
 
     /**
@@ -956,13 +963,11 @@ public class CameriereForm extends JFrame {
             };
 
             java.io.File svgFile = null;
-            String usedPath = null;
 
             for (String path : possiblePaths) {
                 java.io.File testFile = new java.io.File(path);
                 if (testFile.exists()) {
                     svgFile = testFile;
-                    usedPath = path;
                     break;
                 }
             }
