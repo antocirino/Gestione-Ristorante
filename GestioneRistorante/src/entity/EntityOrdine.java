@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.html.parser.Entity;
+
 import DTO.DTOOrdine;
 import database.DBOrdine;
 
@@ -170,11 +172,14 @@ public class EntityOrdine {
     /**
      * Aggiunge una pietanza all'ordine
      * 
-     * @param pietanza La pietanza da aggiungere
+     * @param idPietanza La pietanza da aggiungere
      * @param quantita La quantità della pietanza
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
-    public boolean aggiungiPietanza(EntityPietanza pietanza, int quantita) {
+    public boolean aggiungiPietanza(int idPietanza, int quantita) {
+        
+        EntityPietanza pietanza = new EntityPietanza(idPietanza);
+
         try {
             if (pietanza == null) {
                 System.err.println("Errore: Pietanza null");
@@ -267,6 +272,16 @@ public class EntityOrdine {
         }
     }
 
+    public EntityOrdine creaOrdine(int idTavolo, int numPersone, int idRistorante, String stato) {
+        DBOrdine ordine = new DBOrdine(idTavolo, numPersone, idRistorante,stato);
+        int id = ordine.salvaInDB();
+
+        EntityOrdine new_ordine = new EntityOrdine(id);
+
+        return new_ordine;
+
+    }
+
     /**
      * Aggiunge un menu fisso all'ordine. Un menu fisso è composto da diverse
      * pietanze
@@ -281,8 +296,11 @@ public class EntityOrdine {
      * @param quantita Quantità di menu fissi da aggiungere
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
-    public boolean aggiungiMenuFisso(int menuId, String nome, double prezzo, ArrayList<EntityPietanza> pietanze,
-            int quantita) {
+    public boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
+            EntityMenuFisso menufisso =   new EntityMenuFisso(idMenuFisso);
+            String nome = menufisso.getNome();
+            double prezzo = menufisso.getPrezzo();
+            ArrayList<EntityPietanza> pietanze = menufisso.getPietanze();
         try {
             if (pietanze == null || pietanze.isEmpty()) {
                 System.err.println("Errore: Menu fisso senza pietanze");
@@ -333,7 +351,7 @@ public class EntityOrdine {
                         pietanza.getIdPietanza(),
                         quantita);
                 dettaglio.setParteDiMenu(true); // Marca come parte di un menu fisso
-                dettaglio.setIdMenu(menuId); // Associa al menu fisso
+                dettaglio.setIdMenu(idMenuFisso); // Associa al menu fisso
 
                 // Salva il dettaglio nel database
                 if (dettaglio.scriviSuDB(0) <= 0) {

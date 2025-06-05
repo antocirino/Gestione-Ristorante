@@ -16,7 +16,7 @@ public class EntityMenuFisso {
     private String nome;
     private double prezzo;
     private String descrizione;
-    private List<EntityPietanza> pietanze;
+    private ArrayList<EntityPietanza> pietanze;
 
     /**
      * Costruttore vuoto
@@ -201,11 +201,11 @@ public class EntityMenuFisso {
         this.descrizione = descrizione;
     }
 
-    public List<EntityPietanza> getPietanze() {
+    public ArrayList<EntityPietanza> getPietanze() {
         return pietanze;
     }
 
-    public void setPietanze(List<EntityPietanza> pietanze) {
+    public void setPietanze(ArrayList<EntityPietanza> pietanze) {
         this.pietanze = pietanze;
     }
 

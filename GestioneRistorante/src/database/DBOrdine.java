@@ -42,6 +42,15 @@ public class DBOrdine {
         // Costruttore vuoto
     }
 
+    public DBOrdine(int idTavolo, int numPersone, int idRistorante, String stato) {
+        this.idTavolo = idTavolo;
+        this.numPersone = numPersone;
+        this.dataOrdine = new Date(); // Imposta la data corrente
+        this.stato = stato;
+        this.idRistorante = idRistorante;
+        this.costoTotale = 0.0; // Inizializza il costo totale a 0
+    }
+
     /**
      * Carica i dati dell'ordine dal database
      */
@@ -168,6 +177,7 @@ public class DBOrdine {
 
         return generatedKey;
     }
+
 
     /**
      * Aggiorna lo stato di un ordine

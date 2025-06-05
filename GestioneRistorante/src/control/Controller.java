@@ -168,6 +168,45 @@ public class Controller {
 
     }
 
+    public static boolean aggiungiPietanzaAllOrdine(int idOrdine, int idPietanza, int quantita) {
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
+        boolean result = ordine.aggiungiPietanza(idPietanza, quantita);
+        if (result) {
+            System.out.println("Pietanza aggiunta all'ordine con ID: " + idOrdine);
+        } else {
+            System.err.println("Errore nell'aggiunta della pietanza all'ordine con ID: " + idOrdine);
+        }
+        return result;
+    }
+
+    public static boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
+        boolean result = ordine.aggiungiMenuFisso(idOrdine, idMenuFisso,quantita);
+        if (result) {
+            System.out.println("Menu fisso aggiunto all'ordine con ID: " + idOrdine);
+        } else {
+            System.err.println("Errore nell'aggiunta del menu fisso all'ordine con ID: " + idOrdine);
+        }
+        return result;
+    }
+
+    public static EntityOrdine CreaOrdine(int idOrdine, int num_persone, int id_tavolo, String stato){
+        EntityOrdine ordine = new EntityOrdine();
+        ordine = ordine.creaOrdine(idOrdine, num_persone, id_tavolo, stato);
+        EntityTavolo tavolo = new EntityTavolo(id_tavolo);
+        String statoTavolo = "occupato"; // Imposta lo stato del tavolo a "occupato"
+        tavolo.setStato(statoTavolo);
+
+        return ordine;
+    }
+
+    public static void ConfermaOrdine(int idOrdine, int idTavolo){
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
+        ordine.aggiornaStato("in attesa");
+
+
+    }
+
     /////////////// ACHTUNG/////////////////////////////////////////////////////
     /////////////// ANCORA DA
     /////////////// MODIFICARE/////////////////////////////////////////////////////
@@ -410,7 +449,7 @@ public class Controller {
 
             // Recupera i menu ordinati
             String queryMenus = "SELECT m.nome, dom.quantita, m.prezzo " +
-                    "FROM dettaglio_ordine_pietanza dom " +
+                    "FROM dettaglio_ordine_menu dom " +
                     "JOIN menu_fisso m ON dom.id_menu = m.id_menu " +
                     "WHERE dom.id_ordine = ?";
             PreparedStatement stmtMenus = connection.prepareStatement(queryMenus);
@@ -633,7 +672,7 @@ public class Controller {
 
             // Recupera i dettagli dei menu fissi
             String queryMenus = "SELECT dom.id_dettaglio, m.id_menu, m.nome, dom.quantita, 'Menu Fisso' AS categoria " +
-                    "FROM dettaglio_ordine_pietanza dom " +
+                    "FROM dettaglio_ordine_menu dom " +
                     "JOIN menu_fisso m ON dom.id_menu = m.id_menu " +
                     "WHERE dom.id_ordine = ? " +
                     "ORDER BY m.nome";
