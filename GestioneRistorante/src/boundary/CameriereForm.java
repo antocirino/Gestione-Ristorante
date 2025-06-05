@@ -65,6 +65,15 @@ public class CameriereForm extends JFrame {
     private Map<Integer, Double> prezziMenu = new HashMap<>();
     private Map<Integer, String> nomiPietanze = new HashMap<>();
     private Map<Integer, String> nomiMenu = new HashMap<>();
+    private JButton annullaOrdineButton;
+    private JLabel infoOrdineLabel;
+    private JComboBox<String> tavoliLiberiComboBox;
+    private JSpinner copertiSpinner;
+
+    // Per tenere traccia dell'ordine corrente
+    private int currentOrderId = -1;
+    private int currentTableId = -1;
+    private int currentPersons = 0;
 
     public CameriereForm() {
         setTitle("Gestione Ristorante - Cameriere");
@@ -150,6 +159,14 @@ public class CameriereForm extends JFrame {
         caricaTavoli();
         caricaPietanze();
         caricaMenuFissi();
+
+        // IMPORTANTE: Mostra il dialog per la creazione dell'ordine all'apertura
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                mostraDialogInizioOrdine();
+            }
+        });
     }
 
     /**
@@ -343,7 +360,7 @@ public class CameriereForm extends JFrame {
         panel.setBackground(lightColor);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Pannello superiore con la selezione del tavolo
+        // Pannello superiore con le informazioni del tavolo e numero di persone
         JPanel tavoloPanel = createModernPanel();
         tavoloPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
@@ -351,16 +368,25 @@ public class CameriereForm extends JFrame {
         ImageIcon tavoloIcon = loadSVGIcon("table.svg", 20, 20);
         JLabel tavoloIconLabel = new JLabel(tavoloIcon);
         tavoloIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+        tavoloPanel.add(tavoloIconLabel);
 
-        JLabel tavoloLabel = new JLabel("Seleziona tavolo:");
-        tavoloLabel.setFont(headerFont);
-        tavoloLabel.setForeground(textColor);
+        // Etichetta con informazioni del tavolo
+        JLabel tavoloInfoLabel = new JLabel("Tavolo n.: -");
+        tavoloInfoLabel.setFont(headerFont);
+        tavoloInfoLabel.setForeground(textColor);
+        tavoloPanel.add(tavoloInfoLabel);
+        
+        // Separatore
+        JLabel separatorLabel = new JLabel(" | ");
+        separatorLabel.setFont(headerFont);
+        separatorLabel.setForeground(textColor);
+        tavoloPanel.add(separatorLabel);
 
-        tavoliComboBox = new JComboBox<>();
-        styleComboBox(tavoliComboBox);
-
-        tavoloPanel.add(tavoloLabel);
-        tavoloPanel.add(tavoliComboBox);
+        // Etichetta per il numero di persone
+        JLabel personeInfoLabel = new JLabel("N. di persone: -");
+        personeInfoLabel.setFont(headerFont);
+        personeInfoLabel.setForeground(textColor);
+        tavoloPanel.add(personeInfoLabel);
 
         // Tabella ordine
         ordineTableModel = new DefaultTableModel(
@@ -874,15 +900,15 @@ public class CameriereForm extends JFrame {
             return;
         }
 
-        if (tavoliComboBox.getSelectedItem() == null) {
+        // Usa il tavolo corrente e il numero di persone impostati durante la creazione dell'ordine
+        if (currentTableId <= 0) {
             JOptionPane.showMessageDialog(this,
-                    "Seleziona un tavolo",
+                    "Non è stato selezionato un tavolo valido",
                     "Attenzione", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        String tavolo = tavoliComboBox.getSelectedItem().toString();
-        int idTavolo = Integer.parseInt(tavolo.split(" - ")[0]);
+        
+        int idTavolo = currentTableId;
 
         // Prepara i dati per l'ordine
         List<Map<String, Object>> elementiOrdine = new ArrayList<>();
@@ -942,6 +968,194 @@ public class CameriereForm extends JFrame {
             JOptionPane.showMessageDialog(this,
                     "Errore durante l'invio dell'ordine: " + e.getMessage(),
                     "Errore Database", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Mostra il dialog per la creazione di un nuovo ordine
+     */
+    private void mostraDialogInizioOrdine() {
+        // Crea un JDialog personalizzato
+        JDialog dialog = new JDialog(this, "Inizio Nuovo Ordine", true);
+        dialog.setSize(450, 300);
+        dialog.setLocationRelativeTo(this);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // Pannello interno al dialog
+        JPanel dialogPanel = new JPanel();
+        dialogPanel.setLayout(new GridBagLayout());
+        dialogPanel.setBackground(lightColor);
+        dialogPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Titolo
+        JLabel dialogTitleLabel = new JLabel("Inizio Nuovo Ordine");
+        dialogTitleLabel.setFont(headerFont);
+        dialogTitleLabel.setForeground(textColor);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.CENTER;
+        dialogPanel.add(dialogTitleLabel, gbc);
+
+        // Selezione tavolo
+        JLabel tavoloLabel = new JLabel("Seleziona tavolo:");
+        tavoloLabel.setFont(regularFont);
+        tavoloLabel.setForeground(textColor);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1; gbc.anchor = GridBagConstraints.WEST;
+        dialogPanel.add(tavoloLabel, gbc);
+
+        tavoliLiberiComboBox = new JComboBox<>();
+        caricaTavoliLiberi();
+        styleComboBox(tavoliLiberiComboBox);
+        gbc.gridx = 1; gbc.gridy = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        dialogPanel.add(tavoliLiberiComboBox, gbc);
+
+        // Numero coperti
+        JLabel copertiLabel = new JLabel("Numero coperti:");
+        copertiLabel.setFont(regularFont);
+        copertiLabel.setForeground(textColor);
+        gbc.gridx = 0; gbc.gridy = 2; gbc.anchor = GridBagConstraints.WEST;
+        dialogPanel.add(copertiLabel, gbc);
+
+        SpinnerModel copertiSpinnerModel = new SpinnerNumberModel(2, 1, 20, 1);
+        copertiSpinner = new JSpinner(copertiSpinnerModel);
+        styleSpinner(copertiSpinner);
+        gbc.gridx = 1; gbc.gridy = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        dialogPanel.add(copertiSpinner, gbc);
+
+        // Pulsanti
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonsPanel.setBackground(lightColor);
+        
+        // Pulsante conferma
+        JButton confermaButton = createStyledButton("Inizia Ordine", successColor);
+        confermaButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                iniziaNuovoOrdine();
+                dialog.dispose();
+            }
+        });
+        
+        // Pulsante annulla
+        JButton annullaButton = createStyledButton("Annulla", dangerColor);
+        annullaButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CameriereForm.this.dispose(); // Chiudi il form cameriere
+                dialog.dispose();
+                new FirstForm().setVisible(true);  // Ritorna al primo form
+            }
+        });
+        
+        buttonsPanel.add(confermaButton);
+        buttonsPanel.add(annullaButton);
+        
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        dialogPanel.add(buttonsPanel, gbc);
+
+        // Aggiungi pannello al dialog e mostra
+        dialog.add(dialogPanel);
+        dialog.setResizable(false);
+        dialog.setVisible(true);
+    }
+    
+    /**
+     * Carica i tavoli liberi per la selezione iniziale
+     */
+    private void caricaTavoliLiberi() {
+        try {
+            List<DTOTavolo> tavoli = Controller.getAllTavoli();
+            
+            tavoliLiberiComboBox.removeAllItems();
+            for (DTOTavolo tavolo : tavoli) {
+                if (!tavolo.isOccupato()) {
+                    int idTavolo = tavolo.getIdTavolo();
+                    int maxPosti = tavolo.getMaxPosti();
+                    tavoliLiberiComboBox.addItem(
+                            idTavolo + " - Tavolo (max " + maxPosti + " posti)");
+                }
+            }
+            
+            // Verifica se ci sono tavoli liberi
+            if (tavoliLiberiComboBox.getItemCount() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Non ci sono tavoli liberi al momento.",
+                    "Avviso", JOptionPane.WARNING_MESSAGE);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Errore durante il caricamento dei tavoli: " + e.getMessage(),
+                "Errore Database", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Inizia un nuovo ordine utilizzando Controller.CreaOrdine
+     */
+    private void iniziaNuovoOrdine() {
+        if (tavoliLiberiComboBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this,
+                "Seleziona un tavolo libero",
+                "Attenzione", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Ottiene l'ID del tavolo dalla stringra selezionata
+        String tavoloString = tavoliLiberiComboBox.getSelectedItem().toString();
+        int idTavolo = Integer.parseInt(tavoloString.split(" - ")[0]);
+        
+        // Ottiene il numero di coperti
+        int numeroCoperti = (Integer) copertiSpinner.getValue();
+        
+        try {
+            // Chiamata al controller per creare un nuovo ordine
+            // Imposta il tavolo corrente e numero di persone
+            currentTableId = idTavolo;
+            currentPersons = numeroCoperti;
+            // Il metodo CreaOrdine richiede (idOrdine, num_persone, id_tavolo, stato)
+            // Attenzione: id_tavolo deve essere l'ID del tavolo selezionato, non 0
+            Controller.CreaOrdine(0, numeroCoperti, idTavolo, "in_attesa");
+            
+            // Aggiorna le etichette nell'interfaccia
+            aggiornaInfoOrdine();
+            
+            // Imposta l'etichetta dell'ordine
+            JOptionPane.showMessageDialog(this,
+                "Ordine iniziato per il tavolo " + idTavolo + " con " + numeroCoperti + " coperti",
+                "Ordine Creato", JOptionPane.INFORMATION_MESSAGE);
+                
+            // Aggiorna la lista dei tavoli disponibili
+            caricaTavoli();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Errore durante la creazione dell'ordine: " + e.getMessage(),
+                "Errore", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Aggiorna le etichette delle informazioni sul tavolo e persone nel pannello ordine
+     */
+    private void aggiornaInfoOrdine() {
+        // Cerca i componenti nel pannello dell'ordine
+        if (ordinePanel != null) {
+            Component[] components = ordinePanel.getComponents();
+            if (components.length > 0 && components[0] instanceof JPanel) {
+                JPanel tavoloPanel = (JPanel) components[0];
+                for (Component comp : tavoloPanel.getComponents()) {
+                    if (comp instanceof JLabel) {
+                        JLabel label = (JLabel) comp;
+                        String text = label.getText();
+                        if (text != null && text.startsWith("Tavolo n.:")) {
+                            label.setText("Tavolo n.: " + currentTableId);
+                        } else if (text != null && text.startsWith("N. di persone:")) {
+                            label.setText("N. di persone: " + currentPersons);
+                        }
+                    }
+                }
+            }
         }
     }
 
