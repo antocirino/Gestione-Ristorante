@@ -12,11 +12,13 @@ import java.util.Map;
 
 import CFG.DBConnection;
 import DTO.DTOCategoriaPietanza;
+import DTO.DTOIngrediente;
 import DTO.DTOMenuFisso;
 import DTO.DTOOrdine;
 import DTO.DTOPietanza;
 import DTO.DTOTavolo;
 import entity.EntityCategoriaPietanza;
+import entity.EntityIngrediente;
 import entity.EntityMenuFisso;
 import entity.EntityOrdine;
 import entity.EntityPietanza;
@@ -206,7 +208,12 @@ public class Controller {
 
 
     }
-
+    
+     /////////////// INGREDIENTE//////////////////////////////////////////////////////// 
+    public static ArrayList<DTOIngrediente> generaReport(){
+        ArrayList<DTOIngrediente> dto_ingredienti_liste = EntityIngrediente.getIngredientiEsauriti();
+        return dto_ingredienti_liste;
+    }
     /////////////// ACHTUNG/////////////////////////////////////////////////////
     /////////////// ANCORA DA
     /////////////// MODIFICARE/////////////////////////////////////////////////////

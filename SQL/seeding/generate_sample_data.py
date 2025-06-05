@@ -60,9 +60,9 @@ nomi_bevande = [
 
 # Dati per gli ingredienti
 ingredienti_comuni = [
-    ("Pomodoro", "kg", 50.0, 10.0),
-    ("Farina", "kg", 30.0, 5.0),
-    ("Sale", "kg", 5.0, 1.0),
+    ("Pomodoro", "kg", 0.0, 10.0),
+    ("Farina", "kg", 0.0, 5.0),
+    ("Sale", "kg", 0.0, 1.0),
     ("Olio d oliva", "litri", 10.0, 2.0),
     ("Aglio", "kg", 3.0, 0.5),
     ("Basilico", "mazzetti", 20.0, 5.0),

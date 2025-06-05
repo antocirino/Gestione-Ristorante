@@ -103,10 +103,10 @@ public class DBIngrediente {
      * @return ArrayList di ingredienti con scorte minori o uguali alla soglia di
      *         riordino
      */
-    public static ArrayList<EntityIngrediente> getIngredientiEsauriti() {
+    public static ArrayList<DBIngrediente> getIngredientiEsauriti() {
         // metodo per ottenere gli ingredienti con scorte minore della quantità di
         // soglia
-        ArrayList<EntityIngrediente> lista = new ArrayList<>();
+        ArrayList<DBIngrediente> lista = new ArrayList<>();
         String query = "SELECT * FROM ingrediente";
 
         try {
@@ -116,12 +116,13 @@ public class DBIngrediente {
                 float soglia = rs.getFloat("soglia_riordino");
                 if (quantita <= soglia) {
                     System.out.println("ingrediente esurito");
-                    EntityIngrediente ing = new EntityIngrediente();
+                    DBIngrediente ing = new DBIngrediente();
                     ing.setIdIngrediente(rs.getInt("id_ingrediente"));
                     ing.setNome(rs.getString("nome"));
                     ing.setQuantitaDisponibile(quantita);
                     ing.setUnitaMisura(rs.getString("unita_misura"));
                     ing.setSogliaRiordino(soglia);
+                    
                     lista.add(ing);
                 }
             }
