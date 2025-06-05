@@ -8,7 +8,9 @@ import java.util.Map;
 
 import javax.swing.text.html.parser.Entity;
 
+import DTO.DTOMenuFissoCuoco;
 import DTO.DTOOrdine;
+import DTO.DTOPietanzaCuoco;
 import database.DBOrdine;
 
 /**
@@ -146,6 +148,31 @@ public class EntityOrdine {
     }
         return listaOrdini;
     }
+
+    /**
+     * Recupera le pietanze associate a un ordine
+     * 
+     * @return ArrayList di oggetti DTOPietanzaCuoco con le pietanze dell'ordine
+     */
+    public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine(){
+        ArrayList<DTOPietanzaCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        DBOrdine ordine = new DBOrdine(this.idOrdine);
+        pietanzeDAoRDINE = ordine.getPietanzeDaOrdine();
+        return pietanzeDAoRDINE;
+    }
+
+    /**
+     * Recupera i menu fissi associati a un ordine
+     * 
+     * @return ArrayList di oggetti DTOMenuFissoCuoco con i menu fissi dell'ordine
+     */
+    public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine(){
+        ArrayList<DTOMenuFissoCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        DBOrdine ordine = new DBOrdine(this.idOrdine);
+        pietanzeDAoRDINE = ordine.getMenuFissiDaOrdine();
+        return pietanzeDAoRDINE;
+    }
+
 
     /**
      * Recupera gli ordini con un determinato stato

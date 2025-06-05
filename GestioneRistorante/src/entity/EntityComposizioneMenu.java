@@ -11,8 +11,7 @@ import database.DBComposizioneMenu;
 public class EntityComposizioneMenu {
     private int idMenu;
     private int idPietanza;
-    private EntityPietanza pietanza;
-    private EntityMenuFisso menuFisso;
+
 
     /**
      * Costruttore vuoto
@@ -32,18 +31,6 @@ public class EntityComposizioneMenu {
         c.setIdPietanza(idPietanza);
     }
 
-    /**
-     * Costruttore con oggetti MenuFisso e Pietanza
-     * 
-     * @param menuFisso Menu fisso
-     * @param pietanza  Pietanza
-     */
-    public EntityComposizioneMenu(EntityMenuFisso menuFisso, EntityPietanza pietanza) {
-        this.menuFisso = menuFisso;
-        this.pietanza = pietanza;
-        this.idMenu = menuFisso.getIdMenu();
-        this.idPietanza = pietanza.getIdPietanza();
-    }
 
     /**
      * Salva l'associazione menu-pietanza nel database
@@ -121,38 +108,11 @@ public class EntityComposizioneMenu {
         this.idPietanza = idPietanza;
     }
 
-    public EntityPietanza getPietanza() {
-        if (this.pietanza == null && this.idPietanza > 0) {
-            this.pietanza = new EntityPietanza(this.idPietanza);
-        }
-        return pietanza;
-    }
-
-    public void setPietanza(EntityPietanza pietanza) {
-        this.pietanza = pietanza;
-        if (pietanza != null) {
-            this.idPietanza = pietanza.getIdPietanza();
-        }
-    }
-
-    public EntityMenuFisso getMenuFisso() {
-        if (this.menuFisso == null && this.idMenu > 0) {
-            this.menuFisso = new EntityMenuFisso(this.idMenu);
-        }
-        return menuFisso;
-    }
-
-    public void setMenuFisso(EntityMenuFisso menuFisso) {
-        this.menuFisso = menuFisso;
-        if (menuFisso != null) {
-            this.idMenu = menuFisso.getIdMenu();
-        }
-    }
 
     @Override
     public String toString() {
-        String nomeMenu = (menuFisso != null) ? menuFisso.getNome() : "Menu #" + idMenu;
-        String nomePietanza = (pietanza != null) ? pietanza.getNome() : "Pietanza #" + idPietanza;
+        String nomeMenu = "IdMenu #" + idMenu;
+        String nomePietanza = "Idpietanza #" + idPietanza;
         return nomeMenu + " - " + nomePietanza;
     }
 }

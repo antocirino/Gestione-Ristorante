@@ -14,8 +14,10 @@ import CFG.DBConnection;
 import DTO.DTOCategoriaPietanza;
 import DTO.DTOIngrediente;
 import DTO.DTOMenuFisso;
+import DTO.DTOMenuFissoCuoco;
 import DTO.DTOOrdine;
 import DTO.DTOPietanza;
+import DTO.DTOPietanzaCuoco;
 import DTO.DTOTavolo;
 import entity.EntityCategoriaPietanza;
 import entity.EntityIngrediente;
@@ -208,7 +210,19 @@ public class Controller {
 
 
     }
-    
+
+    public static ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine(int idOrdine){
+        ArrayList<DTOPietanzaCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
+        return pietanzeDAoRDINE = ordine.getPietanzeDaOrdine();
+    }
+
+    public static ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine(int idOrdine){
+        ArrayList<DTOMenuFissoCuoco> menuFissiDAoRDINE = new ArrayList<>();
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
+        return menuFissiDAoRDINE = ordine.getMenuFissiDaOrdine();
+    }
+
      /////////////// INGREDIENTE//////////////////////////////////////////////////////// 
     public static ArrayList<DTOIngrediente> generaReport(){
         ArrayList<DTOIngrediente> dto_ingredienti_liste = EntityIngrediente.getIngredientiEsauriti();
