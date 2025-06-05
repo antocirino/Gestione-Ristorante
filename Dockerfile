@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Imposta le variabili d'ambiente per il display
-ENV DISPLAY=192.168.1.10:0
+ENV DISPLAY=host.docker.internal
 ENV LIBGL_ALWAYS_INDIRECT=1
 ENV QT_X11_NO_MITSHM=1
 
