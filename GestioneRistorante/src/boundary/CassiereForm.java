@@ -478,31 +478,14 @@ public class CassiereForm extends JFrame {
             return;
         }
 
-        // Recupera i dettagli delle pietanze ordinate
-        Map<String, Double> pietanze = Controller.getPietanzeByOrdine(ordine.getIdOrdine());
-        
-        // Costruisce il testo dettagliato del conto
-        StringBuilder dettagli = new StringBuilder();
-        dettagli.append(String.format("Ordine #%d\n", ordine.getIdOrdine()));
-        dettagli.append(String.format("Data: %s\n", ordine.getDataOrdine() != null ? ordine.getDataOrdine().toString() : "-"));
-        dettagli.append(String.format("Numero Persone: %d\n\n", ordine.getNumPersone()));
-        
-        // Aggiunge le pietanze ordinate
-        dettagli.append("PIETANZE ORDINATE:\n");
-        dettagli.append("-----------------\n");
-        
-        if (pietanze != null && !pietanze.isEmpty()) {
-            for (Map.Entry<String, Double> pietanza : pietanze.entrySet()) {
-                dettagli.append(String.format("%s: € %.2f\n", pietanza.getKey(), pietanza.getValue()));
-            }
-        } else {
-            dettagli.append("Nessuna pietanza trovata\n");
-        }
-        
-        dettagli.append("\n-----------------\n");
-        dettagli.append(String.format("TOTALE: € %.2f", ordine.getCostoTotale()));
-
-        dettagliContoTextArea.setText(dettagli.toString());
+        // Mostra i dettagli dell'ordine (personalizza questa stringa come preferisci)
+        String dettagli = String.format(
+                "Ordine #%d\nData: %s\nNumero Persone: %d\nTotale: € %.2f",
+                ordine.getIdOrdine(),
+                ordine.getDataOrdine() != null ? ordine.getDataOrdine().toString() : "-",
+                ordine.getNumPersone(),
+                ordine.getCostoTotale());
+        dettagliContoTextArea.setText(dettagli);
         dettagliContoTextArea.setForeground(textColor);
 
         // Imposta il totale
