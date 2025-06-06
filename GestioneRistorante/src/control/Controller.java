@@ -992,4 +992,66 @@ public class Controller {
         
         return risultato;
     }
+
+    /**
+     * Recupera tutte le pietanze e i menu fissi associati a un ordine
+     * 
+     * @param idOrdine ID dell'ordine di cui recuperare le pietanze
+     * @return Map con il nome della pietanza/menu come chiave e il prezzo come valore
+     */
+    public static Map<String, Double> getPietanzeByOrdine(int idOrdine) {
+        Map<String, Double> pietanze = new HashMap<>();
+        
+        try {
+            Connection conn = DBConnection.getConnection();
+            
+            // Query per recuperare le pietanze dell'ordine
+            String queryPietanze = 
+                "SELECT p.nome, p.prezzo, dop.quantita " +
+                "FROM dettaglio_ordine_pietanza dop " +
+                "JOIN pietanza p ON dop.id_pietanza = p.id_pietanza " +
+                "WHERE dop.id_ordine = ?";
+                
+            PreparedStatement stmtPietanze = conn.prepareStatement(queryPietanze);
+            stmtPietanze.setInt(1, idOrdine);
+            ResultSet rsPietanze = stmtPietanze.executeQuery();
+            
+            while (rsPietanze.next()) {
+                String nome = rsPietanze.getString("nome");
+                double prezzo = rsPietanze.getDouble("prezzo");
+                int quantita = rsPietanze.getInt("quantita");
+                pietanze.put(nome + " (x" + quantita + ")", prezzo * quantita);
+            }
+            
+            // Query per recuperare i menu fissi dell'ordine
+            String queryMenu = 
+                "SELECT m.nome, m.prezzo, dom.quantita " +
+                "FROM dettaglio_ordine_menu dom " +
+                "JOIN menu_fisso m ON dom.id_menu = m.id_menu " +
+                "WHERE dom.id_ordine = ?";
+                
+            PreparedStatement stmtMenu = conn.prepareStatement(queryMenu);
+            stmtMenu.setInt(1, idOrdine);
+            ResultSet rsMenu = stmtMenu.executeQuery();
+            
+            while (rsMenu.next()) {
+                String nome = rsMenu.getString("nome");
+                double prezzo = rsMenu.getDouble("prezzo");
+                int quantita = rsMenu.getInt("quantita");
+                pietanze.put(nome + " (x" + quantita + ")", prezzo * quantita);
+            }
+            
+            // Chiudi le risorse
+            rsMenu.close();
+            stmtMenu.close();
+            rsPietanze.close();
+            stmtPietanze.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            System.err.println("Errore nel recupero delle pietanze dell'ordine: " + e.getMessage());
+        }
+        
+        return pietanze;
+    }
 }
