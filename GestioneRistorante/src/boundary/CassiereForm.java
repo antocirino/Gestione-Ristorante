@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import control.Controller;
 
@@ -425,6 +424,7 @@ public class CassiereForm extends JFrame {
     private void caricaTavoli() {
         tavoliComboBox.removeAllItems();
         String stato = "occupato";
+        
         try {
 
             ArrayList<DTOTavolo> tavoli = Controller.getTavoliByStato(stato);

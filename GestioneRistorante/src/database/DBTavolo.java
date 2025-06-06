@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.EntityTavolo;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'tavolo' nel database
