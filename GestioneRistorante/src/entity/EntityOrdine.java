@@ -113,6 +113,12 @@ public class EntityOrdine {
         return o.aggiornaStato(nuovoStato);
     }
 
+    public int aggiornaCostoTotale(double nuovoCosto) {
+        this.costoTotale = nuovoCosto;
+        DBOrdine o = new DBOrdine(this.idOrdine);
+        return o.aggiornaCosto(nuovoCosto);
+    }
+
     /**
      * Recupera tutti gli ordini dal database
      * 
@@ -189,9 +195,32 @@ public class EntityOrdine {
      * @param idTavolo l'ID del tavolo
      * @return ArrayList di oggetti Ordine per il tavolo specificato
      */
-    public static ArrayList<EntityOrdine> getOrdiniPerTavolo(int idTavolo) {
-        DBOrdine ordine = new DBOrdine();
-        return ordine.getOrdiniPerTavolo(idTavolo);
+    public static DTOOrdine getOrdinePerTavolo(int idTavolo) {
+        
+        int id_ordine = DBOrdine.getIDOrdineByTavolo(idTavolo);
+
+        if (id_ordine <= 0) {
+            System.err.println("Nessun ordine trovato per il tavolo con ID: " + idTavolo);
+            return null;
+        }
+        EntityOrdine ordine = new EntityOrdine(id_ordine);
+        double val = ordine.calcolaConto(true);
+
+        if (val <= 0) {
+            System.err.println("Errore nel calcolo del conto per l'ordine con ID: " + id_ordine);
+            return null;
+        }
+
+        DTOOrdine dtoOrdine = new DTOOrdine();
+        dtoOrdine.setIdOrdine(ordine.getIdOrdine());
+        dtoOrdine.setIdTavolo(ordine.getIdTavolo());
+        dtoOrdine.setNumPersone(ordine.getNumPersone());
+        dtoOrdine.setDataOrdine(ordine.getDataOrdine());
+        dtoOrdine.setStato(ordine.getStato());
+        dtoOrdine.setCostoTotale(ordine.getCostoTotale());
+        
+        return dtoOrdine;
+        
     }
 
     /**
@@ -405,6 +434,8 @@ public class EntityOrdine {
         }
     }
 
+    
+
     /**
      * Calcola il totale del conto per l'ordine
      * 
@@ -521,6 +552,12 @@ public class EntityOrdine {
             }
 
             System.out.println("TOTALE CONTO: " + String.format("%.2f", totale) + "€");
+            // Aggiorna il costo totale dell'ordine
+            this.costoTotale = totale;
+            // Aggiorna il costo totale nel database
+            if (!aggiornaCostoTotale()) {
+                System.err.println("Avviso: Impossibile aggiornare il costo totale nel database");
+            }
             return totale;
         } catch (Exception e) {
             System.err.println("Errore durante il calcolo del conto: " + e.getMessage());

@@ -253,6 +253,16 @@ public class Controller {
         return isStatoValido;
     }
 
+    public static DTOOrdine getOrdineByTavolo(int id_tavolo){
+        DTOOrdine dtoOrdine = EntityOrdine.getOrdinePerTavolo(id_tavolo);
+        if (dtoOrdine == null) {
+            System.err.println("Nessun ordine trovato per il tavolo specificato.");
+        } else {
+            System.out.println("Ordine recuperato: " + dtoOrdine);
+        }
+        return dtoOrdine;
+    }
+
      /////////////// INGREDIENTE//////////////////////////////////////////////////////// 
     public static ArrayList<DTOIngrediente> generaReport(){
         ArrayList<DTOIngrediente> dto_ingredienti_liste = EntityIngrediente.getIngredientiEsauriti();

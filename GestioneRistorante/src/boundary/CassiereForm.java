@@ -14,6 +14,7 @@ import control.Controller;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGUniverse;
 
+import DTO.DTOOrdine;
 import DTO.DTOTavolo;
 
 /**
@@ -424,7 +425,7 @@ public class CassiereForm extends JFrame {
     private void caricaTavoli() {
         tavoliComboBox.removeAllItems();
         String stato = "occupato";
-        
+
         try {
 
             ArrayList<DTOTavolo> tavoli = Controller.getTavoliByStato(stato);
@@ -435,10 +436,8 @@ public class CassiereForm extends JFrame {
                 boolean occupato = tavolo.isOccupato();
                 String displayText = "";
 
-                displayText = " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🔴 OCCUPATO";
-
-
-                tavoliComboBox.addItem(displayText); 
+                displayText = idTavolo + " - Tavolo " + " (" + maxPosti + " posti) - OCCUPATO";
+                tavoliComboBox.addItem(displayText);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -448,10 +447,9 @@ public class CassiereForm extends JFrame {
     }
 
     /**
-     * Calcola il conto per il tavolo selezionato
+     * Calcola il conto del tavolo selezionato
      */
     private void calcolaConto() {
-        
         if (tavoliComboBox.getSelectedItem() == null) {
             JOptionPane.showMessageDialog(this,
                     "Seleziona un tavolo",
@@ -468,38 +466,37 @@ public class CassiereForm extends JFrame {
         pulisciCampi();
         coppertiField.setEditable(false);
 
-        Controller controller = Controller.getInstance();
-        Map<String, Object> risultatoConto = controller.getContoTavolo(idTavolo);
+        DTOOrdine ordine = Controller.getOrdineByTavolo(idTavolo);
+        System.out.println("Ordine recuperato: " + ordine);
 
-        if (risultatoConto.containsKey("errore")) {
-            dettagliContoTextArea.setText((String) risultatoConto.get("errore"));
-            dettagliContoTextArea.setForeground(dangerColor);
-            return;
-        }
-
-        if ((Boolean) risultatoConto.get("success")) {
-            // Imposta i dettagli del conto
-            dettagliContoTextArea.setText((String) risultatoConto.get("dettagli"));
-            dettagliContoTextArea.setForeground(textColor);
-
-            // Imposta il totale
-            double totale = (Double) risultatoConto.get("totale");
-            totaleLabel.setText(String.format("TOTALE: € %.2f", totale));
-
-            // Imposta il numero di coperti
-            int numeroPersone = (Integer) risultatoConto.get("numeroPersone");
-            coppertiField.setText(String.valueOf(numeroPersone));
-
-            // Abilita i pulsanti
-            stampaContoButton.setEnabled(true);
-            pagaButton.setEnabled(true);
-        } else {
-            dettagliContoTextArea.setText("Si è verificato un errore nel calcolo del conto.");
+        if (ordine == null || ordine.getIdOrdine() == 0) {
+            dettagliContoTextArea.setText("Nessun ordine attivo per questo tavolo.");
             dettagliContoTextArea.setForeground(dangerColor);
             totaleLabel.setText("TOTALE: € 0,00");
             stampaContoButton.setEnabled(false);
             pagaButton.setEnabled(false);
+            return;
         }
+
+        // Mostra i dettagli dell'ordine (personalizza questa stringa come preferisci)
+        String dettagli = String.format(
+                "Ordine #%d\nData: %s\nNumero Persone: %d\nTotale: € %.2f",
+                ordine.getIdOrdine(),
+                ordine.getDataOrdine() != null ? ordine.getDataOrdine().toString() : "-",
+                ordine.getNumPersone(),
+                ordine.getCostoTotale());
+        dettagliContoTextArea.setText(dettagli);
+        dettagliContoTextArea.setForeground(textColor);
+
+        // Imposta il totale
+        totaleLabel.setText(String.format("TOTALE: € %.2f", ordine.getCostoTotale()));
+
+        // Imposta il numero di coperti
+        coppertiField.setText(String.valueOf(ordine.getNumPersone()));
+
+        // Abilita i pulsanti
+        stampaContoButton.setEnabled(true);
+        pagaButton.setEnabled(true);
     }
 
     /**

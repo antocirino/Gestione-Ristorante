@@ -11,6 +11,7 @@ import java.util.Map;
 
 import CFG.DBConnection;
 import DTO.DTOMenuFissoCuoco;
+import DTO.DTOOrdine;
 import DTO.DTOPietanzaCuoco;
 import entity.EntityOrdine;
 
@@ -331,31 +332,45 @@ public class DBOrdine {
     }
 
     /**
-     * Recupera gli ordini per un tavolo specifico
+     * Recupera l'ultimo per un tavolo specifico
      * 
      * @param idTavolo l'ID del tavolo
-     * @return ArrayList di oggetti Ordine per il tavolo specificato
      */
-    public ArrayList<EntityOrdine> getOrdiniPerTavolo(int idTavolo) {
-        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
-        String query = "SELECT * FROM ordine WHERE id_tavolo = " + idTavolo + " ORDER BY data_ordine DESC";
+    public void getOrdinePerTavolo(int idTavolo) { // da eliminare probabilmente
+        DBOrdine ordine = new DBOrdine();
+        String query = "SELECT * FROM ordine WHERE id_tavolo = " + idTavolo + " ORDER BY data_ordine DESC LIMIT 1";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
-            while (rs.next()) {
-                EntityOrdine ordine = new EntityOrdine();
+
+            if (rs.next()) {
                 ordine.setIdOrdine(rs.getInt("id_ordine"));
                 ordine.setIdTavolo(rs.getInt("id_tavolo"));
                 ordine.setNumPersone(rs.getInt("num_persone"));
                 ordine.setDataOrdine(rs.getTimestamp("data_ordine"));
                 ordine.setStato(rs.getString("stato"));
-                listaOrdini.add(ordine);
             }
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nel recupero degli ordini per tavolo: " + e.getMessage());
         }
 
-        return listaOrdini;
+    }
+
+    public static int getIDOrdineByTavolo(int idTavolo) {
+        String query = "SELECT id_ordine FROM ordine WHERE id_tavolo = " + idTavolo
+                + " ORDER BY data_ordine DESC LIMIT 1";
+        int id_ordine = 0;
+        try {
+            ResultSet rs = DBConnection.selectQuery(query);
+            if (rs.next()) {
+                id_ordine = rs.getInt("id_ordine");
+            } else {
+                id_ordine = -1; // Se non trovato, impostiamo a -1
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nel recupero dell'ID ordine per tavolo: " + e.getMessage());
+        }
+        return id_ordine;
     }
 
     /**
@@ -426,6 +441,21 @@ public class DBOrdine {
             System.err.println("Errore nel recupero del costo coperto: " + e.getMessage());
         }
         return costoCoperto;
+    }
+
+    public int aggiornaCosto(double costoTotale) {
+        this.costoTotale = costoTotale;
+        String query = String.format(Locale.US,
+                "UPDATE ordine SET costo_totale = %.2f WHERE id_ordine = %d",
+                this.costoTotale, this.idOrdine);
+
+        try {
+            int result = DBConnection.updateQuery(query);
+            return result; // restituisce il numero di righe aggiornate
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore durante l'aggiornamento del costo totale: " + e.getMessage());
+            return -1;
+        }
     }
 
     // Getters e setters
