@@ -74,7 +74,7 @@ public class EntityOrdine {
         this.numPersone = ordine.getNumPersone();
         this.dataOrdine = ordine.getDataOrdine();
         this.stato = ordine.getStato();
-        this.costoTotale = 0.0;
+        this.costoTotale = ordine.getCostoTotale(); 
     }
 
     /**

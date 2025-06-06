@@ -2,6 +2,8 @@
 
 # Alta priorità
 
+- in questo momento si può fare un ordine mettendo un  umero di persone maggiore della capienza del 
+- in aggi
 - veirfica disponibilita ingredienti e prenota
 - controlla script e eliman i non necessari
 - aggiorna query per agginugere pietanza all'ordine con onConflict do update
