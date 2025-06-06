@@ -478,7 +478,7 @@ public class CassiereForm extends JFrame {
             return;
         }
 
-        // Mostra i dettagli dell'ordine (personalizza questa stringa come preferisci)
+        // Mostra i dettagli dell'ordine 
         String dettagli = String.format(
                 "Ordine #%d\nData: %s\nNumero Persone: %d\nTotale: € %.2f",
                 ordine.getIdOrdine(),
@@ -570,28 +570,11 @@ public class CassiereForm extends JFrame {
         String selectedItem = (String) tavoliComboBox.getSelectedItem();
         // Estraiamo l'ID del tavolo dal formato "ID - Tavolo X (Y posti) - STATO"
         String[] parts = selectedItem.split(" - ");
-        int idTavolo = Integer.parseInt(parts[0]);
 
-        // Verifica se il tavolo è libero
-        if (selectedItem.contains("LIBERO")) {
-            JOptionPane.showMessageDialog(this,
-                    "Il tavolo selezionato è libero. Non ci sono ordini da stampare.",
-                    "Attenzione", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Controller controller = Controller.getInstance();
-        boolean success = controller.stampaConto(idTavolo);
-
-        if (success) {
-            JOptionPane.showMessageDialog(this,
-                    "🖨️ Conto stampato con successo!",
+        JOptionPane.showMessageDialog(this,
+                    "Conto stampato con successo!",
                     "Informazione", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Impossibile stampare il conto. Nessun ordine attivo trovato.",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
-        }
+
     }
 
     /**
