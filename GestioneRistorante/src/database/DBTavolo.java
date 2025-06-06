@@ -173,6 +173,14 @@ public class DBTavolo {
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
+            if (rs == null) {
+                 // Gestire il caso in cui selectQuery restituisce null
+                 System.err.println("Errore: selectQuery ha restituito null per la query: " + query);
+                 // Potremmo voler lanciare un'eccezione qui o semplicemente tornare una lista vuota
+                 // Data la descrizione dell'utente che funziona lo stesso, torniamo lista vuota
+                 return listaTavoli; // Restituisce una lista vuota in caso di null
+            }
+
             while (rs.next()) {
                 DBTavolo tavolo = new DBTavolo();
                 tavolo.setIdTavolo(rs.getInt("id_tavolo"));
@@ -181,8 +189,16 @@ public class DBTavolo {
                 tavolo.setIdRistorante(rs.getInt("id_ristorante"));
                 listaTavoli.add(tavolo);
             }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero dei tavoli per stato: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println("Errore Driver JDBC in getTavoliPerStato: " + e.getMessage());
+            e.printStackTrace();
+            // Rilancia l'eccezione incapsulata per propagare l'errore
+            throw new RuntimeException("Errore configurazione database nel caricamento tavoli", e);
+        } catch (SQLException e) {
+            System.err.println("Errore SQL in getTavoliPerStato: " + e.getMessage());
+            e.printStackTrace();
+            // Rilancia l'eccezione incapsulata per propagare l'errore
+            throw new RuntimeException("Errore accesso database nel caricamento tavoli", e);
         }
 
         return listaTavoli;

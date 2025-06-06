@@ -7,6 +7,7 @@ import DTO.DTOCategoriaPietanza;
 import DTO.DTOMenuFisso;
 import DTO.DTOPietanza;
 import DTO.DTOTavolo;
+import entity.EntityOrdine;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.border.*;
@@ -910,60 +911,40 @@ public class CameriereForm extends JFrame {
         
         int idTavolo = currentTableId;
 
-        // Prepara i dati per l'ordine
-        List<Map<String, Object>> elementiOrdine = new ArrayList<>();
-        String note = ""; // Le note potrebbero essere aggiunte come campo nell'interfaccia
-
-        // Ciclo su tutte le righe dell'ordine
-        for (int i = 0; i < ordineTableModel.getRowCount(); i++) {
-            int id = Integer.parseInt(ordineTableModel.getValueAt(i, 0).toString());
-            String tipo = ordineTableModel.getValueAt(i, 1).toString();
-            int quantita = Integer.parseInt(ordineTableModel.getValueAt(i, 3).toString());
-            String noteElemento = String.valueOf(ordineTableModel.getValueAt(i, 6));
-
-            // Controlliamo se è un'intestazione di menu o una pietanza inclusa in un menu
-            boolean isMenuHeader = "Menu".equals(tipo) && noteElemento.equals("Menu completo");
-            boolean isPietanzaFromMenu = "Pietanza".equals(tipo) && noteElemento.contains("Inclusa nel menu");
-
-            // Aggiungiamo solo i menu completi e le pietanze singole (non quelle incluse
-            // nei menu)
-            if (isMenuHeader) {
-                Map<String, Object> elementoMenu = new HashMap<>();
-                elementoMenu.put("id", id);
-                elementoMenu.put("isMenu", true);
-                elementoMenu.put("quantita", quantita);
-                elementoMenu.put("note", noteElemento);
-                elementiOrdine.add(elementoMenu);
-            } else if ("Pietanza".equals(tipo) && !isPietanzaFromMenu) {
-                Map<String, Object> elementoPietanza = new HashMap<>();
-                elementoPietanza.put("id", id);
-                elementoPietanza.put("isMenu", false);
-                elementoPietanza.put("quantita", quantita);
-                elementoPietanza.put("note", noteElemento);
-                elementiOrdine.add(elementoPietanza);
-            }
-        }
-
         try {
-            Controller controller = Controller.getInstance();
-            boolean success = controller.insertOrdine(idTavolo, elementiOrdine, note);
+            // Ciclo su tutte le righe dell'ordine
+            for (int i = 0; i < ordineTableModel.getRowCount(); i++) {
+                int id = Integer.parseInt(ordineTableModel.getValueAt(i, 0).toString());
+                String tipo = ordineTableModel.getValueAt(i, 1).toString();
+                int quantita = Integer.parseInt(ordineTableModel.getValueAt(i, 3).toString());
+                String noteElemento = String.valueOf(ordineTableModel.getValueAt(i, 6));
 
-            if (success) {
-                // Mostro conferma e resetto l'ordine
-                JOptionPane.showMessageDialog(this,
-                        "Ordine inviato con successo",
-                        "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
+                // Controlliamo se è un'intestazione di menu o una pietanza inclusa in un menu
+                boolean isMenuHeader = "Menu".equals(tipo) && noteElemento.equals("Menu completo");
+                boolean isPietanzaFromMenu = "Pietanza".equals(tipo) && noteElemento.contains("Inclusa nel menu");
 
-                // Resetto l'ordine
-                ordineTableModel.setRowCount(0);
-
-                // Aggiorno la lista dei tavoli
-                caricaTavoli();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Si è verificato un errore durante l'invio dell'ordine",
-                        "Errore", JOptionPane.ERROR_MESSAGE);
+                // Aggiungiamo solo i menu completi e le pietanze singole (non quelle incluse nei menu)
+                if (isMenuHeader) {
+                    // Aggiungi il menu fisso all'ordine
+                    Controller.aggiungiMenuFisso(currentOrderId, id, quantita);
+                } else if ("Pietanza".equals(tipo) && !isPietanzaFromMenu) {
+                    // Aggiungi la pietanza all'ordine
+                    Controller.aggiungiPietanzaAllOrdine(currentOrderId, id, quantita);
+                }
             }
+
+            // Conferma l'ordine
+            Controller.ConfermaOrdine(currentOrderId, idTavolo);
+
+            // Mostro conferma
+            JOptionPane.showMessageDialog(this,
+                    "Ordine inviato con successo",
+                    "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
+
+            // Chiudi il form e torna alla home
+            this.dispose();
+            new FirstForm().setVisible(true);
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante l'invio dell'ordine: " + e.getMessage(),
@@ -1114,9 +1095,10 @@ public class CameriereForm extends JFrame {
             // Imposta il tavolo corrente e numero di persone
             currentTableId = idTavolo;
             currentPersons = numeroCoperti;
-            // Il metodo CreaOrdine richiede (idOrdine, num_persone, id_tavolo, stato)
-            // Attenzione: id_tavolo deve essere l'ID del tavolo selezionato, non 0
-            Controller.CreaOrdine(0, numeroCoperti, idTavolo, "in_attesa");
+            // Il metodo CreaOrdine richiede (num_persone, id_tavolo, stato)
+            EntityOrdine ordine = Controller.CreaOrdine(numeroCoperti, idTavolo, "in_attesa");
+            // Salva l'ID dell'ordine
+            currentOrderId = ordine.getIdOrdine();
             
             // Aggiorna le etichette nell'interfaccia
             aggiornaInfoOrdine();

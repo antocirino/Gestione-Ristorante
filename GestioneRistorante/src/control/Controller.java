@@ -210,21 +210,21 @@ public class Controller {
         return result;
     }
 
-    public static EntityOrdine CreaOrdine(int idOrdine, int num_persone, int id_tavolo, String stato){
+    public static EntityOrdine CreaOrdine(int num_persone, int id_tavolo, String stato){
         EntityOrdine ordine = new EntityOrdine();
-        ordine = ordine.creaOrdine(idOrdine, num_persone, id_tavolo, stato);
+        ordine = ordine.creaOrdine(id_tavolo, num_persone, 1, stato);
         EntityTavolo tavolo = new EntityTavolo(id_tavolo);
         String statoTavolo = "occupato"; // Imposta lo stato del tavolo a "occupato"
         tavolo.setStato(statoTavolo);
+        // Salva lo stato del tavolo nel database
+        tavolo.aggiornaStato(statoTavolo);
 
         return ordine;
     }
 
     public static void ConfermaOrdine(int idOrdine, int idTavolo){
         EntityOrdine ordine = new EntityOrdine(idOrdine);
-        ordine.aggiornaStato("in attesa");
-
-
+        ordine.aggiornaStato("in_attesa");
     }
 
     public static ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine(int idOrdine){
