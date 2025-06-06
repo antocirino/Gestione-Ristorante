@@ -127,7 +127,8 @@ CREATE TABLE IF NOT EXISTS `dettaglio_ordine_pietanza` (
   `id_menu` INT DEFAULT NULL,
   PRIMARY KEY (`id_dettaglio`),
   FOREIGN KEY (`id_ordine`) REFERENCES `ordine` (`id_ordine`) ON DELETE CASCADE,
-  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`)
+  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`),
+  UNIQUE KEY `unique_ordine_pietanza` (`id_ordine`, `id_pietanza`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Crea indice per migliorare le ricerche per menu
