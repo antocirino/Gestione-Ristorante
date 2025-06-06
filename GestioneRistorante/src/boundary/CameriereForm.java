@@ -42,7 +42,6 @@ public class CameriereForm extends JFrame {
     private JButton aggiungiPietanzaButton;
     private JButton aggiungiMenuButton;
     private JButton inviaOrdineButton;
-    private JButton eliminaButton;
     private JButton indietroButton;
     private JTextField noteField;
     private JSpinner quantitaSpinner;
@@ -140,6 +139,8 @@ public class CameriereForm extends JFrame {
                         CameriereForm.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
             }
         });
+        // Disabilita inizialmente il pulsante indietro
+        indietroButton.setEnabled(false);
 
         JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         leftButtonPanel.setBackground(new Color(245, 247, 250));
@@ -411,20 +412,11 @@ public class CameriereForm extends JFrame {
         JPanel ordineButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         ordineButtonPanel.setBackground(lightColor);
 
-        eliminaButton = createStyledButton("Elimina selezionato", dangerColor);
         inviaOrdineButton = createStyledButton("Invia Ordine", primaryColor);
 
-        // Aggiungi icone SVG ai pulsanti
-        ImageIcon eliminaIcon = loadSVGIcon("delete.svg", 20, 20);
+        // Aggiungi icona SVG al pulsante
         ImageIcon inviaIcon = loadSVGIcon("send.svg", 20, 20);
-        eliminaButton.setIcon(eliminaIcon);
         inviaOrdineButton.setIcon(inviaIcon);
-
-        eliminaButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                eliminaElementoOrdine();
-            }
-        });
 
         inviaOrdineButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -432,7 +424,6 @@ public class CameriereForm extends JFrame {
             }
         });
 
-        ordineButtonPanel.add(eliminaButton);
         ordineButtonPanel.add(inviaOrdineButton);
 
         panel.add(tavoloPanel, BorderLayout.NORTH);
@@ -672,9 +663,8 @@ public class CameriereForm extends JFrame {
                 }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Errore durante il caricamento dei tavoli: " + e.getMessage(),
-                    "Errore Database", JOptionPane.ERROR_MESSAGE);
+            // Ignora o gestisci l'errore in modo silenzioso, o loggalo
+            System.err.println("Errore durante il caricamento dei tavoli: " + e.getMessage());
         }
     }
 
@@ -876,21 +866,6 @@ public class CameriereForm extends JFrame {
     }
 
     /**
-     * Elimina un elemento dall'ordine
-     */
-    private void eliminaElementoOrdine() {
-        int selectedRow = ordineTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Seleziona un elemento da eliminare",
-                    "Attenzione", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        ordineTableModel.removeRow(selectedRow);
-    }
-
-    /**
      * Invia l'ordine al database
      */
     private void inviaOrdine() {
@@ -941,6 +916,9 @@ public class CameriereForm extends JFrame {
                     "Ordine inviato con successo",
                     "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
 
+            // Riabilita il pulsante indietro
+            indietroButton.setEnabled(true);
+            
             // Chiudi il form e torna alla home
             this.dispose();
             new FirstForm().setVisible(true);
@@ -1066,9 +1044,8 @@ public class CameriereForm extends JFrame {
             }
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                "Errore durante il caricamento dei tavoli: " + e.getMessage(),
-                "Errore Database", JOptionPane.ERROR_MESSAGE);
+            // Ignora o gestisci l'errore in modo silenzioso, o loggalo
+            System.err.println("Errore durante il caricamento dei tavoli liberi: " + e.getMessage());
         }
     }
     
@@ -1102,6 +1079,9 @@ public class CameriereForm extends JFrame {
             
             // Aggiorna le etichette nell'interfaccia
             aggiornaInfoOrdine();
+            
+            // Disabilita il pulsante indietro
+            indietroButton.setEnabled(false);
             
             // Imposta l'etichetta dell'ordine
             JOptionPane.showMessageDialog(this,
