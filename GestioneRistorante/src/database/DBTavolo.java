@@ -167,14 +167,14 @@ public class DBTavolo {
      * @param statoFiltro lo stato per cui filtrare ('libero' o 'occupato')
      * @return ArrayList di oggetti Tavolo che corrispondono al filtro
      */
-    public ArrayList<EntityTavolo> getTavoliPerStato(String statoFiltro) {
-        ArrayList<EntityTavolo> listaTavoli = new ArrayList<>();
+    public ArrayList<DBTavolo> getTavoliPerStato(String statoFiltro) {
+        ArrayList<DBTavolo> listaTavoli = new ArrayList<>();
         String query = "SELECT * FROM tavolo WHERE stato = '" + statoFiltro + "' ORDER BY numero";
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityTavolo tavolo = new EntityTavolo();
+                DBTavolo tavolo = new DBTavolo();
                 tavolo.setIdTavolo(rs.getInt("id_tavolo"));
                 tavolo.setMaxPosti(rs.getInt("max_posti"));
                 tavolo.setStato(rs.getString("stato"));

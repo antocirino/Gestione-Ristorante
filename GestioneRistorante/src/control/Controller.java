@@ -101,6 +101,22 @@ public class Controller {
 
     }
 
+    public static ArrayList<DTOTavolo> getTavoliByStato(String stato) {
+
+        ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
+
+        dto_tavoli_liste = EntityTavolo.getTavoliByStato(stato);
+        System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
+        System.out.println("Tavoli: " + dto_tavoli_liste);
+
+
+        System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
+        System.out.println("Tavoli: " + dto_tavoli_liste);
+
+        return dto_tavoli_liste;
+
+    }
+
     ///// MENUFISSI////////////////////////////////////////////////////////////////////
     /**
      * Recuperare tutti i menu fissi dal database
