@@ -6,6 +6,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
@@ -419,14 +420,14 @@ public class CassiereForm extends JFrame {
     }
 
     /**
-     * Carica tutti i tavoli dal database con il loro stato attuale
+     * Carica tutti i tavoli dal database con stato = 'occupato'
      */
     private void caricaTavoli() {
         tavoliComboBox.removeAllItems();
-
+        String stato = "occupato";
         try {
 
-            List<DTOTavolo> tavoli = Controller.getAllTavoli();
+            ArrayList<DTOTavolo> tavoli = Controller.getTavoliByStato(stato);
 
             for (DTOTavolo tavolo : tavoli) {
                 int idTavolo = tavolo.getIdTavolo();
@@ -434,13 +435,10 @@ public class CassiereForm extends JFrame {
                 boolean occupato = tavolo.isOccupato();
                 String displayText = "";
 
-                if (!occupato) {
-                    displayText = " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🟢 LIBERO";
-                } else {
-                    displayText = " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🔴 OCCUPATO";
-                }
+                displayText = " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🔴 OCCUPATO";
 
-                tavoliComboBox.addItem(displayText);
+
+                tavoliComboBox.addItem(displayText); 
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -453,6 +451,7 @@ public class CassiereForm extends JFrame {
      * Calcola il conto per il tavolo selezionato
      */
     private void calcolaConto() {
+        
         if (tavoliComboBox.getSelectedItem() == null) {
             JOptionPane.showMessageDialog(this,
                     "Seleziona un tavolo",

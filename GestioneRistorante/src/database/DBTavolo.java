@@ -169,7 +169,8 @@ public class DBTavolo {
      */
     public ArrayList<DBTavolo> getTavoliPerStato(String statoFiltro) {
         ArrayList<DBTavolo> listaTavoli = new ArrayList<>();
-        String query = "SELECT * FROM tavolo WHERE stato = '" + statoFiltro + "' ORDER BY numero";
+        String query = "SELECT * FROM tavolo WHERE stato = '" + statoFiltro + "' ORDER BY id_tavolo";
+        System.out.println(query); // Per debug
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
