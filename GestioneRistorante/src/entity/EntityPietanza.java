@@ -3,8 +3,13 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.html.parser.Entity;
+
 import DTO.DTOPietanza;
+import database.DBIngrediente;
 import database.DBPietanza;
+import database.DBRicetta;
+import database.DBRicettaIngrediente;
 
 /**
  * Classe che rappresenta una pietanza del menu
@@ -195,35 +200,25 @@ public class EntityPietanza {
      * 
      * @return true se la pietanza è disponibile, false altrimenti
      */
-    public boolean isDisponibilePerOrdine() {
-        // Primo controllo rapido basato sulla variabile disponibile
-        if (!this.disponibile) {
+    public boolean isDisponibilePerOrdine(int quantitaPietanze) {
+        EntityRicetta ricetta = EntityRicetta.getRicettaByPietanza(this.idPietanza);
+        if (ricetta == null)
             return false;
-        }
 
-        // Recupera la ricetta della pietanza
-        EntityRicetta ricetta = this.getRicetta();
-        if (ricetta == null) {
-            // Se non c'è una ricetta, consideriamo la pietanza disponibile
-            return true;
-        }
+        return ricetta.isRicettaEseguibile(quantitaPietanze);
+    }
 
-        // Controlla la disponibilità di tutti gli ingredienti necessari
-        List<EntityRicetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
-        for (EntityRicetta.IngredienteQuantita ing : ingredientiRicetta) {
-            int idIngrediente = ing.getIdIngrediente();
-            float quantitaNecessaria = ing.getQuantita();
-
-            EntityIngrediente ingrediente = new EntityIngrediente(idIngrediente);
-            if (!ingrediente.isDisponibile(quantitaNecessaria)) {
-                // Aggiorna lo stato della pietanza
-                this.disponibile = false;
-                this.aggiornaDisponibilita(false);
-                return false;
-            }
-        }
-
-        return true;
+    /**
+     * Prenota gli ingredienti necessari per preparare la pietanza
+     * 
+     * @param quantitaPietanze La quantità di pietanze da preparare
+     * @return true se la prenotazione è avvenuta con successo, false altrimenti
+     */
+    public boolean prenotaIngredienti(int quantitaPietanze) {
+        EntityRicetta ricetta = EntityRicetta.getRicettaByPietanza(this.idPietanza);
+        if (ricetta == null)
+            return false;
+        return ricetta.prenotaIngredienti(quantitaPietanze);
     }
 
     /**
@@ -232,6 +227,7 @@ public class EntityPietanza {
      * @param quantita La quantità di pietanze da preparare
      * @return true se la prenotazione è avvenuta con successo, false altrimenti
      */
+    /* 
     public boolean prenotaIngredienti(int quantita) {
         EntityRicetta ricetta = this.getRicetta();
         if (ricetta == null) {
@@ -264,7 +260,7 @@ public class EntityPietanza {
             return false;
         }
     }
-
+    */
     /**
      * Aggiorna lo stato di disponibilità della pietanza nel database
      * 

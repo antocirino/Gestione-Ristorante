@@ -4,8 +4,6 @@
 
 - in questo momento si può fare un ordine mettendo un  umero di persone maggiore della capienza del tavolo.
 - AGGIUNGRE CHE QUANDO SI PAGA, LO STATO DEL TAVOLO DIVENTI LIBERO
-- SEMBREREBBE CHE NON si possibile aggiungere più volte lo stesso menù all'ordine: da indivudare la causa.
-- veirfica disponibilita ingredienti e prenota
 - controlla script e eliman i non necessari
 - aggiorna query per agginugere pietanza all'ordine con onConflict do update
 

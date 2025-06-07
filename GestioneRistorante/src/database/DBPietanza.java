@@ -19,7 +19,6 @@ public class DBPietanza {
     private int idCategoria;
     private boolean disponibile;
     private String nomeCategoria; // Campo aggiuntivo per memorizzare il nome della categoria
-    private ArrayList<DBIngrediente> ingredienti;
     /**
      * Costruttore che carica una pietanza dal database tramite il suo ID
      * 
@@ -187,7 +186,6 @@ public class DBPietanza {
                         rs.getBoolean("disponibile"),
                         rs.getString("nome_categoria"));
 
-                pietanza.setIngredienti(this.getIngredientiDaPietanza());
                 listaPietanze.add(pietanza);
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -307,10 +305,6 @@ public class DBPietanza {
 
     public void setDisponibile(boolean disponibile) {
         this.disponibile = disponibile;
-    }
-
-    public void setIngredienti(ArrayList<DBIngrediente> array){
-        this.ingredienti = array;
     }
 
     public String getNomeCategoria() {

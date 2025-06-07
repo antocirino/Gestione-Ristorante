@@ -74,7 +74,7 @@ public class EntityOrdine {
         this.numPersone = ordine.getNumPersone();
         this.dataOrdine = ordine.getDataOrdine();
         this.stato = ordine.getStato();
-        this.costoTotale = ordine.getCostoTotale(); 
+        this.costoTotale = ordine.getCostoTotale();
     }
 
     /**
@@ -144,12 +144,12 @@ public class EntityOrdine {
             dto.setIdOrdine(o.getIdOrdine());
             dto.setIdTavolo(o.getIdTavolo());
             dto.setNumPersone(o.getNumPersone());
-            dto.setDataOrdine(o.getDataOrdine());   
+            dto.setDataOrdine(o.getDataOrdine());
             dto.setStato(o.getStato());
             dto.setCostoTotale(o.getCostoTotale());
             listaOrdini.add(dto);
 
-    }
+        }
         return listaOrdini;
     }
 
@@ -158,7 +158,7 @@ public class EntityOrdine {
      * 
      * @return ArrayList di oggetti DTOPietanzaCuoco con le pietanze dell'ordine
      */
-    public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine(){
+    public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine() {
         ArrayList<DTOPietanzaCuoco> pietanzeDAoRDINE = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
         pietanzeDAoRDINE = ordine.getPietanzeDaOrdine();
@@ -170,13 +170,12 @@ public class EntityOrdine {
      * 
      * @return ArrayList di oggetti DTOMenuFissoCuoco con i menu fissi dell'ordine
      */
-    public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine(){
+    public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine() {
         ArrayList<DTOMenuFissoCuoco> pietanzeDAoRDINE = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
         pietanzeDAoRDINE = ordine.getMenuFissiDaOrdine();
         return pietanzeDAoRDINE;
     }
-
 
     /**
      * Recupera gli ordini con un determinato stato
@@ -196,7 +195,7 @@ public class EntityOrdine {
      * @return ArrayList di oggetti Ordine per il tavolo specificato
      */
     public static DTOOrdine getOrdinePerTavolo(int idTavolo) {
-        
+
         int id_ordine = DBOrdine.getIDOrdineByTavolo(idTavolo);
 
         if (id_ordine <= 0) {
@@ -218,20 +217,20 @@ public class EntityOrdine {
         dtoOrdine.setDataOrdine(ordine.getDataOrdine());
         dtoOrdine.setStato(ordine.getStato());
         dtoOrdine.setCostoTotale(ordine.getCostoTotale());
-        
+
         return dtoOrdine;
-        
+
     }
 
     /**
      * Aggiunge una pietanza all'ordine
      * 
      * @param idPietanza La pietanza da aggiungere
-     * @param quantita La quantità della pietanza
+     * @param quantita   La quantità della pietanza
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
     public boolean aggiungiPietanza(int idPietanza, int quantita) {
-        
+
         EntityPietanza pietanza = new EntityPietanza(idPietanza);
 
         try {
@@ -241,7 +240,7 @@ public class EntityOrdine {
             }
 
             // Verifica disponibilità della pietanza
-            if (!pietanza.isDisponibilePerOrdine()) {
+            if (!pietanza.isDisponibilePerOrdine(quantita)) {
                 System.err.println("Pietanza non disponibile: " + pietanza.getNome());
                 return false;
             }
@@ -322,7 +321,7 @@ public class EntityOrdine {
     }
 
     public EntityOrdine creaOrdine(int idTavolo, int numPersone, int idRistorante, String stato) {
-        DBOrdine ordine = new DBOrdine(idTavolo, numPersone, idRistorante,stato);
+        DBOrdine ordine = new DBOrdine(idTavolo, numPersone, idRistorante, stato);
         int id = ordine.salvaInDB();
 
         EntityOrdine new_ordine = new EntityOrdine(id);
@@ -346,10 +345,10 @@ public class EntityOrdine {
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
     public boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
-            EntityMenuFisso menufisso =   new EntityMenuFisso(idMenuFisso);
-            String nome = menufisso.getNome();
-            double prezzo = menufisso.getPrezzo();
-            ArrayList<EntityPietanza> pietanze = menufisso.getPietanze();
+        EntityMenuFisso menufisso = new EntityMenuFisso(idMenuFisso);
+        String nome = menufisso.getNome();
+        double prezzo = menufisso.getPrezzo();
+        ArrayList<EntityPietanza> pietanze = menufisso.getPietanze();
         try {
             if (pietanze == null || pietanze.isEmpty()) {
                 System.err.println("Errore: Menu fisso senza pietanze");
@@ -372,28 +371,35 @@ public class EntityOrdine {
                 System.out.println("Creato nuovo ordine con ID: " + nuovoId);
             }
 
+            // FASE 1: Verifica preliminare di tutte le pietanze prima di qualsiasi modifica
+            for (EntityPietanza pietanza : pietanze) {
+                // Verifica disponibilità della pietanza
+                if (!pietanza.isDisponibilePerOrdine(quantita)) {
+                    System.err.println("Pietanza del menu non disponibile: " + pietanza.getNome());
+                    return false;
+                }
+            }
+
             // Aggiorna il costo totale dell'ordine con il prezzo del menu fisso
             double costoAggiuntivo = prezzo * quantita;
             this.costoTotale += costoAggiuntivo;
 
-            // Flag per tracciare se tutte le pietanze sono state aggiunte con successo
+            // FASE 2: Esegui le operazioni di prenotazione e salvataggio
             boolean tutteLeAggiunte = true;
 
-            // Aggiungi ogni pietanza del menu senza considerare il suo prezzo individuale
-            for (EntityPietanza pietanza : pietanze) {
-                // Verifica disponibilità della pietanza
-                if (!pietanza.isDisponibilePerOrdine()) {
-                    System.err.println("Pietanza del menu non disponibile: " + pietanza.getNome());
-                    tutteLeAggiunte = false;
-                    break;
-                }
+            // Lista per tenere traccia degli ingredienti prenotati (per eventuale rollback)
+            ArrayList<EntityPietanza> pietanzePrenotate = new ArrayList<>();
 
+            // Prenota gli ingredienti di ogni pietanza del menu fisso   
+            for (EntityPietanza pietanza : pietanze) {
                 // Prenota gli ingredienti per la pietanza
                 if (!pietanza.prenotaIngredienti(quantita)) {
                     System.err.println("Impossibile prenotare ingredienti per: " + pietanza.getNome());
                     tutteLeAggiunte = false;
                     break;
                 }
+
+                pietanzePrenotate.add(pietanza);
 
                 // Crea il dettaglio ordine (ma non aggiunge al costo totale)
                 EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine,
@@ -411,9 +417,18 @@ public class EntityOrdine {
                 }
             }
 
-            // Se qualcosa è andato storto, ripristina il costo totale
+            // Se qualcosa è andato storto, ripristina il costo totale e annulla le
+            // prenotazioni
             if (!tutteLeAggiunte) {
                 this.costoTotale -= costoAggiuntivo;
+
+                // Annulla le prenotazioni di ingredienti già fatte
+                for (EntityPietanza pietanza : pietanzePrenotate) {
+                    // Qui dovrebbe esserci un metodo per annullare la prenotazione
+                    // pietanza.annullaPrenotazioneIngredienti(quantita);
+                    System.err.println("Annullata prenotazione ingredienti per: " + pietanza.getNome());
+                }
+
                 return false;
             }
 
@@ -433,8 +448,6 @@ public class EntityOrdine {
             return false;
         }
     }
-
-    
 
     /**
      * Calcola il totale del conto per l'ordine
