@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Map;
 import control.Controller;
 
 // Importa la libreria SVG Salamander
@@ -433,7 +432,6 @@ public class CassiereForm extends JFrame {
             for (DTOTavolo tavolo : tavoli) {
                 int idTavolo = tavolo.getIdTavolo();
                 int maxPosti = tavolo.getMaxPosti();
-                boolean occupato = tavolo.isOccupato();
                 String displayText = "";
 
                 displayText = idTavolo + " - Tavolo " + " (" + maxPosti + " posti) - OCCUPATO";
@@ -515,14 +513,6 @@ public class CassiereForm extends JFrame {
         String[] parts = selectedItem.split(" - ");
         int idTavolo = Integer.parseInt(parts[0]);
 
-        // Verifica se il tavolo è libero
-        if (selectedItem.contains("LIBERO")) {
-            JOptionPane.showMessageDialog(this,
-                    "Il tavolo selezionato è libero. Non ci sono ordini da pagare.",
-                    "Attenzione", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         // Conferma del pagamento
         int conferma = JOptionPane.showConfirmDialog(this,
                 "Confermi il pagamento del conto?",
@@ -532,8 +522,7 @@ public class CassiereForm extends JFrame {
             return;
         }
 
-        Controller controller = Controller.getInstance();
-        boolean success = controller.registraPagamentoOrdine(idTavolo);
+        boolean success = Controller.registraPagamentoOrdine(idTavolo);
 
         if (success) {
             JOptionPane.showMessageDialog(this,

@@ -3,12 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.html.parser.Entity;
-
-import database.DBIngrediente;
 import database.DBRicetta;
-import database.DBRicettaIngrediente;
-import entity.EntityRicetta.IngredienteQuantita;
 
 /**
  * Classe che rappresenta una ricetta nel sistema di gestione ristorante

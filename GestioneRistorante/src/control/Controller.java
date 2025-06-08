@@ -268,6 +268,29 @@ public class Controller {
         ArrayList<DTOIngrediente> dto_ingredienti_liste = EntityIngrediente.getIngredientiEsauriti();
         return dto_ingredienti_liste;
     }
+
+    /////////////// GENERALI//////////////////////////////////////////////////////// 
+
+    public static boolean registraPagamentoOrdine(int idTavolo){
+        DTOOrdine dtoOrdine = EntityOrdine.getOrdinePerTavolo(idTavolo);
+        int idOrdine = dtoOrdine.getIdOrdine();
+
+        EntityOrdine ordine = new EntityOrdine(idOrdine);
+        String statoOrdine = "pagato";
+        
+        if(ordine.aggiornaStato(statoOrdine) < 0){
+            return false;
+        }
+
+        EntityTavolo tavolo = new EntityTavolo(idTavolo);
+        String statoTavolo = "libero"; // Imposta lo stato del tavolo a "libero"
+        if(tavolo.aggiornaStato(statoTavolo) < 0){
+            return false;
+        }
+        System.out.println("Pagamento registrato per l'ordine con ID: " + idOrdine + " e tavolo con ID: " + idTavolo + "aggiornato a 'pagato' e 'libero' rispettivamente.");
+        return true;
+
+    }
     /////////////// ACHTUNG/////////////////////////////////////////////////////
     /////////////// ANCORA DA
     /////////////// MODIFICARE/////////////////////////////////////////////////////
@@ -303,145 +326,6 @@ public class Controller {
             return result;
         } catch (SQLException e) {
             System.err.println("Errore durante il test della connessione al database: " + e.getMessage());
-            return false;
-        }
-    }
-
-
-    /**
-     * Inserisce un nuovo ordine nel database
-     * 
-     * @param idTavolo       ID del tavolo che ha effettuato l'ordine
-     * @param elementiOrdine Lista di elementi dell'ordine (può contenere pietanze o
-     *                       menu fissi)
-     * @param note           Note aggiuntive per l'ordine
-     * @return true se l'inserimento è avvenuto con successo, false altrimenti
-     */
-    public boolean insertOrdine(int idTavolo, List<Map<String, Object>> elementiOrdine, String note) {
-        try {
-            // Prima inserisco l'ordine
-            connection.setAutoCommit(false);
-
-            String queryOrdine = "INSERT INTO ordine (id_tavolo, stato, note, timestamp) VALUES (?, 'in attesa', ?, NOW())";
-            PreparedStatement pstmtOrdine = connection.prepareStatement(queryOrdine, Statement.RETURN_GENERATED_KEYS);
-            pstmtOrdine.setInt(1, idTavolo);
-            pstmtOrdine.setString(2, note);
-            pstmtOrdine.executeUpdate();
-
-            // Ottengo l'ID dell'ordine appena inserito
-            ResultSet rsOrdine = pstmtOrdine.getGeneratedKeys();
-            if (!rsOrdine.next()) {
-                connection.rollback();
-                return false;
-            }
-
-            int idOrdine = rsOrdine.getInt(1);
-
-            // Ora inserisco i dettagli dell'ordine
-            String queryPietanza = "INSERT INTO dettaglio_ordine (id_ordine, id_pietanza, quantita) VALUES (?, ?, ?)";
-            PreparedStatement pstmtPietanza = connection.prepareStatement(queryPietanza);
-
-            String queryMenu = "INSERT INTO dettaglio_menu_ordine (id_ordine, id_menu, quantita) VALUES (?, ?, ?)";
-            PreparedStatement pstmtMenu = connection.prepareStatement(queryMenu);
-
-            for (Map<String, Object> elemento : elementiOrdine) {
-                boolean isMenu = (Boolean) elemento.get("isMenu");
-                int id = (Integer) elemento.get("id");
-                int quantita = (Integer) elemento.get("quantita");
-
-                if (isMenu) {
-                    pstmtMenu.setInt(1, idOrdine);
-                    pstmtMenu.setInt(2, id);
-                    pstmtMenu.setInt(3, quantita);
-                    pstmtMenu.executeUpdate();
-                } else {
-                    pstmtPietanza.setInt(1, idOrdine);
-                    pstmtPietanza.setInt(2, id);
-                    pstmtPietanza.setInt(3, quantita);
-                    pstmtPietanza.executeUpdate();
-                }
-            }
-
-            // Aggiorno lo stato del tavolo a "occupato" se non lo è già
-            String queryTavolo = "UPDATE tavolo SET stato = 'occupato' WHERE id_tavolo = ? AND stato <> 'occupato'";
-            PreparedStatement pstmtTavolo = connection.prepareStatement(queryTavolo);
-            pstmtTavolo.setInt(1, idTavolo);
-            pstmtTavolo.executeUpdate();
-
-            connection.commit();
-            connection.setAutoCommit(true);
-
-            return true;
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                System.err.println("Errore nel rollback della transazione: " + ex.getMessage());
-            }
-
-            System.err.println("Errore nell'inserimento dell'ordine: " + e.getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Registra il pagamento di un ordine e libera il tavolo
-     * 
-     * @param idTavolo ID del tavolo che ha pagato
-     * @return true se il pagamento è stato registrato con successo, false
-     *         altrimenti
-     */
-    public boolean registraPagamentoOrdine(int idTavolo) {
-        try {
-            // Trova l'ordine da pagare
-            String queryTrovaOrdine = "SELECT id_ordine FROM ordine WHERE id_tavolo = ? AND stato = 'in_attesa' " +
-                    "ORDER BY data_ordine DESC LIMIT 1";
-            PreparedStatement stmtTrovaOrdine = connection.prepareStatement(queryTrovaOrdine);
-            stmtTrovaOrdine.setInt(1, idTavolo);
-            ResultSet rsTrovaOrdine = stmtTrovaOrdine.executeQuery();
-
-            if (!rsTrovaOrdine.next()) {
-                System.err.println("Nessun ordine in attesa da pagare per il tavolo " + idTavolo);
-                return false;
-            }
-
-            int idOrdine = rsTrovaOrdine.getInt("id_ordine");
-
-            connection.setAutoCommit(false);
-
-            // Aggiorna lo stato dell'ordine a pagato
-            String queryAggiornaOrdine = "UPDATE ordine SET stato = 'pagato' WHERE id_ordine = ?";
-            PreparedStatement stmtAggiornaOrdine = connection.prepareStatement(queryAggiornaOrdine);
-            stmtAggiornaOrdine.setInt(1, idOrdine);
-            stmtAggiornaOrdine.executeUpdate();
-
-            // Libera il tavolo
-            String queryTavolo = "UPDATE tavolo SET stato = 'libero' WHERE id_tavolo = ?";
-            PreparedStatement stmtTavolo = connection.prepareStatement(queryTavolo);
-            stmtTavolo.setInt(1, idTavolo);
-            stmtTavolo.executeUpdate();
-
-            connection.commit();
-
-            // Chiusura delle risorse
-            stmtTavolo.close();
-            stmtAggiornaOrdine.close();
-            rsTrovaOrdine.close();
-            stmtTrovaOrdine.close();
-
-            connection.setAutoCommit(true);
-
-            return true;
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                System.err.println("Errore nel rollback della transazione: " + ex.getMessage());
-            }
-
-            System.err.println("Errore nel registrare il pagamento: " + e.getMessage());
             return false;
         }
     }

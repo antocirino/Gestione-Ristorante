@@ -3,13 +3,8 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.html.parser.Entity;
-
 import DTO.DTOPietanza;
-import database.DBIngrediente;
 import database.DBPietanza;
-import database.DBRicetta;
-import database.DBRicettaIngrediente;
 
 /**
  * Classe che rappresenta una pietanza del menu
@@ -221,46 +216,6 @@ public class EntityPietanza {
         return ricetta.prenotaIngredienti(quantitaPietanze);
     }
 
-    /**
-     * Prenota gli ingredienti necessari per preparare la pietanza
-     * 
-     * @param quantita La quantità di pietanze da preparare
-     * @return true se la prenotazione è avvenuta con successo, false altrimenti
-     */
-    /* 
-    public boolean prenotaIngredienti(int quantita) {
-        EntityRicetta ricetta = this.getRicetta();
-        if (ricetta == null) {
-            // Se non c'è una ricetta, consideriamo l'operazione riuscita
-            return true;
-        }
-
-        // Lista per tenere traccia degli ingredienti già prenotati
-        List<Integer> ingredientiPrenotati = new ArrayList<>();
-
-        try {
-            // Prenota tutti gli ingredienti necessari
-            List<EntityRicetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
-            for (EntityRicetta.IngredienteQuantita ing : ingredientiRicetta) {
-                int idIngrediente = ing.getIdIngrediente();
-                float quantitaUnitaria = ing.getQuantita();
-                float quantitaTotale = quantitaUnitaria * quantita;
-
-                EntityIngrediente ingrediente = new EntityIngrediente(idIngrediente);
-                if (ingrediente.prenotaIngrediente(quantitaTotale)) {
-                    ingredientiPrenotati.add(idIngrediente);
-                } else {
-                    return false; // Se un ingrediente non è disponibile, ritorna false
-                }
-            }
-
-            return true;
-        } catch (Exception e) {
-            System.err.println("Errore nella prenotazione degli ingredienti: " + e.getMessage());
-            return false;
-        }
-    }
-    */
     /**
      * Aggiorna lo stato di disponibilità della pietanza nel database
      * 
