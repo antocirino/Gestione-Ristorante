@@ -266,6 +266,27 @@ public class DBPietanza {
         return ingredienti;
     }
 
+    /**
+     * Recupera l'ID di una pietanza dato il suo nome
+     * 
+     * @param nomePietanza Nome della pietanza
+     * @return ID della pietanza, o -1 se non trovata
+     */
+    public static int getIdByNome(String nomePietanza) {
+        String query = "SELECT id_pietanza FROM pietanza WHERE nome = '" + nomePietanza.replace("'", "''") + "'";
+        try {
+            ResultSet rs = DBConnection.selectQuery(query);
+            if (rs.next()) {
+                return rs.getInt("id_pietanza");
+            } else {
+                return -1; // Non trovato
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nel recupero id_pietanza per nome: " + e.getMessage());
+            return -1;
+        }
+    }
+
     // Getters e setters
     public int getIdPietanza() {
         return idPietanza;

@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS `pietanza` (
   `id_categoria` INT NOT NULL,
   `disponibile` BOOLEAN NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`id_pietanza`),
-  FOREIGN KEY (`id_categoria`) REFERENCES `categoria_pietanza` (`id_categoria`) ON DELETE CASCADE
+  FOREIGN KEY (`id_categoria`) REFERENCES `categoria_pietanza` (`id_categoria`) ON DELETE CASCADE,
+  UNIQUE KEY `unique_nome_pietanza` (`nome`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabella Menu (relazione diretta tra ristorante e pietanze)

@@ -3,6 +3,8 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import DTO.DTOIngredienteCuoco;
+import DTO.DTOIngredientiRicettaPietanza;
 import DTO.DTOPietanza;
 import database.DBPietanza;
 
@@ -242,6 +244,43 @@ public class EntityPietanza {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Fornisce tutte le informazioni necessarie per la preparazione della pietanza
+     * 
+     * @return DTOIngredientiRicettaPietanza
+     */
+    public DTOIngredientiRicettaPietanza getIngredientiRicettaPietanza() {
+        EntityRicetta ricetta = EntityRicetta.getRicettaByPietanza(this.idPietanza);
+        DTOIngredientiRicettaPietanza dto = new DTOIngredientiRicettaPietanza();
+
+        if (ricetta != null) {
+            dto.setNome_ricetta(ricetta.getNome());
+            dto.setNome_pietanza(this.nome);
+            dto.setDescrizione(ricetta.getDescrizione());
+            dto.setTempoPreparazione(ricetta.getTempoPreparazione());
+            dto.setIstruzioni(ricetta.getIstruzioni());
+
+            ArrayList<DTOIngredienteCuoco> listaIngredienti = new ArrayList<>();
+            ArrayList<EntityRicettaIngrediente> ingredientiRicetta = EntityRicettaIngrediente
+                    .getIngredientiPerRicetta(ricetta.getIdRicetta());
+
+            for (EntityRicettaIngrediente eri : ingredientiRicetta) {
+                EntityIngrediente ingr = new EntityIngrediente(eri.getIdIngrediente());
+                DTO.DTOIngredienteCuoco dtoIngr = new DTO.DTOIngredienteCuoco(
+                        ingr.getNome(),
+                        eri.getQuantita(),
+                        ingr.getUnitaMisura());
+                listaIngredienti.add(dtoIngr);
+            }
+            dto.setIngredienti(listaIngredienti);
+        }
+        return dto;
+    }
+
+    public static int getIdPietanzaByNome(String nomePietanza) {
+        return DBPietanza.getIdByNome(nomePietanza);
     }
 
     @Override
