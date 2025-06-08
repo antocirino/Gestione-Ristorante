@@ -65,8 +65,6 @@ public class CameriereForm extends JFrame {
     private Map<Integer, Double> prezziMenu = new HashMap<>();
     private Map<Integer, String> nomiPietanze = new HashMap<>();
     private Map<Integer, String> nomiMenu = new HashMap<>();
-    private JButton annullaOrdineButton;
-    private JLabel infoOrdineLabel;
     private JComboBox<String> tavoliLiberiComboBox;
     private JSpinner copertiSpinner;
 
@@ -1076,12 +1074,41 @@ public class CameriereForm extends JFrame {
             return;
         }
 
-        // Ottiene l'ID del tavolo dalla stringra selezionata
+        // Ottiene l'ID del tavolo dalla stringa selezionata
         String tavoloString = tavoliLiberiComboBox.getSelectedItem().toString();
         int idTavolo = Integer.parseInt(tavoloString.split(" - ")[0]);
 
         // Ottiene il numero di coperti
         int numeroCoperti = (Integer) copertiSpinner.getValue();
+
+        // Recupera il max posti del tavolo selezionato
+        int maxPosti = 0;
+        try {
+            // Supponendo che Controller.getAllTavoli() restituisca la lista dei tavoli
+            List<DTOTavolo> tavoli = Controller.getAllTavoli();
+            for (DTOTavolo tavolo : tavoli) {
+                if (tavolo.getIdTavolo() == idTavolo) {
+                    maxPosti = tavolo.getMaxPosti();
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Errore durante il controllo dei posti del tavolo: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verifica che il numero di coperti non superi il massimo consentito
+        if (numeroCoperti > maxPosti) {
+            JOptionPane.showMessageDialog(this,
+                    "Il numero di coperti (" + numeroCoperti
+                            + ") supera il massimo consentito per il tavolo selezionato (" + maxPosti + ").",
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            // Riapri il dialog per la selezione
+            SwingUtilities.invokeLater(() -> mostraDialogInizioOrdine());
+            return;
+        }
 
         try {
             // Chiamata al controller per creare un nuovo ordine
@@ -1279,18 +1306,19 @@ public class CameriereForm extends JFrame {
         }
     }
 
-    /*public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new CameriereForm().setVisible(true);
-            }
-        });
-    }
-        */
+    /*
+     * public static void main(String[] args) {
+     * try {
+     * UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+     * } catch (Exception e) {
+     * e.printStackTrace();
+     * }
+     * 
+     * SwingUtilities.invokeLater(new Runnable() {
+     * public void run() {
+     * new CameriereForm().setVisible(true);
+     * }
+     * });
+     * }
+     */
 }

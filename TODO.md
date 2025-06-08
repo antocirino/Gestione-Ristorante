@@ -2,15 +2,8 @@
 
 # Alta priorità
 
-- in questo momento si può fare un ordine mettendo un  umero di persone maggiore della capienza del tavolo.
-- AGGIUNGRE CHE QUANDO SI PAGA, LO STATO DEL TAVOLO DIVENTI LIBERO
 - controlla script e eliman i non necessari
 - aggiorna query per agginugere pietanza all'ordine con onConflict do update
-
-# Entity/DAO
-
-- Aggiustare classi EntityComposizoneMenu e DBComposizioneMenu perché hanno attributi differrenti?
-- Correzione costruttore EntityComposizioneMenu, deve lavorare sull'oggetto DBCompoisizioneMenu
 
 # DIAGRAMMI
 
