@@ -57,7 +57,17 @@ Su Windows, è necessario usare un server X11:
    - Abilita "Disable access control" (per permettere la connessione dal container)
    - Lascia VcXsrv in esecuzione durante tutto l'utilizzo dell'applicazione.
 
-3. **Avviare i container**
+3. **Avviare l'applicazione con lo script dedicato**
+
+   Per facilitare l'avvio dell'interfaccia grafica su Windows, utilizzare lo script apposito:
+
+   ```bat
+   avvia_gui_windows.bat
+   ```
+
+   Questo script verifica automaticamente che XLaunch sia in esecuzione e configura l'ambiente correttamente.
+
+4. **Avviare i container Docker** (se necessario)
 
    ```bash
    ./docker-utils.sh start
@@ -82,3 +92,25 @@ Se l'interfaccia grafica non viene visualizzata:
 3. **Provare l'esecuzione in modalità headless**
 
    Se non è possibile visualizzare l'interfaccia grafica, è possibile modificare l'applicazione per supportare una modalità headless (senza interfaccia grafica, ad esempio con API REST o interfaccia a riga di comando).
+
+## Risoluzione dei problemi Windows specifici
+
+Se l'interfaccia grafica non viene visualizzata su Windows:
+
+1. **Verificare le impostazioni di XLaunch**
+
+   - Assicurarsi che sia stato avviato con "Disable access control"
+   - Provare a riavviare XLaunch
+
+2. **Verificare il firewall di Windows**
+
+   - Assicurarsi che il firewall non blocchi le connessioni a VcXsrv
+   - Aggiungere VcXsrv alle eccezioni del firewall
+
+3. **Problemi di Java**
+
+   - Verificare che la variabile JAVA_HOME sia impostata correttamente
+   - Provare con `java -version` per assicurarsi che Java sia installato correttamente
+
+4. **Provare con il debug**
+   - Modificare lo script aggiungendo `-Dawt.debug=true` alle opzioni Java
