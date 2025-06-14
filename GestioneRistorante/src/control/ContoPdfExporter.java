@@ -312,9 +312,9 @@ public class ContoPdfExporter {
 
         // Il costo totale già include i coperti
         double totale = ordine.getCostoTotale();
-        double iva = totale * 0.0909; // IVA al 10% (10/110 = 0.0909)
 
         double totaleFinale = totale + totaleCoperto; // Aggiungi il costo del coperto al totale
+        double iva = totaleFinale * 0.0909; // IVA al 10% (10/110 = 0.0909)
 
         // Riga per il netto
         PdfPCell cellNettoLabel = new PdfPCell(new Phrase("Subtotale:", labelFont));
