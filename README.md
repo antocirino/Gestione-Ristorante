@@ -2,8 +2,8 @@
 
 > Progetto sviluppato per il corso di Ingegneria del Software.  
 > Linguaggio di programmazione utilizzato: **Java**  
-> Database: **Relazionale (MySQL)**
-> Architettura: **BCED (Boundary Control Entity Database)**
+> Database: **Relazionale (MySQL)**          
+> Architettura: **BCED (Boundary Control Entity Database)**      
 > Containerizzazione: **Docker**
 
 ---
