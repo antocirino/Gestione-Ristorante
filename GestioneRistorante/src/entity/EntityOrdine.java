@@ -262,36 +262,15 @@ public class EntityOrdine {
             this.costoTotale += costoAggiuntivo;
             System.out.println("Aggiornamento del costo totale a seguito dell'aggiunta: " + this.costoTotale);
 
-            // Controlla se la pietanza è già presente nell'ordine
-            ArrayList<EntityDettaglioOrdinePietanza> dettagliEsistenti = EntityDettaglioOrdinePietanza
-                    .getDettagliOrdine(this.idOrdine);
-            for (EntityDettaglioOrdinePietanza dop : dettagliEsistenti) {
-                if (dop.getIdPietanza() == pietanza.getIdPietanza()) {
-                    // Aggiorna la quantità invece di creare un nuovo dettaglio
-                    int nuovaQuantita = dop.getQuantita() + quantita;
-                    dop.setQuantita(nuovaQuantita);
-                    if (dop.scriviSuDB(dop.getIdDettaglio()) > 0) {
-                        // Aggiorna il costo totale nel database
-                        if (!aggiornaCostoTotale()) {
-                            System.err.println("Avviso: Impossibile aggiornare il costo totale nel database");
-                        }
-                        return pietanza.prenotaIngredienti(quantita);
-                    }
-                    // Ripristina il costo totale in caso di errore
-                    this.costoTotale -= costoAggiuntivo;
-                    return false;
-                }
-            }
-
             // Crea il dettaglio ordine
-            System.out.println("Creazione del dettaglio ordine per la pietanza: " + pietanza.getNome());
+            System.out.println("Creazione/Aggiornamento del dettaglio ordine per la pietanza: " + pietanza.getNome());
             EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine,
                     pietanza.getIdPietanza(),
                     quantita);
 
-            // Salva il dettaglio nel database
-            int dettaglioId = dettaglio.scriviSuDB(0);
-            System.out.println("Dettaglio ordine salvato con ID: " + dettaglioId);
+            // Salva il dettaglio nel database utilizzando ON CONFLICT
+            int dettaglioId = dettaglio.scriviSuDBConOnConflict();
+            System.out.println("Dettaglio ordine salvato/aggiornato con ID: " + dettaglioId);
             if (dettaglioId > 0) {
                 // Se il salvataggio è riuscito, prenota gli ingredienti e aggiorna il costo
                 // totale
@@ -390,7 +369,7 @@ public class EntityOrdine {
             // Lista per tenere traccia degli ingredienti prenotati (per eventuale rollback)
             ArrayList<EntityPietanza> pietanzePrenotate = new ArrayList<>();
 
-            // Prenota gli ingredienti di ogni pietanza del menu fisso   
+            // Prenota gli ingredienti di ogni pietanza del menu fisso
             for (EntityPietanza pietanza : pietanze) {
                 // Prenota gli ingredienti per la pietanza
                 if (!pietanza.prenotaIngredienti(quantita)) {
@@ -408,8 +387,8 @@ public class EntityOrdine {
                 dettaglio.setParteDiMenu(true); // Marca come parte di un menu fisso
                 dettaglio.setIdMenu(idMenuFisso); // Associa al menu fisso
 
-                // Salva il dettaglio nel database
-                if (dettaglio.scriviSuDB(0) <= 0) {
+                // Salva il dettaglio nel database usando ON CONFLICT
+                if (dettaglio.scriviSuDBConOnConflict() <= 0) {
                     System.err.println(
                             "Errore: Impossibile salvare il dettaglio per la pietanza del menu: " + pietanza.getNome());
                     tutteLeAggiunte = false;

@@ -1,9 +1,7 @@
 ### TODO
 
-- controlla script e elimina non necessari 
 - aggiorna query per agginugere pietanza all'ordine con onConflict do update
 - sistema scrit windows
-- controlla i .md 
 
 # DIAGRAMMI
 

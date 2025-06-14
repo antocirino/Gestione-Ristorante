@@ -100,6 +100,35 @@ public class EntityDettaglioOrdinePietanza {
     }
 
     /**
+     * Salva il dettaglio ordine nel database utilizzando INSERT ... ON CONFLICT
+     * Se esiste già un dettaglio con lo stesso id_ordine, id_pietanza,
+     * parte_di_menu e id_menu,
+     * aggiorna la quantità sommandola a quella esistente.
+     * 
+     * @return l'ID del dettaglio ordine se il salvataggio è avvenuto con successo,
+     *         -1 in caso di errore
+     */
+    public int scriviSuDBConOnConflict() {
+        DBDettaglioOrdinePietanza d = new DBDettaglioOrdinePietanza(); // DAO
+
+        d.setIdOrdine(this.idOrdine);
+        d.setIdPietanza(this.idPietanza);
+        d.setQuantita(this.quantita);
+        d.setParteDiMenu(this.parteDiMenu);
+        d.setIdMenu(this.idMenu);
+
+        int result = d.salvaConOnConflict();
+        System.out.println("DettaglioOrdinePietanza (ON CONFLICT): id_dettaglio " + result);
+
+        // Aggiorna l'ID se l'operazione è riuscita
+        if (result > 0) {
+            this.idDettaglio = result;
+        }
+
+        return result;
+    }
+
+    /**
      * Elimina un dettaglio ordine dal database
      * 
      * @return il numero di righe modificate o -1 in caso di errore

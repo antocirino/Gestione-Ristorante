@@ -215,6 +215,54 @@ public class DBDettaglioOrdinePietanza {
         return listaDettagli;
     }
 
+    /**
+     * Salva un dettaglio ordine nel database usando INSERT ... ON CONFLICT
+     * Se il dettaglio esiste già (stesso id_ordine, id_pietanza, parte_di_menu e
+     * id_menu),
+     * aggiorna solo la quantità sommandola a quella esistente.
+     * 
+     * @return l'ID del dettaglio ordine se il salvataggio è avvenuto con successo,
+     *         -1 altrimenti
+     */
+    public int salvaConOnConflict() {
+        try {
+            // Query che utilizza ON CONFLICT per gestire i duplicati
+            String query = "INSERT INTO dettaglio_ordine_pietanza (id_ordine, id_pietanza, quantita, parte_di_menu, id_menu) "
+                    + "VALUES (" + this.idOrdine + ", " + this.idPietanza + ", " + this.quantita + ", "
+                    + (this.parteDiMenu ? "TRUE" : "FALSE") + ", " + this.idMenu + ") "
+                    + "ON DUPLICATE KEY UPDATE quantita = quantita + VALUES(quantita)";
+
+            System.out.println("Query con ON DUPLICATE KEY: " + query);
+
+            // Eseguiamo la query e verifichiamo il risultato
+            int affectedRows = DBConnection.updateQuery(query);
+
+            if (affectedRows > 0) {
+                // Se la query ha avuto successo, recuperiamo l'ID del dettaglio
+                String selectQuery = "SELECT id_dettaglio FROM dettaglio_ordine_pietanza "
+                        + "WHERE id_ordine = " + this.idOrdine
+                        + " AND id_pietanza = " + this.idPietanza
+                        + " AND parte_di_menu = " + (this.parteDiMenu ? "TRUE" : "FALSE")
+                        + " AND id_menu = " + this.idMenu;
+
+                ResultSet rs = DBConnection.selectQuery(selectQuery);
+                if (rs.next()) {
+                    int dettaglioId = rs.getInt("id_dettaglio");
+                    System.out.println("Dettaglio ordine inserito/aggiornato con ID: " + dettaglioId);
+                    return dettaglioId;
+                }
+            }
+
+            System.err.println("Errore nell'inserimento o aggiornamento del dettaglio ordine");
+            return -1;
+
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nel salvataggio del dettaglio ordine con ON DUPLICATE KEY: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     // Getters e setters
     public int getIdDettaglio() {
         return idDettaglio;
