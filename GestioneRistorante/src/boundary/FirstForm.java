@@ -24,7 +24,7 @@ public class FirstForm extends JFrame {
     private Font smallFont = new Font("Segoe UI", Font.PLAIN, 14);
 
     public FirstForm() {
-        setTitle("Ristorante Manager 222");
+        setTitle("Ristorante Manager");
         setSize(900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
