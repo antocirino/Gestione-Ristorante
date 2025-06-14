@@ -312,7 +312,7 @@ public class ContoPdfExporter {
 
         // Il costo totale già include i coperti
         double totale = ordine.getCostoTotale();
-        double iva = totale * 0.10; // IVA al 10%
+        double iva = totale * (10 / 110); // IVA al 10%
 
         double totaleFinale = totale + totaleCoperto; // Aggiungi il costo del coperto al totale
 
