@@ -1,10 +1,10 @@
 # 🍽️ Sistema di Gestione per Ristorante
 
-> Progetto sviluppato per il corso di Ingegneria del Software.  
-> Linguaggio di programmazione utilizzato: **Java**  
-> Database: **Relazionale (MySQL)**          
-> Architettura: **BCED (Boundary Control Entity Database)**      
-> Containerizzazione: **Docker**
+> Progetto sviluppato per il corso di Ingegneria del Software.     
+> Linguaggio di programmazione utilizzato: **Java**   
+> Database: **Relazionale (MySQL)**    
+> Architettura: **BCED (Boundary Control Entity Database)**    
+> Containerizzazione: **Docker** 
 
 ---
 
@@ -37,11 +37,44 @@ PHPMYADMIN_PORT=8081
 
 Puoi modificare queste variabili nel file `.env` per personalizzare la configurazione.
 
+### Dettagli delle variabili d'ambiente
+
+#### Database MySQL
+
+- `MYSQL_ROOT_PASSWORD`: Password dell'utente root del database
+- `MYSQL_DATABASE`: Nome del database
+- `MYSQL_USER`: Nome dell'utente aggiuntivo (non utilizzato nella connessione attuale)
+- `MYSQL_PASSWORD`: Password dell'utente aggiuntivo
+
+#### Connessione Java al database
+
+- `DATABASE_URL`: URL JDBC per la connessione al database
+- `DATABASE_USER`: Utente per la connessione al database (impostato su root)
+- `DATABASE_PASSWORD`: Password per la connessione al database
+
+#### Porte
+
+- `PHPMYADMIN_PORT`: Porta per accedere a phpMyAdmin
+- `JAVA_APP_PORT`: Porta esposta per l'applicazione Java
+
 ---
+
+## 📋 Requisiti
+
+- **macOS**:
+
+  - Docker Desktop
+  - XQuartz (per l'interfaccia grafica)
+
+- **Windows**:
+  - Docker Desktop
+  - VcXsrv Windows X Server (per l'interfaccia grafica)
 
 ## 🚀 Come Eseguire il Progetto
 
-### Metodo 1: Avvio Rapido con Ricostruzione (consigliato per prima installazione) **_macOS_**
+### Metodo 1: Avvio Rapido con Ricostruzione (consigliato per prima installazione)
+
+#### Per macOS
 
 ```zsh
 chmod +x avvia-app-rebuild.sh
@@ -50,12 +83,12 @@ chmod +x avvia-app-rebuild.sh
 
 Questo script si occuperà di:
 
-- Configurare X11 per la visualizzazione dell'interfaccia grafica
+- Configurare X11 (XQuartz) per la visualizzazione dell'interfaccia grafica
 - Fermare eventuali container in esecuzione
 - Ricostruire i container (elimina anche i dati esistenti)
 - Mostrare i log dell'applicazione
 
-### Metodo 1: Avvio Rapido con Ricostruzione (consigliato per prima installazione) **_Windows_**
+#### Per Windows
 
 1. **Compila l'applicazione Java** (usa Git Bash o WSL):
 
@@ -82,14 +115,14 @@ chmod +x compile.sh
 ./compile.sh
 ```
 
-### 2. Configurazione X11 per l'interfaccia grafica (solo per macOS)
+#### 2. Configurazione X11 per l'interfaccia grafica (solo per macOS)
 
 ```zsh
 chmod +x setup-x11-macos.sh
 ./setup-x11-macos.sh
 ```
 
-### 3. Avvio dei container Docker
+#### 3. Avvio dei container Docker
 
 ```zsh
 chmod +x docker-utils.sh
@@ -103,6 +136,8 @@ Questo comando avvierà:
 - Un container phpMyAdmin per gestire facilmente il database
 
 ### 4. Gestione del sistema
+
+Utilizza lo script `docker-utils.sh` per gestire facilmente tutti gli aspetti del sistema:
 
 ```zsh
 # Per vedere i log dell'applicazione
@@ -135,7 +170,7 @@ Per gestire il database tramite interfaccia web, accedi a:
 Per rimuovere anche i volumi (dati del database):
 
 ```zsh
-./docker-utils.sh clean
+./docker-utils.sh rebuild
 ```
 
 ## ⚠️ Risoluzione dei problemi comuni
@@ -158,7 +193,9 @@ Su **_macOS_** se l'interfaccia grafica non appare ma i container si avviano cor
 ```zsh
 export DISPLAY=:0
 ```
+
 oppure
+
 ```zsh
 export DISPLAY=localhost:0
 ```
@@ -176,19 +213,25 @@ export DISPLAY=localhost:0
 ./avvia-app-rebuild.sh
 ```
 
-### 3. Per maggiori dettagli sulla configurazione della GUI
+### 3. Errori durante la compilazione
 
-Consulta il file di documentazione specifico:
+- Verifica di avere installato JDK 11 o superiore: `java -version`
+- Controlla eventuali errori nei sorgenti Java
+- Verifica che il driver MySQL sia stato scaricato correttamente in `GestioneRistorante/bin/jars/`
 
-```zsh
-less GUI-Docker.md
-```
+## 📚 Documentazione Aggiuntiva
 
-Per una guida rapida all'utilizzo:
+Per informazioni più dettagliate, consultare i seguenti documenti:
 
-```zsh
-less QUICKSTART.md
-```
+- **[GUI-Docker.md](GUI-Docker.md)**: Guida dettagliata per la configurazione dell'interfaccia grafica in Docker per macOS e Windows
+- **[TESTING.md](TESTING.md)**: Guide per testing e configurazione dell'ambiente di sviluppo, inclusa la configurazione di IntelliJ IDEA
+
+## 📁 Struttura del Progetto
+
+- **`/GestioneRistorante/src/`**: File sorgente Java
+- **`/GestioneRistorante/bin/`**: File compilati
+- **`/SQL/init/`**: Script di inizializzazione del database
+- **`/SQL/seeding/`**: Script per la generazione di dati di test
 
 ## 🧠 Autori
 

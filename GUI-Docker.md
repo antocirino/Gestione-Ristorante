@@ -80,7 +80,6 @@ Se l'interfaccia grafica non viene visualizzata:
 1. **Verificare che X11 sia configurato correttamente**
 
    - Su macOS: XQuartz in esecuzione e `xhost +` attivato
-   - Su Linux: `xhost +local:docker` eseguito
    - Su Windows: VcXsrv in esecuzione con "Disable access control" attivo
 
 2. **Controllare i log dell'applicazione**
