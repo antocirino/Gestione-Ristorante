@@ -1,23 +1,23 @@
 ### TODO
 
-# Alta priorità
-
-- controlla script e eliman i non necessari
+- controlla script e elimina non necessari 
 - aggiorna query per agginugere pietanza all'ordine con onConflict do update
+- sistema scrit windows
+- controlla i .md 
 
 # DIAGRAMMI
 
--Aggiustare diagramma BCED aggiungendo le classi ricavate dalla traduzione diagramma delle classi --> diagramma relazionale
+- Aggiustare diagramma BCED aggiungendo le classi ricavate dalla traduzione diagramma delle classi --> diagramma relazionale
+- rifare genera report (d sequenza) non usando Entity Report e Dao
+- rifare sequenza Raccolta Ordine separando in combined frames; non specificare le query; non c'è bisogno del controllo (es. esistenza del tavolo), viene fatto dall'input. SEMPLIFICARE DIAGRAMMI
+- Sviluppare fase di implentazione co i diagrammi (aggiorna quelli gia fatti con le nuove classi e metodi)
 
 # LATEX
 
 - Aggiungere spiegazione traduzione diagramma delle classi --> diagramma relazionale
 - Aggiungere diagrammi mancanti
-
-# SUPER ACHTUNG
-
-- Nel diagramma di sequenza di "GeneraReport" abbiamo messo l'EntityReport e ReportDAO" ma non nel database.
-
-# COMPILAZIONE
-
-- Correggere i file -bat per avvio su Windows
+- controllare scenari su documentazione=codice=diagrammi
+- aggiustare test in generaReport
+- inserire jar 
+- capitolo finale
+- teoria riempitiva
