@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.nio.file.Path;
 
 import CFG.DBConnection;
 import DTO.DTOCategoriaPietanza;
@@ -21,6 +22,7 @@ import entity.EntityIngrediente;
 import entity.EntityMenuFisso;
 import entity.EntityOrdine;
 import entity.EntityPietanza;
+import entity.EntityRistorante;
 import entity.EntityTavolo;
 
 /**
@@ -260,6 +262,35 @@ public class Controller {
         return dtoOrdine;
     }
 
+    /**
+     * Genera un file PDF con il conto per un tavolo specifico.
+     * Recupera le informazioni dell'ordine associato al tavolo e genera un PDF
+     * utilizzando la classe ContoPdfExporter.
+     * 
+     * @param idTavolo ID del tavolo per cui generare il conto
+     * @return Path del file PDF generato
+     * @throws Exception se si verifica un errore durante la generazione del PDF o
+     *                   se non esiste un ordine per il tavolo specificato
+     */
+    public static Path generaPdfConto(int idTavolo) throws Exception {
+        // Recupera l'ordine per il tavolo
+        DTOOrdine ordine = EntityOrdine.getOrdinePerTavolo(idTavolo);
+
+        if (ordine == null) {
+            throw new Exception("Nessun ordine trovato per il tavolo " + idTavolo);
+        }
+
+        // Genera il PDF del conto utilizzando ContoPdfExporter
+        try {
+            Path pdfPath = ContoPdfExporter.generaPdf(ordine);
+            System.out.println("PDF del conto generato con successo: " + pdfPath);
+            return pdfPath;
+        } catch (Exception e) {
+            System.err.println("Errore durante la generazione del PDF: " + e.getMessage());
+            throw new Exception("Impossibile generare il PDF del conto: " + e.getMessage());
+        }
+    }
+
     /////////////// INGREDIENTE////////////////////////////////////////////////////////
     public static ArrayList<DTOIngrediente> generaReport() {
         ArrayList<DTOIngrediente> dto_ingredienti_liste = EntityIngrediente.getIngredientiEsauriti();
@@ -303,7 +334,7 @@ public class Controller {
         if (id_pietanza == -1) {
             System.err.println("Pietanza non trovata: " + nome_pietanza);
             return null;
-        } 
+        }
         EntityPietanza pietanza = new EntityPietanza(id_pietanza);
         DTOIngredientiRicettaPietanza dto = pietanza.getIngredientiRicettaPietanza();
         if (dto == null) {
@@ -351,4 +382,14 @@ public class Controller {
         }
     }
 
+    /**
+     * Recupera il costo del coperto impostato per il ristorante
+     * 
+     * @return il costo del coperto
+     */
+    public static double getCostoCoperto() {
+        // Utilizziamo EntityRistorante per recuperare l'informazione
+        EntityRistorante ristorante = new EntityRistorante(1); // Assumiamo ID=1 per il ristorante predefinito
+        return ristorante.getCostoCoperto();
+    }
 }

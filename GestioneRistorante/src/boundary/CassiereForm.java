@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import control.Controller;
+import java.nio.file.Path;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
@@ -476,18 +477,32 @@ public class CassiereForm extends JFrame {
             return;
         }
 
-        // Mostra i dettagli dell'ordine 
+        // Calcoliamo il costo del coperto da aggiungere all'interfaccia (ma non al DB)
+        double costoCoperto = 2.0; // Valore predefinito
+        try {
+            // Recupera il costo del coperto utilizzando il Controller
+            costoCoperto = Controller.getCostoCoperto();
+        } catch (Exception e) {
+            System.err.println("Errore nel recupero del costo coperto: " + e.getMessage());
+        }
+
+        double totaleCoperto = costoCoperto * ordine.getNumPersone();
+        double totaleConCoperto = ordine.getCostoTotale() + totaleCoperto;
+
+        // Mostra i dettagli dell'ordine
         String dettagli = String.format(
-                "Ordine #%d\nData: %s\nNumero Persone: %d\nTotale: € %.2f",
+                "Ordine #%d\nData: %s\nNumero Persone: %d\nSubtotale: € %.2f\nCoperto: € %.2f x %d persone = € %.2f\nTotale: € %.2f",
                 ordine.getIdOrdine(),
                 ordine.getDataOrdine() != null ? ordine.getDataOrdine().toString() : "-",
                 ordine.getNumPersone(),
-                ordine.getCostoTotale());
+                ordine.getCostoTotale(),
+                costoCoperto, ordine.getNumPersone(), totaleCoperto,
+                totaleConCoperto);
         dettagliContoTextArea.setText(dettagli);
         dettagliContoTextArea.setForeground(textColor);
 
-        // Imposta il totale
-        totaleLabel.setText(String.format("TOTALE: € %.2f", ordine.getCostoTotale()));
+        // Imposta il totale (inclusi i coperti) solo per la visualizzazione
+        totaleLabel.setText(String.format("TOTALE: € %.2f", totaleConCoperto));
 
         // Imposta il numero di coperti
         coppertiField.setText(String.valueOf(ordine.getNumPersone()));
@@ -546,24 +561,35 @@ public class CassiereForm extends JFrame {
     }
 
     /**
-     * Stampa il conto del tavolo selezionato
+     * Stampa il conto del tavolo selezionato in formato PDF.
+     * Genera il file e mostra solo il percorso.
      */
     private void stampaContoTavolo() {
         if (tavoliComboBox.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Seleziona un tavolo",
+            JOptionPane.showMessageDialog(this, "Seleziona un tavolo",
                     "Attenzione", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String selectedItem = (String) tavoliComboBox.getSelectedItem();
-        // Estraiamo l'ID del tavolo dal formato "ID - Tavolo X (Y posti) - STATO"
-        String[] parts = selectedItem.split(" - ");
+        int idTavolo = Integer.parseInt(
+                ((String) tavoliComboBox.getSelectedItem()).split(" - ")[0]);
 
-        JOptionPane.showMessageDialog(this,
-                    "Conto stampato con successo!",
-                    "Informazione", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            Path pdf = Controller.generaPdfConto(idTavolo);
 
+            JOptionPane.showMessageDialog(this,
+                    "PDF generato con successo!\n" +
+                            "Nome file: " + pdf.getFileName() +
+                            "\n\nPuoi trovare il file nella cartella 'exported-pdf' " +
+                            "nella directory del progetto.",
+                    "Conto generato", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Errore durante la generazione del PDF: " + e.getMessage(),
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 
     /**

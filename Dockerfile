@@ -40,8 +40,15 @@ COPY ./GestioneRistorante/bin/resources ./bin/resources/
 COPY ./start-app.sh ./
 RUN chmod +x ./start-app.sh
 
+# Crea cartella per i PDF esportati
+RUN mkdir -p /app/exported-pdf && chmod 777 /app/exported-pdf
+
+# Imposta le variabili d'ambiente
+ENV HOME="/app"
+ENV USER="app-user"
+
 # Esporre la porta su cui funzionerà l'applicazione
 EXPOSE 8080
 
-# Comando per eseguire l'applicazione con X11 forwarding
+# Usa lo script start-app come entry point
 ENTRYPOINT ["./start-app.sh"]

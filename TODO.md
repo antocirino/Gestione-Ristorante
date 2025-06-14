@@ -1,6 +1,5 @@
 ### TODO
 
-- aggiorna query per agginugere pietanza all'ordine con onConflict do update
 - sistema scrit windows
 
 # DIAGRAMMI

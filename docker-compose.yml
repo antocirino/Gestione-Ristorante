@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: ristorante-app
+    user: "${UID:-501}:${GID:-20}"  # Imposta l'utente del container (default: 501:20 per macOS)
     ports:
       - "${JAVA_APP_PORT:-8090}:8080"
     depends_on:
@@ -20,9 +21,11 @@ services:
     volumes:
       - ./config:/app/config
       - /tmp/.X11-unix:/tmp/.X11-unix  # X11 forwarding per la GUI
+      - "./exported-pdf:/app/exported-pdf:rw"  # Cartella dedicata solo per i PDF
     extra_hosts:
       - "host.docker.internal:host-gateway"  # Per macOS, per X11
     privileged: true  # Necessario per alcune configurazioni X11
+    entrypoint: ["./start-app.sh"]
 
   # Servizio per il database MySQL
   db:

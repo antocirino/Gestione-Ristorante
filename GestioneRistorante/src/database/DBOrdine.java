@@ -25,7 +25,7 @@ public class DBOrdine {
     private Date dataOrdine;
     private String stato;
     private int idRistorante;
-    private double costoTotale; // Nuovo campo per tenere traccia del costo totale
+    private double costoTotale;
 
     /**
      * Costruttore che carica un ordine dal database tramite il suo ID

@@ -203,10 +203,12 @@ public class EntityOrdine {
             return null;
         }
         EntityOrdine ordine = new EntityOrdine(id_ordine);
-        double val = ordine.calcolaConto(true);
+        // Non calcoliamo il conto qui per evitare di aggiornare il DB
+        // Recuperiamo solo i dati esistenti dell'ordine
+        double val = ordine.getCostoTotale();
 
         if (val <= 0) {
-            System.err.println("Errore nel calcolo del conto per l'ordine con ID: " + id_ordine);
+            System.err.println("Errore nel recupero del costo per l'ordine con ID: " + id_ordine);
             return null;
         }
 

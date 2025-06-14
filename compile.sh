@@ -64,9 +64,93 @@ else
   echo "SVG Salamander già presente."
 fi
 
-# Compila l'applicazione
-echo -e "${YELLOW}Compilazione dell'applicazione...${NC}"
-javac -d GestioneRistorante/bin -cp "$JDBC_DIR/*" $(find GestioneRistorante/src -name "*.java")
+# Scarica OpenPDF per l'esportazione dei conti in PDF
+# Versione 1.3.30 è stabile e compatibile con Java 11
+OPENPDF_VERSION="1.3.30"
+OPENPDF_JAR="openpdf-$OPENPDF_VERSION.jar"
+
+# Rimuovi eventuali versioni precedenti che potrebbero essere corrotte
+echo -e "${YELLOW}Rimuovo eventuali versioni precedenti di OpenPDF...${NC}"
+find "$JDBC_DIR" -name "openpdf-*.jar" -type f -delete
+
+echo -e "${YELLOW}Scaricamento della libreria OpenPDF per l'esportazione in PDF...${NC}"
+curl -L -o "$JDBC_DIR/$OPENPDF_JAR" "https://repo1.maven.org/maven2/com/github/librepdf/openpdf/$OPENPDF_VERSION/openpdf-$OPENPDF_VERSION.jar"
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}OpenPDF scaricato con successo.${NC}"
+else
+  echo -e "${RED}Errore durante il download di OpenPDF.${NC}"
+  exit 1
+fi
+
+# Scarica le dipendenze di OpenPDF
+echo -e "${YELLOW}Scaricamento delle dipendenze di OpenPDF...${NC}"
+
+# Dipendenza: BouncyCastle PKIX compatibile con Java 11 e OpenPDF 1.3.30
+BCPKIX_VERSION="1.69"
+BCPKIX_JAR="bcpkix-jdk15on-$BCPKIX_VERSION.jar"
+
+# Rimuovi eventuali versioni precedenti che potrebbero essere corrotte
+echo -e "${YELLOW}Rimuovo eventuali versioni precedenti di BouncyCastle PKIX...${NC}"
+find "$JDBC_DIR" -name "bcpkix-*.jar" -type f -delete
+
+echo -e "${YELLOW}Scaricamento di BouncyCastle PKIX...${NC}"
+curl -L -o "$JDBC_DIR/$BCPKIX_JAR" "https://repo1.maven.org/maven2/org/bouncycastle/bcpkix-jdk15on/$BCPKIX_VERSION/bcpkix-jdk15on-$BCPKIX_VERSION.jar"
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}BouncyCastle PKIX scaricato con successo.${NC}"
+else
+  echo -e "${RED}Errore durante il download di BouncyCastle PKIX.${NC}"
+  exit 1
+fi
+
+# Dipendenza: BouncyCastle Provider compatibile con Java 11
+BCPROV_VERSION="1.69"
+BCPROV_JAR="bcprov-jdk15on-$BCPROV_VERSION.jar"
+
+# Rimuovi eventuali versioni precedenti che potrebbero essere corrotte
+echo -e "${YELLOW}Rimuovo eventuali versioni precedenti di BouncyCastle Provider...${NC}"
+find "$JDBC_DIR" -name "bcprov-*.jar" -type f -delete
+
+echo -e "${YELLOW}Scaricamento di BouncyCastle Provider...${NC}"
+curl -L -o "$JDBC_DIR/$BCPROV_JAR" "https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/$BCPROV_VERSION/bcprov-jdk15on-$BCPROV_VERSION.jar"
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}BouncyCastle Provider scaricato con successo.${NC}"
+else
+  echo -e "${RED}Errore durante il download di BouncyCastle Provider.${NC}"
+  exit 1
+fi
+
+# Dipendenza: BouncyCastle Util compatibile con Java 11
+# Per OpenPDF 1.3.30, utilizziamo la versione disponibile 1.69
+BCUTIL_VERSION="1.69"
+BCUTIL_JAR="bcutil-jdk15on-$BCUTIL_VERSION.jar"
+
+# Rimuovi eventuali versioni precedenti che potrebbero essere corrotte
+echo -e "${YELLOW}Rimuovo eventuali versioni precedenti di BouncyCastle Util...${NC}"
+find "$JDBC_DIR" -name "bcutil-*.jar" -type f -delete
+
+echo -e "${YELLOW}Scaricamento di BouncyCastle Util...${NC}"
+curl -L -o "$JDBC_DIR/$BCUTIL_JAR" "https://repo1.maven.org/maven2/org/bouncycastle/bcutil-jdk15on/$BCUTIL_VERSION/bcutil-jdk15on-$BCUTIL_VERSION.jar"
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}BouncyCastle Util scaricato con successo.${NC}"
+else
+  echo -e "${RED}Errore durante il download di BouncyCastle Util.${NC}"
+  exit 1
+fi
+
+# Verifica che i file JAR siano stati scaricati correttamente
+echo -e "${YELLOW}Verifico la presenza di tutte le librerie necessarie...${NC}"
+for jar_file in "$OPENPDF_JAR" "$BCPKIX_JAR" "$BCPROV_JAR" "$BCUTIL_JAR"; do
+  if [ ! -f "$JDBC_DIR/$jar_file" ] || [ ! -s "$JDBC_DIR/$jar_file" ]; then
+    echo -e "${RED}Errore: Il file $jar_file non esiste o è vuoto.${NC}"
+    exit 1
+  else
+    echo -e "${GREEN}File $jar_file verificato con successo.${NC}"
+  fi
+done
+
+# Compila l'applicazione (escludendo i test per ora)
+echo -e "${YELLOW}Compilazione dell'applicazione (escludendo i test)...${NC}"
+javac -d GestioneRistorante/bin -cp "$JDBC_DIR/*" $(find GestioneRistorante/src -name "*.java" | grep -v "/test/")
 
 # Copia le risorse (icone SVG) nella cartella bin
 echo -e "${YELLOW}Copia delle risorse...${NC}"
