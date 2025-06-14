@@ -89,6 +89,7 @@ public class EntityDettaglioOrdinePietanza {
         d.setIdMenu(this.idMenu);
 
         int result = d.salvaInDB(idDettaglio);
+        System.out.println("DettaglioOrdinePietanza: id_dettaglio " + result);
 
         // Aggiorna l'ID se si tratta di un nuovo dettaglio
         if (idDettaglio == 0 && result > 0) {

@@ -19,7 +19,6 @@ public class DBPietanza {
     private int idCategoria;
     private boolean disponibile;
     private String nomeCategoria; // Campo aggiuntivo per memorizzare il nome della categoria
-    private ArrayList<DBIngrediente> ingredienti;
     /**
      * Costruttore che carica una pietanza dal database tramite il suo ID
      * 
@@ -187,7 +186,6 @@ public class DBPietanza {
                         rs.getBoolean("disponibile"),
                         rs.getString("nome_categoria"));
 
-                pietanza.setIngredienti(this.getIngredientiDaPietanza());
                 listaPietanze.add(pietanza);
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -268,6 +266,27 @@ public class DBPietanza {
         return ingredienti;
     }
 
+    /**
+     * Recupera l'ID di una pietanza dato il suo nome
+     * 
+     * @param nomePietanza Nome della pietanza
+     * @return ID della pietanza, o -1 se non trovata
+     */
+    public static int getIdByNome(String nomePietanza) {
+        String query = "SELECT id_pietanza FROM pietanza WHERE nome = '" + nomePietanza.replace("'", "''") + "'";
+        try {
+            ResultSet rs = DBConnection.selectQuery(query);
+            if (rs.next()) {
+                return rs.getInt("id_pietanza");
+            } else {
+                return -1; // Non trovato
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Errore nel recupero id_pietanza per nome: " + e.getMessage());
+            return -1;
+        }
+    }
+
     // Getters e setters
     public int getIdPietanza() {
         return idPietanza;
@@ -307,10 +326,6 @@ public class DBPietanza {
 
     public void setDisponibile(boolean disponibile) {
         this.disponibile = disponibile;
-    }
-
-    public void setIngredienti(ArrayList<DBIngrediente> array){
-        this.ingredienti = array;
     }
 
     public String getNomeCategoria() {

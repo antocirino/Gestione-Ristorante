@@ -6,11 +6,10 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import CFG.DBConnection;
+import java.util.ArrayList;
+
+import DTO.DTOIngrediente;
+import control.Controller;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
@@ -156,7 +155,7 @@ public class DirettoreForm extends JFrame {
         ));
         graphPanel.setPreferredSize(new Dimension(800, 180));
         
-        JLabel graphTitle = new JLabel("📈 Visualizzazione Grafica");
+        JLabel graphTitle = new JLabel("Visualizzazione Grafica");
         graphTitle.setFont(headerFont);
         graphTitle.setForeground(textColor);
         graphTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -203,7 +202,10 @@ public class DirettoreForm extends JFrame {
         // Event listeners
         generaReportButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                generaReport();
+                System.out.println("Generazione report...");
+                ArrayList<DTOIngrediente> ingredienti = Controller.generaReport();
+                System.out.println(ingredienti);
+                stampaReport(ingredienti);
             }
         });
 
@@ -367,69 +369,46 @@ public class DirettoreForm extends JFrame {
     /**
      * Genera il report in base alle selezioni dell'utente
      */
-    private void generaReport() {
-        try {
-            Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt;
-            ResultSet rs;
+    private void stampaReport(ArrayList<DTOIngrediente> ingredienti) {
+        // Imposta il modello per il report degli ingredienti da ordinare
+        tableModel = new DefaultTableModel(
+                new String[] { "Ingrediente", "Quantità Disponibile", "Unità di Misura",
+                        "Soglia di Riordino", "Stato" },
+                0);
 
-            // Impostiamo il modello per il report degli ingredienti da ordinare
-            tableModel = new DefaultTableModel(
-                    new String[] { "Ingrediente", "Quantità Disponibile", "Unità di Misura",
-                            "Soglia di Riordino", "Stato" },
-                    0);
+        int ingredientiDaOrdinare = 0;
+        int totaleIngredienti = 0;
 
-            String queryIngredienti = "SELECT nome, quantita_disponibile, unita_misura, soglia_riordino " +
-                    "FROM ingrediente " +
-                    "ORDER BY (quantita_disponibile <= soglia_riordino) DESC, nome";
+        for (DTOIngrediente ingr : ingredienti) {
+            String stato = ingr.getQuantitaDisponibile() <= ingr.getSogliaRiordino()
+                    ? "DA ORDINARE"
+                    : "OK";
 
-            stmt = conn.prepareStatement(queryIngredienti);
-            rs = stmt.executeQuery();
-
-            int ingredientiDaOrdinare = 0;
-            int totaleIngredienti = 0;
-
-            while (rs.next()) {
-                String stato = rs.getDouble("quantita_disponibile") <= rs.getDouble("soglia_riordino")
-                        ? "DA ORDINARE"
-                        : "OK";
-
-                if (stato.contains("DA ORDINARE")) {
-                    ingredientiDaOrdinare++;
-                }
-                totaleIngredienti++;
-
-                tableModel.addRow(new Object[] {
-                        rs.getString("nome"),
-                        rs.getDouble("quantita_disponibile"),
-                        rs.getString("unita_misura"),
-                        rs.getDouble("soglia_riordino"),
-                        stato
-                });
+            if ("DA ORDINARE".equals(stato)) {
+                ingredientiDaOrdinare++;
             }
+            totaleIngredienti++;
 
-            // Aggiorno la tabella con il nuovo modello
-            reportTable.setModel(tableModel);
-
-            // Aggiorno il pannello grafico con statistiche
-            updateGraphPanel(ingredientiDaOrdinare, totaleIngredienti);
-
-            // Mostro un messaggio di successo
-            String message = String.format(
-                "Report generato con successo!");
-
-            JOptionPane.showMessageDialog(this,
-                    message,
-                    "Report Completato", JOptionPane.INFORMATION_MESSAGE);
-
-            rs.close();
-            stmt.close();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "❌ Errore durante la generazione del report:\n" + e.getMessage(),
-                    "Errore Database", JOptionPane.ERROR_MESSAGE);
+            tableModel.addRow(new Object[] {
+                    ingr.getNome(),
+                    ingr.getQuantitaDisponibile(),
+                    ingr.getUnitaMisura(),
+                    ingr.getSogliaRiordino(),
+                    stato
+            });
         }
+
+        // Aggiorna la tabella con il nuovo modello
+        reportTable.setModel(tableModel);
+
+        // Aggiorna il pannello grafico con statistiche
+        updateGraphPanel(ingredientiDaOrdinare, totaleIngredienti);
+
+        // Mostra un messaggio di successo
+        String message = String.format("Report generato con successo!");
+        JOptionPane.showMessageDialog(this,
+                message,
+                "Report Completato", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**

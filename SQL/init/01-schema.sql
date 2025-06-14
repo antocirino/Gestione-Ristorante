@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS `pietanza` (
   `id_categoria` INT NOT NULL,
   `disponibile` BOOLEAN NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`id_pietanza`),
-  FOREIGN KEY (`id_categoria`) REFERENCES `categoria_pietanza` (`id_categoria`) ON DELETE CASCADE
+  FOREIGN KEY (`id_categoria`) REFERENCES `categoria_pietanza` (`id_categoria`) ON DELETE CASCADE,
+  UNIQUE KEY `unique_nome_pietanza` (`nome`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabella Menu (relazione diretta tra ristorante e pietanze)
@@ -127,8 +128,8 @@ CREATE TABLE IF NOT EXISTS `dettaglio_ordine_pietanza` (
   `id_menu` INT DEFAULT NULL,
   PRIMARY KEY (`id_dettaglio`),
   FOREIGN KEY (`id_ordine`) REFERENCES `ordine` (`id_ordine`) ON DELETE CASCADE,
-  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`),
+  UNIQUE KEY `unique_ordine_pietanza` (`id_dettaglio`,`id_ordine`, `id_pietanza`, `id_menu`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Crea indice per migliorare le ricerche per menu
 CREATE INDEX `idx_menu_pietanze` ON `dettaglio_ordine_pietanza` (`id_menu`);

@@ -2,13 +2,8 @@
 
 # Alta priorità
 
-- veirfica disponibilita ingredienti e prenota
 - controlla script e eliman i non necessari
-
-# Entity/DAO
-
-- Aggiustare classi EntityComposizoneMenu e DBComposizioneMenu perché hanno attributi differrenti?
-- Correzione costruttore EntityComposizioneMenu, deve lavorare sull'oggetto DBCompoisizioneMenu
+- aggiorna query per agginugere pietanza all'ordine con onConflict do update
 
 # DIAGRAMMI
 

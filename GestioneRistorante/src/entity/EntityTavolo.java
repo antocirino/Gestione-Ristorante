@@ -96,6 +96,25 @@ public class EntityTavolo {
 
         return listaTavoli;
     }
+
+    public static ArrayList<DTOTavolo> getTavoliByStato(String stato) {
+        DBTavolo dbTavolo = new DBTavolo();
+        ArrayList<DBTavolo> listaDBTavoli = dbTavolo.getTavoliPerStato(stato);
+        
+        ArrayList<DTOTavolo> listaTavoli = new ArrayList<>();
+
+        for (DBTavolo db : listaDBTavoli) {
+            DTOTavolo tavolo = new DTOTavolo(
+                    db.getIdTavolo(),
+                    db.getMaxPosti(),
+                    db.getStato()
+            );
+            listaTavoli.add(tavolo);
+        }
+        return listaTavoli;
+    }
+
+
     // Getters e setters
     public int getIdTavolo() {
         return idTavolo;

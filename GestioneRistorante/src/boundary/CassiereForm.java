@@ -6,14 +6,14 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 import control.Controller;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGUniverse;
 
+import DTO.DTOOrdine;
 import DTO.DTOTavolo;
 
 /**
@@ -31,13 +31,13 @@ public class CassiereForm extends JFrame {
     private JButton indietroButton;
 
     // Colori e font moderni - design system consistente
-    private Color primaryColor = new Color(41, 128, 185);     // Blu principale
-    private Color accentColor = new Color(52, 152, 219);      // Blu accent
-    private Color textColor = new Color(44, 62, 80);          // Grigio scuro
-    private Color lightColor = new Color(236, 240, 241);      // Grigio chiaro
-    private Color successColor = new Color(39, 174, 96);      // Verde
-    private Color warningColor = new Color(230, 126, 34);     // Arancione
-    private Color dangerColor = new Color(192, 57, 43);       // Rosso
+    private Color primaryColor = new Color(41, 128, 185); // Blu principale
+    private Color accentColor = new Color(52, 152, 219); // Blu accent
+    private Color textColor = new Color(44, 62, 80); // Grigio scuro
+    private Color lightColor = new Color(236, 240, 241); // Grigio chiaro
+    private Color successColor = new Color(39, 174, 96); // Verde
+    private Color warningColor = new Color(230, 126, 34); // Arancione
+    private Color dangerColor = new Color(192, 57, 43); // Rosso
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 26);
     private Font headerFont = new Font("Segoe UI", Font.BOLD, 18);
     private Font regularFont = new Font("Segoe UI", Font.PLAIN, 16);
@@ -57,21 +57,21 @@ public class CassiereForm extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(primaryColor);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));
-        
+
         JLabel titleLabel = new JLabel("GESTIONE CASSA");
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(titleFont);
-        
+
         // Aggiunge l'icona SVG al titolo
         ImageIcon svgIcon = loadSVGIcon("payment.svg", 32, 32);
         JLabel iconLabel = new JLabel(svgIcon);
         iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
-        
+
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         titlePanel.setBackground(primaryColor);
         titlePanel.add(iconLabel);
         titlePanel.add(titleLabel);
-        
+
         headerPanel.add(titlePanel, BorderLayout.WEST);
 
         // Pannello centrale con i controlli
@@ -83,25 +83,25 @@ public class CassiereForm extends JFrame {
         // Pannello per la selezione del tavolo
         JPanel selectionPanel = createModernPanel();
         selectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 15));
-        
+
         // Icona tavolo SVG
         ImageIcon tavoloIcon = loadSVGIcon("table.svg", 20, 20, textColor);
         JLabel tavoloIconLabel = new JLabel(tavoloIcon);
         tavoloIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-        
+
         JLabel tavoloLabel = new JLabel("Seleziona Tavolo:");
         tavoloLabel.setFont(boldFont);
         tavoloLabel.setForeground(textColor);
-        
+
         tavoliComboBox = new JComboBox<>();
         styleComboBox(tavoliComboBox);
         tavoliComboBox.setPreferredSize(new Dimension(300, 40));
-        
+
         JLabel coppertiLabel = new JLabel("Coperti:");
         coppertiLabel.setFont(boldFont);
         coppertiLabel.setForeground(textColor);
         coppertiLabel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
-        
+
         coppertiField = new JTextField(8);
         styleTextField(coppertiField);
 
@@ -119,25 +119,24 @@ public class CassiereForm extends JFrame {
         JPanel dettagliPanel = new JPanel(new BorderLayout());
         dettagliPanel.setBackground(Color.WHITE);
         dettagliPanel.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        ));
-        
+                new LineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+
         JLabel dettagliTitle = new JLabel("Dettagli Conto");
         dettagliTitle.setFont(headerFont);
         dettagliTitle.setForeground(textColor);
         dettagliTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
-        
+
         dettagliContoTextArea = new JTextArea(18, 60);
         dettagliContoTextArea.setEditable(false);
         dettagliContoTextArea.setFont(regularFont);
         dettagliContoTextArea.setBackground(new Color(248, 249, 250));
         dettagliContoTextArea.setForeground(textColor);
         dettagliContoTextArea.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        
+
         JScrollPane scrollPane = new JScrollPane(dettagliContoTextArea);
         styleScrollPane(scrollPane);
-        
+
         dettagliPanel.add(dettagliTitle, BorderLayout.NORTH);
         dettagliPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -145,15 +144,14 @@ public class CassiereForm extends JFrame {
         JPanel totalePanel = new JPanel(new BorderLayout());
         totalePanel.setBackground(Color.WHITE);
         totalePanel.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(successColor, 2),
-            BorderFactory.createEmptyBorder(20, 25, 20, 25)
-        ));
-        
+                new LineBorder(successColor, 2),
+                BorderFactory.createEmptyBorder(20, 25, 20, 25)));
+
         totaleLabel = new JLabel("TOTALE: € 0,00");
         totaleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         totaleLabel.setForeground(successColor);
         totaleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         totalePanel.add(totaleLabel, BorderLayout.CENTER);
 
         mainContentPanel.add(dettagliPanel, BorderLayout.CENTER);
@@ -216,7 +214,7 @@ public class CassiereForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Chiude la finestra generando un evento di chiusura
                 CassiereForm.this.dispatchEvent(new java.awt.event.WindowEvent(
-                    CassiereForm.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
+                        CassiereForm.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
             }
         });
     }
@@ -232,18 +230,17 @@ public class CassiereForm extends JFrame {
         button.setOpaque(true);
         button.setBorderPainted(true);
         button.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(backgroundColor.darker(), 2, true),
-            BorderFactory.createEmptyBorder(15, 25, 15, 25)
-        ));
+                new LineBorder(backgroundColor.darker(), 2, true),
+                BorderFactory.createEmptyBorder(15, 25, 15, 25)));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setPreferredSize(new Dimension(200, 50));
-        
+
         // Colori per stato normale e disabilitato
         final Color normalBackground = backgroundColor;
         final Color disabledBackground = createDisabledColor(backgroundColor);
         final Color normalBorder = backgroundColor.darker();
         final Color disabledBorder = createDisabledColor(backgroundColor.darker());
-        
+
         // Listener per gestire il cambio di stato enabled/disabled
         button.addPropertyChangeListener("enabled", e -> {
             boolean enabled = (Boolean) e.getNewValue();
@@ -251,23 +248,21 @@ public class CassiereForm extends JFrame {
                 // Stato normale
                 button.setBackground(normalBackground);
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(normalBorder, 2, true),
-                    BorderFactory.createEmptyBorder(15, 25, 15, 25)
-                ));
+                        new LineBorder(normalBorder, 2, true),
+                        BorderFactory.createEmptyBorder(15, 25, 15, 25)));
                 button.setForeground(Color.WHITE);
                 button.setCursor(new Cursor(Cursor.HAND_CURSOR));
             } else {
                 // Stato disabilitato con opacità ridotta
                 button.setBackground(disabledBackground);
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(disabledBorder, 2, true),
-                    BorderFactory.createEmptyBorder(15, 25, 15, 25)
-                ));
+                        new LineBorder(disabledBorder, 2, true),
+                        BorderFactory.createEmptyBorder(15, 25, 15, 25)));
                 button.setForeground(new Color(255, 255, 255, 120)); // Testo bianco semi-trasparente
                 button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-        
+
         // Effetti hover (solo se il pulsante è abilitato)
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -275,30 +270,28 @@ public class CassiereForm extends JFrame {
                 if (button.isEnabled()) {
                     button.setBackground(normalBackground.brighter());
                     button.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(normalBackground.darker().darker(), 2, true),
-                        BorderFactory.createEmptyBorder(15, 25, 15, 25)
-                    ));
+                            new LineBorder(normalBackground.darker().darker(), 2, true),
+                            BorderFactory.createEmptyBorder(15, 25, 15, 25)));
                 }
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 if (button.isEnabled()) {
                     button.setBackground(normalBackground);
                     button.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(normalBackground.darker(), 2, true),
-                        BorderFactory.createEmptyBorder(15, 25, 15, 25)
-                    ));
+                            new LineBorder(normalBackground.darker(), 2, true),
+                            BorderFactory.createEmptyBorder(15, 25, 15, 25)));
                 }
             }
-            
+
             @Override
             public void mousePressed(MouseEvent e) {
                 if (button.isEnabled()) {
                     button.setBackground(normalBackground.darker());
                 }
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (button.isEnabled()) {
@@ -310,7 +303,7 @@ public class CassiereForm extends JFrame {
                 }
             }
         });
-        
+
         return button;
     }
 
@@ -318,16 +311,16 @@ public class CassiereForm extends JFrame {
     private Color createDisabledColor(Color originalColor) {
         // Riduce la saturazione e aumenta la luminosità per un effetto "spento"
         float[] hsb = Color.RGBtoHSB(originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue(), null);
-        
+
         // Riduce saturazione del 60% e aumenta luminosità del 20%
         float newSaturation = hsb[1] * 0.4f;
         float newBrightness = Math.min(1.0f, hsb[2] + 0.2f);
-        
+
         Color desaturatedColor = Color.getHSBColor(hsb[0], newSaturation, newBrightness);
-        
+
         // Applica anche un po' di trasparenza (alpha channel)
-        return new Color(desaturatedColor.getRed(), desaturatedColor.getGreen(), 
-                        desaturatedColor.getBlue(), 150); // Alpha = 150 (circa 60% opacità)
+        return new Color(desaturatedColor.getRed(), desaturatedColor.getGreen(),
+                desaturatedColor.getBlue(), 150); // Alpha = 150 (circa 60% opacità)
     }
 
     private void styleComboBox(JComboBox<String> comboBox) {
@@ -335,23 +328,22 @@ public class CassiereForm extends JFrame {
         comboBox.setBackground(Color.WHITE);
         comboBox.setForeground(textColor);
         comboBox.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(149, 165, 166), 2, true),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-        
+                new LineBorder(new Color(149, 165, 166), 2, true),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)));
+
         // Migliora l'aspetto del dropdown
         comboBox.setOpaque(true);
-        
+
         // Personalizza il renderer
         comboBox.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value,
                     int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                
+
                 setFont(regularFont);
                 setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
-                
+
                 if (isSelected) {
                     setBackground(accentColor);
                     setForeground(Color.WHITE);
@@ -359,27 +351,25 @@ public class CassiereForm extends JFrame {
                     setBackground(Color.WHITE);
                     setForeground(textColor);
                 }
-                
+
                 return this;
             }
         });
-        
+
         // Aggiungi effetti hover
         comboBox.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 comboBox.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(accentColor, 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(accentColor, 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 comboBox.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(149, 165, 166), 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(new Color(149, 165, 166), 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
         });
     }
@@ -390,36 +380,32 @@ public class CassiereForm extends JFrame {
         textField.setForeground(textColor);
         textField.setPreferredSize(new Dimension(100, 40));
         textField.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(149, 165, 166), 2, true),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
+                new LineBorder(new Color(149, 165, 166), 2, true),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)));
         textField.setHorizontalAlignment(JTextField.CENTER);
-        
+
         // Aggiungi effetti focus
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
                 textField.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(accentColor, 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(accentColor, 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
-            
+
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
                 textField.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(new Color(149, 165, 166), 2, true),
-                    BorderFactory.createEmptyBorder(8, 12, 8, 12)
-                ));
+                        new LineBorder(new Color(149, 165, 166), 2, true),
+                        BorderFactory.createEmptyBorder(8, 12, 8, 12)));
             }
         });
     }
 
     private void styleScrollPane(JScrollPane scrollPane) {
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+                new LineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         scrollPane.getViewport().setBackground(Color.WHITE);
     }
 
@@ -427,34 +413,28 @@ public class CassiereForm extends JFrame {
         JPanel panel = new JPanel();
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        ));
+                new LineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)));
         return panel;
     }
 
     /**
-     * Carica tutti i tavoli dal database con il loro stato attuale
+     * Carica tutti i tavoli dal database con stato = 'occupato'
      */
     private void caricaTavoli() {
         tavoliComboBox.removeAllItems();
+        String stato = "occupato";
 
         try {
-            Controller controller = Controller.getInstance();
-            List<DTOTavolo> tavoli = controller.getAllTavoli();
+
+            ArrayList<DTOTavolo> tavoli = Controller.getTavoliByStato(stato);
 
             for (DTOTavolo tavolo : tavoli) {
                 int idTavolo = tavolo.getIdTavolo();
                 int maxPosti = tavolo.getMaxPosti();
-                boolean occupato = tavolo.isOccupato();
                 String displayText = "";
 
-                if (!occupato) {
-                    displayText =  " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🟢 LIBERO";
-                } else {
-                    displayText = " - Tavolo " + idTavolo + " (" + maxPosti + " posti) - 🔴 OCCUPATO";
-                }
-
+                displayText = idTavolo + " - Tavolo " + " (" + maxPosti + " posti) - OCCUPATO";
                 tavoliComboBox.addItem(displayText);
             }
         } catch (Exception e) {
@@ -465,7 +445,7 @@ public class CassiereForm extends JFrame {
     }
 
     /**
-     * Calcola il conto per il tavolo selezionato
+     * Calcola il conto del tavolo selezionato
      */
     private void calcolaConto() {
         if (tavoliComboBox.getSelectedItem() == null) {
@@ -484,38 +464,37 @@ public class CassiereForm extends JFrame {
         pulisciCampi();
         coppertiField.setEditable(false);
 
-        Controller controller = Controller.getInstance();
-        Map<String, Object> risultatoConto = controller.getContoTavolo(idTavolo);
+        DTOOrdine ordine = Controller.getOrdineByTavolo(idTavolo);
+        System.out.println("Ordine recuperato: " + ordine);
 
-        if (risultatoConto.containsKey("errore")) {
-            dettagliContoTextArea.setText((String) risultatoConto.get("errore"));
-            dettagliContoTextArea.setForeground(dangerColor);
-            return;
-        }
-
-        if ((Boolean) risultatoConto.get("success")) {
-            // Imposta i dettagli del conto
-            dettagliContoTextArea.setText((String) risultatoConto.get("dettagli"));
-            dettagliContoTextArea.setForeground(textColor);
-
-            // Imposta il totale
-            double totale = (Double) risultatoConto.get("totale");
-            totaleLabel.setText(String.format("TOTALE: € %.2f", totale));
-
-            // Imposta il numero di coperti
-            int numeroPersone = (Integer) risultatoConto.get("numeroPersone");
-            coppertiField.setText(String.valueOf(numeroPersone));
-
-            // Abilita i pulsanti
-            stampaContoButton.setEnabled(true);
-            pagaButton.setEnabled(true);
-        } else {
-            dettagliContoTextArea.setText("Si è verificato un errore nel calcolo del conto.");
+        if (ordine == null || ordine.getIdOrdine() == 0) {
+            dettagliContoTextArea.setText("Nessun ordine attivo per questo tavolo.");
             dettagliContoTextArea.setForeground(dangerColor);
             totaleLabel.setText("TOTALE: € 0,00");
             stampaContoButton.setEnabled(false);
             pagaButton.setEnabled(false);
+            return;
         }
+
+        // Mostra i dettagli dell'ordine 
+        String dettagli = String.format(
+                "Ordine #%d\nData: %s\nNumero Persone: %d\nTotale: € %.2f",
+                ordine.getIdOrdine(),
+                ordine.getDataOrdine() != null ? ordine.getDataOrdine().toString() : "-",
+                ordine.getNumPersone(),
+                ordine.getCostoTotale());
+        dettagliContoTextArea.setText(dettagli);
+        dettagliContoTextArea.setForeground(textColor);
+
+        // Imposta il totale
+        totaleLabel.setText(String.format("TOTALE: € %.2f", ordine.getCostoTotale()));
+
+        // Imposta il numero di coperti
+        coppertiField.setText(String.valueOf(ordine.getNumPersone()));
+
+        // Abilita i pulsanti
+        stampaContoButton.setEnabled(true);
+        pagaButton.setEnabled(true);
     }
 
     /**
@@ -534,14 +513,6 @@ public class CassiereForm extends JFrame {
         String[] parts = selectedItem.split(" - ");
         int idTavolo = Integer.parseInt(parts[0]);
 
-        // Verifica se il tavolo è libero
-        if (selectedItem.contains("LIBERO")) {
-            JOptionPane.showMessageDialog(this,
-                    "Il tavolo selezionato è libero. Non ci sono ordini da pagare.",
-                    "Attenzione", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         // Conferma del pagamento
         int conferma = JOptionPane.showConfirmDialog(this,
                 "Confermi il pagamento del conto?",
@@ -551,8 +522,7 @@ public class CassiereForm extends JFrame {
             return;
         }
 
-        Controller controller = Controller.getInstance();
-        boolean success = controller.registraPagamentoOrdine(idTavolo);
+        boolean success = Controller.registraPagamentoOrdine(idTavolo);
 
         if (success) {
             JOptionPane.showMessageDialog(this,
@@ -564,7 +534,7 @@ public class CassiereForm extends JFrame {
 
             // Pulisco i campi
             pulisciCampi();
-            
+
             // Disabilito i pulsanti
             stampaContoButton.setEnabled(false);
             pagaButton.setEnabled(false);
@@ -589,28 +559,11 @@ public class CassiereForm extends JFrame {
         String selectedItem = (String) tavoliComboBox.getSelectedItem();
         // Estraiamo l'ID del tavolo dal formato "ID - Tavolo X (Y posti) - STATO"
         String[] parts = selectedItem.split(" - ");
-        int idTavolo = Integer.parseInt(parts[0]);
 
-        // Verifica se il tavolo è libero
-        if (selectedItem.contains("LIBERO")) {
-            JOptionPane.showMessageDialog(this,
-                    "Il tavolo selezionato è libero. Non ci sono ordini da stampare.",
-                    "Attenzione", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Controller controller = Controller.getInstance();
-        boolean success = controller.stampaConto(idTavolo);
-
-        if (success) {
-            JOptionPane.showMessageDialog(this,
-                    "🖨️ Conto stampato con successo!",
+        JOptionPane.showMessageDialog(this,
+                    "Conto stampato con successo!",
                     "Informazione", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Impossibile stampare il conto. Nessun ordine attivo trovato.",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
-        }
+
     }
 
     /**
@@ -628,22 +581,22 @@ public class CassiereForm extends JFrame {
     private ImageIcon loadSVGIcon(String filename, int width, int height) {
         return loadSVGIcon(filename, width, height, Color.WHITE);
     }
-    
+
     // Metodo sovraccaricato per specificare il colore dell'icona
     private ImageIcon loadSVGIcon(String filename, int width, int height, Color color) {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
             String[] possiblePaths = {
-                "bin/resources/icons/" + filename,                    // Nel container/dopo compilazione
-                "resources/icons/" + filename,                       // Percorso relativo nel container
-                "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
-                "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
-                "src/resources/icons/" + filename                    // Durante sviluppo
+                    "bin/resources/icons/" + filename, // Nel container/dopo compilazione
+                    "resources/icons/" + filename, // Percorso relativo nel container
+                    "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
+                    "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
+                    "src/resources/icons/" + filename // Durante sviluppo
             };
-            
+
             java.io.File svgFile = null;
             String usedPath = null;
-            
+
             for (String path : possiblePaths) {
                 java.io.File testFile = new java.io.File(path);
                 if (testFile.exists()) {
@@ -653,7 +606,7 @@ public class CassiereForm extends JFrame {
                     break;
                 }
             }
-            
+
             // Se non trovato con percorsi diretti, prova con il class loader
             if (svgFile == null || !svgFile.exists()) {
                 try {
@@ -669,85 +622,85 @@ public class CassiereForm extends JFrame {
                     // Ignora e usa fallback
                 }
             }
-            
+
             if (svgFile == null || !svgFile.exists()) {
                 System.out.println("File SVG non trovato in nessuno dei percorsi: " + filename);
                 return createFallbackIcon(filename, width, height, color);
             }
-            
+
             SVGUniverse svgUniverse = new SVGUniverse();
             java.net.URI svgUri = svgFile.toURI();
             SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(svgUri.toURL()));
-            
+
             if (diagram == null) {
                 System.out.println("Impossibile caricare il diagramma SVG: " + filename);
                 return createFallbackIcon(filename, width, height, color);
             }
-            
+
             // Imposta dimensioni
             diagram.setIgnoringClipHeuristic(true);
-            
+
             // Renderizza SVG come BufferedImage con sfondo trasparente
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = image.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            
+
             // Pulisci lo sfondo
             g2.setComposite(AlphaComposite.Clear);
             g2.fillRect(0, 0, width, height);
             g2.setComposite(AlphaComposite.SrcOver);
-            
+
             // Imposta il colore dell'SVG
             g2.setColor(color);
-            
+
             // Scala e centra l'SVG
             java.awt.geom.Rectangle2D bounds = diagram.getViewRect();
             double scaleX = (double) width / bounds.getWidth();
             double scaleY = (double) height / bounds.getHeight();
             double scale = Math.min(scaleX, scaleY);
-            
+
             int scaledWidth = (int) (bounds.getWidth() * scale);
             int scaledHeight = (int) (bounds.getHeight() * scale);
             int x = (width - scaledWidth) / 2;
             int y = (height - scaledHeight) / 2;
-            
+
             g2.translate(x, y);
             g2.scale(scale, scale);
-            
+
             diagram.render(g2);
             g2.dispose();
-            
+
             System.out.println("Icona SVG caricata con successo: " + filename);
             return new ImageIcon(image);
-            
+
         } catch (Exception e) {
             System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
             e.printStackTrace();
             return createFallbackIcon(filename, width, height, color);
         }
     }
-    
+
     // Metodo per creare icone di fallback
     private ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
         // Imposta colore e font
         g2.setColor(color);
         g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, Math.min(width, height) - 4));
-        
+
         String icon = getUnicodeIcon(filename);
         FontMetrics fm = g2.getFontMetrics();
         int textWidth = fm.stringWidth(icon);
         int textHeight = fm.getHeight();
         int x = (width - textWidth) / 2;
         int y = (height - textHeight) / 2 + fm.getAscent();
-        
+
         g2.drawString(icon, x, y);
         g2.dispose();
-        
+
         return new ImageIcon(image);
     }
 
@@ -773,7 +726,7 @@ public class CassiereForm extends JFrame {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            
+
             // Migliora l'aspetto dei componenti Swing
             UIManager.put("Button.arc", 10);
             UIManager.put("Component.arc", 10);

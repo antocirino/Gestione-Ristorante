@@ -2,6 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 
+import DTO.DTOIngrediente;
 import database.DBIngrediente;
 
 /**
@@ -54,8 +55,19 @@ public class EntityIngrediente {
         return i;
     }
 
-    public static ArrayList<EntityIngrediente> getIngredientiEsauriti() {
-        return DBIngrediente.getIngredientiEsauriti();
+    public static ArrayList<DTOIngrediente> getIngredientiEsauriti() {
+        ArrayList<DTOIngrediente> listaIngredienti = new ArrayList<>();
+        ArrayList<DBIngrediente> lista_ingredienti = DBIngrediente.getIngredientiEsauriti();
+        for (DBIngrediente o : lista_ingredienti) {
+            DTOIngrediente dto = new DTOIngrediente();
+            dto.setIdIngrediente(o.getIdIngrediente());
+            dto.setNome(o.getNome());
+            dto.setQuantitaDisponibile(o.getQuantitaDisponibile());
+            dto.setUnitaMisura(o.getUnitaMisura());
+            dto.setSogliaRiordino(o.getSogliaRiordino());
+            listaIngredienti.add(dto);
+        }
+        return listaIngredienti;
     }
 
     /**

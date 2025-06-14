@@ -11,4 +11,5 @@ public class ControllerTest {
         var x = Controller.getCategoriePietanze();
         System.out.println("x: " + x);
     }
+
 }

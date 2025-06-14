@@ -3,6 +3,8 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import DTO.DTOIngredienteCuoco;
+import DTO.DTOIngredientiRicettaPietanza;
 import DTO.DTOPietanza;
 import database.DBPietanza;
 
@@ -195,74 +197,25 @@ public class EntityPietanza {
      * 
      * @return true se la pietanza è disponibile, false altrimenti
      */
-    public boolean isDisponibilePerOrdine() {
-        // Primo controllo rapido basato sulla variabile disponibile
-        if (!this.disponibile) {
+    public boolean isDisponibilePerOrdine(int quantitaPietanze) {
+        EntityRicetta ricetta = EntityRicetta.getRicettaByPietanza(this.idPietanza);
+        if (ricetta == null)
             return false;
-        }
 
-        // Recupera la ricetta della pietanza
-        EntityRicetta ricetta = this.getRicetta();
-        if (ricetta == null) {
-            // Se non c'è una ricetta, consideriamo la pietanza disponibile
-            return true;
-        }
-
-        // Controlla la disponibilità di tutti gli ingredienti necessari
-        List<EntityRicetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
-        for (EntityRicetta.IngredienteQuantita ing : ingredientiRicetta) {
-            int idIngrediente = ing.getIdIngrediente();
-            float quantitaNecessaria = ing.getQuantita();
-
-            EntityIngrediente ingrediente = new EntityIngrediente(idIngrediente);
-            if (!ingrediente.isDisponibile(quantitaNecessaria)) {
-                // Aggiorna lo stato della pietanza
-                this.disponibile = false;
-                this.aggiornaDisponibilita(false);
-                return false;
-            }
-        }
-
-        return true;
+        return ricetta.isRicettaEseguibile(quantitaPietanze);
     }
 
     /**
      * Prenota gli ingredienti necessari per preparare la pietanza
      * 
-     * @param quantita La quantità di pietanze da preparare
+     * @param quantitaPietanze La quantità di pietanze da preparare
      * @return true se la prenotazione è avvenuta con successo, false altrimenti
      */
-    public boolean prenotaIngredienti(int quantita) {
-        EntityRicetta ricetta = this.getRicetta();
-        if (ricetta == null) {
-            // Se non c'è una ricetta, consideriamo l'operazione riuscita
-            return true;
-        }
-
-        // Lista per tenere traccia degli ingredienti già prenotati
-        List<Integer> ingredientiPrenotati = new ArrayList<>();
-
-        try {
-            // Prenota tutti gli ingredienti necessari
-            List<EntityRicetta.IngredienteQuantita> ingredientiRicetta = ricetta.getIngredienti();
-            for (EntityRicetta.IngredienteQuantita ing : ingredientiRicetta) {
-                int idIngrediente = ing.getIdIngrediente();
-                float quantitaUnitaria = ing.getQuantita();
-                float quantitaTotale = quantitaUnitaria * quantita;
-
-                EntityIngrediente ingrediente = new EntityIngrediente(idIngrediente);
-                if (ingrediente.prenotaIngrediente(quantitaTotale)) {
-                    ingredientiPrenotati.add(idIngrediente);
-                } else {
-                    return false; // Se un ingrediente non è disponibile, ritorna false
-                }
-            }
-
-            return true;
-        } catch (Exception e) {
-            System.err.println("Errore nella prenotazione degli ingredienti: " + e.getMessage());
+    public boolean prenotaIngredienti(int quantitaPietanze) {
+        EntityRicetta ricetta = EntityRicetta.getRicettaByPietanza(this.idPietanza);
+        if (ricetta == null)
             return false;
-        }
+        return ricetta.prenotaIngredienti(quantitaPietanze);
     }
 
     /**
@@ -291,6 +244,43 @@ public class EntityPietanza {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Fornisce tutte le informazioni necessarie per la preparazione della pietanza
+     * 
+     * @return DTOIngredientiRicettaPietanza
+     */
+    public DTOIngredientiRicettaPietanza getIngredientiRicettaPietanza() {
+        EntityRicetta ricetta = EntityRicetta.getRicettaByPietanza(this.idPietanza);
+        DTOIngredientiRicettaPietanza dto = new DTOIngredientiRicettaPietanza();
+
+        if (ricetta != null) {
+            dto.setNome_ricetta(ricetta.getNome());
+            dto.setNome_pietanza(this.nome);
+            dto.setDescrizione(ricetta.getDescrizione());
+            dto.setTempoPreparazione(ricetta.getTempoPreparazione());
+            dto.setIstruzioni(ricetta.getIstruzioni());
+
+            ArrayList<DTOIngredienteCuoco> listaIngredienti = new ArrayList<>();
+            ArrayList<EntityRicettaIngrediente> ingredientiRicetta = EntityRicettaIngrediente
+                    .getIngredientiPerRicetta(ricetta.getIdRicetta());
+
+            for (EntityRicettaIngrediente eri : ingredientiRicetta) {
+                EntityIngrediente ingr = new EntityIngrediente(eri.getIdIngrediente());
+                DTO.DTOIngredienteCuoco dtoIngr = new DTO.DTOIngredienteCuoco(
+                        ingr.getNome(),
+                        eri.getQuantita(),
+                        ingr.getUnitaMisura());
+                listaIngredienti.add(dtoIngr);
+            }
+            dto.setIngredienti(listaIngredienti);
+        }
+        return dto;
+    }
+
+    public static int getIdPietanzaByNome(String nomePietanza) {
+        return DBPietanza.getIdByNome(nomePietanza);
     }
 
     @Override
