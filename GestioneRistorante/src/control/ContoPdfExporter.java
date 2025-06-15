@@ -27,9 +27,8 @@ import entity.EntityPietanza;
 import entity.EntityTavolo;
 import database.DBOrdine;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
+
 
 /**
  * Classe responsabile dell'esportazione di un conto in formato PDF.
@@ -150,7 +149,7 @@ public class ContoPdfExporter {
         String dataOrdine = dateFormat.format(ordine.getDataOrdine());
 
         // Recupera informazioni del tavolo
-        EntityTavolo tavolo = new EntityTavolo(ordine.getIdTavolo());
+        //EntityTavolo tavolo = new EntityTavolo(ordine.getIdTavolo());
 
         infoParagraph.add(new Phrase("TAVOLO #" + ordine.getIdTavolo() + " - Coperti: " + ordine.getNumPersone() + "\n",
                 infoFont));

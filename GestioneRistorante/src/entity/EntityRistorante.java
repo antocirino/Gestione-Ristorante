@@ -246,53 +246,7 @@ public class EntityRistorante {
         return EntityIngrediente.getIngredientiSottoSoglia();
     }
 
-    /**
-     * Visualizza tutti gli ordini attivi
-     * 
-     * @return Lista degli ordini attivi
-     */
-    public ArrayList<EntityOrdine> visualizzaOrdini() {
-        ArrayList<EntityOrdine> ordiniAttivi = new ArrayList<>();
-        ArrayList<EntityOrdine> tuttiOrdini = EntityOrdine.getTuttiOrdini();
-
-        // Filtra solo gli ordini che non sono stati pagati
-        for (EntityOrdine o : tuttiOrdini) {
-            if (!o.getStato().equals("pagato")) {
-                ordiniAttivi.add(o);
-            }
-        }
-
-        return ordiniAttivi;
-    }
-
-    /**
-     * Preleva gli ordini pronti dalla cucina
-     * 
-     * @return Lista degli ordini pronti da servire
-     */
-    public ArrayList<EntityOrdine> prelevaOrdini() {
-        ArrayList<EntityOrdine> ordiniPronti = EntityOrdine.getOrdiniByStato("pronto");
-        for (EntityOrdine o : ordiniPronti) {
-            o.aggiornaStato("consegnato");
-        }
-        return ordiniPronti;
-    }
-
-    /**
-     * Seleziona un tavolo per operazioni come il calcolo del conto
-     * 
-     * @param idTavolo ID del tavolo da selezionare
-     * @return Il tavolo selezionato o null se non esiste
-     */
-    public EntityTavolo selezionaTavolo(int idTavolo) {
-        try {
-            return new EntityTavolo(idTavolo);
-        } catch (Exception e) {
-            System.err.println("Errore nella selezione del tavolo: " + e.getMessage());
-            return null;
-        }
-    }
-
+  
     // Getters e setters
     public int getIdRistorante() {
         return idRistorante;
