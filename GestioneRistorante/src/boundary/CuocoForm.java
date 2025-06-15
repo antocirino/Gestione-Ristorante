@@ -412,7 +412,7 @@ public class CuocoForm extends JFrame {
             return;
 
         int idOrdine = Integer.parseInt(ordiniTable.getValueAt(selectedRow, 0).toString());
-        boolean risultato = Controller.aggiornaStatoOrdine(idOrdine, nuovoStato.getCodice());
+        Controller.aggiornaStatoOrdine(idOrdine, nuovoStato.getCodice());
 
         JOptionPane.showMessageDialog(this,
                 "Stato dell'ordine aggiornato con successo",

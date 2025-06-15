@@ -42,7 +42,6 @@ public class CassiereForm extends JFrame {
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 26);
     private Font headerFont = new Font("Segoe UI", Font.BOLD, 18);
     private Font regularFont = new Font("Segoe UI", Font.PLAIN, 16);
-    private Font smallFont = new Font("Segoe UI", Font.PLAIN, 14);
     private Font boldFont = new Font("Segoe UI", Font.BOLD, 16);
 
     public CassiereForm() {

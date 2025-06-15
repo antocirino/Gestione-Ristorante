@@ -12,7 +12,7 @@ public class RistoranteTest {
 
     @Before
     public void setUp() throws Exception {
-        EntityRistorante ristorante  = new EntityRistorante();
+        ristorante  = new EntityRistorante();
     }
 
     @After

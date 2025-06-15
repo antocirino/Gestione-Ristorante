@@ -14,7 +14,7 @@ public class TavoloTest {
 
     @Before
     public void setUp() throws Exception {
-        EntityTavolo tavolo  = new EntityTavolo();
+        tavolo  = new EntityTavolo();
     }
 
     @After
