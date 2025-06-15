@@ -24,7 +24,6 @@ import DTO.DTOOrdine;
 import entity.EntityDettaglioOrdinePietanza;
 import entity.EntityOrdine;
 import entity.EntityPietanza;
-import entity.EntityTavolo;
 import database.DBOrdine;
 import java.util.Map;
 import java.util.List;
