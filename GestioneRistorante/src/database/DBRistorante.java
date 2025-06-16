@@ -3,8 +3,6 @@ package database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import CFG.DBConnection;
 import entity.EntityRistorante;
@@ -138,54 +136,6 @@ public class DBRistorante {
         return listaRistoranti;
     }
 
-    /**
-     * Recupera un ristorante dal database come mappa di attributi
-     * 
-     * @param idRistorante ID del ristorante da recuperare
-     * @return Mappa con gli attributi del ristorante
-     */
-    public Map<String, Object> getRistoranteAsMap(int idRistorante) {
-        Map<String, Object> ristoranteMap = new HashMap<>();
-        try {
-            String query = "SELECT * FROM ristorante WHERE id_ristorante = " + idRistorante;
-            ResultSet rs = DBConnection.selectQuery(query);
-
-            if (rs.next()) {
-                ristoranteMap.put("id_ristorante", rs.getInt("id_ristorante"));
-                ristoranteMap.put("nome", rs.getString("nome"));
-                ristoranteMap.put("numero_tavoli", rs.getInt("numero_tavoli"));
-                ristoranteMap.put("costo_coperto", rs.getDouble("costo_coperto"));
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero del ristorante: " + e.getMessage());
-        }
-        return ristoranteMap;
-    }
-
-    /**
-     * Collega le pietanze disponibili al menu del ristorante
-     * 
-     * @param idRistorante ID del ristorante
-     * @return true se il collegamento è avvenuto con successo, false altrimenti
-     */
-    public boolean collegaPietanzeAlMenu(int idRistorante) {
-        try {
-            // Prima rimuovi i collegamenti esistenti
-            String deleteQuery = "DELETE FROM menu WHERE id_ristorante = " + idRistorante;
-            DBConnection.updateQuery(deleteQuery);
-
-            // Poi inserisci i nuovi collegamenti per tutte le pietanze disponibili
-            String query = "INSERT INTO menu (id_ristorante, id_pietanza) " +
-                    "SELECT " + idRistorante + ", id_pietanza FROM pietanza WHERE disponibile = true";
-
-            System.out.println(query); // Per debug
-            int result = DBConnection.updateQuery(query);
-            return result > 0;
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel collegamento delle pietanze al menu: " + e.getMessage());
-            return false;
-        }
-    }
 
     // Getters e setters
     public int getIdRistorante() {

@@ -12,7 +12,6 @@ import java.util.Map;
 import CFG.DBConnection;
 import DTO.DTOMenuFissoCuoco;
 import DTO.DTOPietanzaCuoco;
-import entity.EntityOrdine;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'ordine' nel database
@@ -227,33 +226,6 @@ public class DBOrdine {
     }
 
     /**
-     * Recupera tutti gli ordini dal database
-     * 
-     * @return ArrayList di oggetti Ordine
-     */
-    public ArrayList<EntityOrdine> getTuttiOrdini() {
-        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
-        String query = "SELECT * FROM ordine ORDER BY data_ordine DESC";
-
-        try {
-            ResultSet rs = DBConnection.selectQuery(query);
-            while (rs.next()) {
-                EntityOrdine ordine = new EntityOrdine();
-                ordine.setIdOrdine(rs.getInt("id_ordine"));
-                ordine.setIdTavolo(rs.getInt("id_tavolo"));
-                ordine.setNumPersone(rs.getInt("num_persone"));
-                ordine.setDataOrdine(rs.getTimestamp("data_ordine"));
-                ordine.setStato(rs.getString("stato"));
-                listaOrdini.add(ordine);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero degli ordini: " + e.getMessage());
-        }
-
-        return listaOrdini;
-    }
-
-    /**
      * Recupera gli ordini filtrati per stato
      * 
      * @param statoFiltro lo stato per cui filtrare
@@ -282,7 +254,7 @@ public class DBOrdine {
     }
 
     public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine() {
-        ArrayList<DTOPietanzaCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        ArrayList<DTOPietanzaCuoco> pietanzaDaOrdine = new ArrayList<>();
         String query = String.format(
                 "SELECT p.nome, SUM(dop.quantita) AS quantita_totale " +
                         "FROM dettaglio_ordine_pietanza dop " +
@@ -296,13 +268,13 @@ public class DBOrdine {
             while (rs.next()) {
                 String nome = rs.getString("nome");
                 int quantita = rs.getInt("quantita_totale");
-                pietanzeDAoRDINE.add(new DTOPietanzaCuoco(nome, quantita));
+                pietanzaDaOrdine.add(new DTOPietanzaCuoco(nome, quantita));
             }
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nel recupero degli ordini per stato: " + e.getMessage());
         }
 
-        return pietanzeDAoRDINE;
+        return pietanzaDaOrdine;
     }
 
     public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine() {
@@ -331,30 +303,11 @@ public class DBOrdine {
     }
 
     /**
-     * Recupera l'ultimo per un tavolo specifico
+     * Recupera l'ID dell'ultimo ordine associato a un tavolo specifico
      * 
-     * @param idTavolo l'ID del tavolo
+     * @param idTavolo ID del tavolo per cui recuperare l'ordine
+     * @return l'ID dell'ultimo ordine o -1 se non trovato
      */
-    public void getOrdinePerTavolo(int idTavolo) { // da eliminare probabilmente
-        DBOrdine ordine = new DBOrdine();
-        String query = "SELECT * FROM ordine WHERE id_tavolo = " + idTavolo + " ORDER BY data_ordine DESC LIMIT 1";
-
-        try {
-            ResultSet rs = DBConnection.selectQuery(query);
-
-            if (rs.next()) {
-                ordine.setIdOrdine(rs.getInt("id_ordine"));
-                ordine.setIdTavolo(rs.getInt("id_tavolo"));
-                ordine.setNumPersone(rs.getInt("num_persone"));
-                ordine.setDataOrdine(rs.getTimestamp("data_ordine"));
-                ordine.setStato(rs.getString("stato"));
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero degli ordini per tavolo: " + e.getMessage());
-        }
-
-    }
-
     public static int getIDOrdineByTavolo(int idTavolo) {
         String query = "SELECT id_ordine FROM ordine WHERE id_tavolo = " + idTavolo
                 + " ORDER BY data_ordine DESC LIMIT 1";
@@ -370,35 +323,6 @@ public class DBOrdine {
             System.err.println("Errore nel recupero dell'ID ordine per tavolo: " + e.getMessage());
         }
         return id_ordine;
-    }
-
-    /**
-     * Recupera gli ordini con un determinato stato
-     * 
-     * @param stato lo stato degli ordini da recuperare
-     * @return ArrayList di oggetti Ordine con lo stato specificato
-     */
-    public ArrayList<EntityOrdine> getOrdiniByStato(String stato) {
-        ArrayList<EntityOrdine> listaOrdini = new ArrayList<>();
-        String query = "SELECT * FROM ordine WHERE stato = '" + stato + "' ORDER BY data_ordine DESC";
-
-        try {
-            ResultSet rs = DBConnection.selectQuery(query);
-            while (rs.next()) {
-                EntityOrdine ordine = new EntityOrdine();
-                ordine.setIdOrdine(rs.getInt("id_ordine"));
-                ordine.setIdTavolo(rs.getInt("id_tavolo"));
-                ordine.setNumPersone(rs.getInt("num_persone"));
-                ordine.setDataOrdine(rs.getTimestamp("data_ordine"));
-                ordine.setStato(rs.getString("stato"));
-
-                listaOrdini.add(ordine);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero degli ordini per stato: " + e.getMessage());
-        }
-
-        return listaOrdini;
     }
 
     /**
@@ -440,21 +364,6 @@ public class DBOrdine {
             System.err.println("Errore nel recupero del costo coperto: " + e.getMessage());
         }
         return costoCoperto;
-    }
-
-    public int aggiornaCosto(double costoTotale) {
-        this.costoTotale = costoTotale;
-        String query = String.format(Locale.US,
-                "UPDATE ordine SET costo_totale = %.2f WHERE id_ordine = %d",
-                this.costoTotale, this.idOrdine);
-
-        try {
-            int result = DBConnection.updateQuery(query);
-            return result; // restituisce il numero di righe aggiornate
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore durante l'aggiornamento del costo totale: " + e.getMessage());
-            return -1;
-        }
     }
 
     // Getters e setters
