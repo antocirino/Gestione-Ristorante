@@ -150,7 +150,7 @@ done
 
 # Compila l'applicazione (escludendo i test per ora)
 echo -e "${YELLOW}Compilazione dell'applicazione (escludendo i test)...${NC}"
-javac -d GestioneRistorante/bin -cp "$JDBC_DIR/*" $(find GestioneRistorante/src -name "*.java" | grep -v "/test/")
+javac -encoding UTF-8 -d GestioneRistorante/bin -cp "$JDBC_DIR/*" $(find GestioneRistorante/src -name "*.java" | grep -v "/test/")
 
 # Copia le risorse (icone SVG) nella cartella bin
 echo -e "${YELLOW}Copia delle risorse...${NC}"

@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     x11-apps \
     xauth \
     netcat \
+    dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
 # Imposta le variabili d'ambiente per il display
@@ -38,7 +39,7 @@ COPY ./GestioneRistorante/bin/resources ./bin/resources/
 
 # Copia lo script di avvio
 COPY ./start-app.sh ./
-RUN chmod +x ./start-app.sh
+RUN dos2unix ./start-app.sh && chmod +x ./start-app.sh
 
 # Crea cartella per i PDF esportati
 RUN mkdir -p /app/exported-pdf && chmod 777 /app/exported-pdf

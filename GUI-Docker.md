@@ -57,21 +57,8 @@ Su Windows, è necessario usare un server X11:
    - Abilita "Disable access control" (per permettere la connessione dal container)
    - Lascia VcXsrv in esecuzione durante tutto l'utilizzo dell'applicazione.
 
-3. **Avviare l'applicazione con lo script dedicato**
-
-   Per facilitare l'avvio dell'interfaccia grafica su Windows, utilizzare lo script apposito:
-
-   ```bat
-   avvia_gui_windows.bat
-   ```
-
-   Questo script verifica automaticamente che XLaunch sia in esecuzione e configura l'ambiente correttamente.
-
-4. **Avviare i container Docker** (se necessario)
-
-   ```bash
-   ./docker-utils.sh start
-   ```
+3. **Opzioni di avvio**
+   - seguire i passi 2 e 3 della sezione macOS per avviare l'applicazione.
 
 ## Risoluzione dei problemi
 
@@ -79,8 +66,7 @@ Se l'interfaccia grafica non viene visualizzata:
 
 1. **Verificare che X11 sia configurato correttamente**
 
-   - Su macOS: XQuartz in esecuzione e `xhost +` attivato
-   - Su Windows: VcXsrv in esecuzione con "Disable access control" attivo
+   - XQuartz in esecuzione e `xhost +` attivato
 
 2. **Controllare i log dell'applicazione**
 
