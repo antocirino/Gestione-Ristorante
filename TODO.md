@@ -13,11 +13,6 @@
 
 # LATEX
 
-- Aggiungere spiegazione traduzione diagramma delle classi --> diagramma relazionale
 - Aggiungere diagrammi mancanti
 - controllare scenari su documentazione=codice=diagrammi
 - verificare i test funzionali di tutti i casi d'uso, in particolare eliminare tutte le parti relative all'autenticazione
-- inserire jar 
-- piccola spiegazione di docker
-- capitolo finale
-- teoria riempitiva
