@@ -597,6 +597,8 @@ public class CameriereForm extends JFrame {
             textField.setForeground(textColor);
             textField.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
             textField.setHorizontalAlignment(JTextField.CENTER);
+            // Disabilita la modifica diretta del campo di testo dello spinner
+            textField.setEditable(false);
         }
 
         // Aggiungi effetti focus per lo Spinner
@@ -653,10 +655,10 @@ public class CameriereForm extends JFrame {
 
             tavoliComboBox.removeAllItems();
             for (DTOTavolo tavolo : tavoli) {
-                    int idTavolo = tavolo.getIdTavolo();
-                    int maxPosti = tavolo.getMaxPosti();
-                    tavoliComboBox.addItem(
-                            idTavolo + " - Tavolo " + " (max " + maxPosti + " posti)");
+                int idTavolo = tavolo.getIdTavolo();
+                int maxPosti = tavolo.getMaxPosti();
+                tavoliComboBox.addItem(
+                        idTavolo + " - Tavolo " + " (max " + maxPosti + " posti)");
             }
         } catch (Exception e) {
             // Ignora o gestisci l'errore in modo silenzioso, o loggalo
