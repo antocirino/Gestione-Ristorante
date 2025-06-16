@@ -1,8 +1,7 @@
 ### TODO
 
-- sistema scrit windows
-
 # CODICE
+
 -aggiustare la schermata inbiziale rimuovendo il test del database
 
 # DIAGRAMMI
