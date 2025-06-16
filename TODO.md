@@ -2,6 +2,9 @@
 
 - sistema scrit windows
 
+# CODICE
+-aggiustare la schermata inbiziale rimuovendo il test del database
+
 # DIAGRAMMI
 
 - Aggiustare diagramma BCED aggiungendo le classi ricavate dalla traduzione diagramma delle classi --> diagramma relazionale

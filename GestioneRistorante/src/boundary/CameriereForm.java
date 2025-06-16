@@ -649,16 +649,14 @@ public class CameriereForm extends JFrame {
     private void caricaTavoli() {
         try {
 
-            List<DTOTavolo> tavoli = Controller.getAllTavoli();
+            List<DTOTavolo> tavoli = Controller.getTavoliByStato("libero");
 
             tavoliComboBox.removeAllItems();
             for (DTOTavolo tavolo : tavoli) {
-                if (!tavolo.isOccupato()) {
                     int idTavolo = tavolo.getIdTavolo();
                     int maxPosti = tavolo.getMaxPosti();
                     tavoliComboBox.addItem(
                             idTavolo + " - Tavolo " + " (max " + maxPosti + " posti)");
-                }
             }
         } catch (Exception e) {
             // Ignora o gestisci l'errore in modo silenzioso, o loggalo
