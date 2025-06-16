@@ -15,9 +15,21 @@ public class EntityTavolo {
     private int idRistorante;
 
     // Costruttori
+
+    /**
+     * Costruttore vuoto
+     */
     public EntityTavolo() {
     }
 
+    /**
+     * Costruttore con attributi principali
+     * 
+     * @param idTavolo     ID del tavolo (0 per auto-incremento)
+     * @param maxPosti     Numero massimo di posti a sedere
+     * @param stato        Stato del tavolo ('libero' o 'occupato')
+     * @param idRistorante ID del ristorante a cui appartiene il tavolo
+     */
     public EntityTavolo(int idTavolo, int maxPosti, String stato, int idRistorante) {
         this.idTavolo = idTavolo;
         this.maxPosti = maxPosti;
@@ -76,21 +88,21 @@ public class EntityTavolo {
 
     /**
      * Recupera tutti i tavoli dal database
+     * 
      * @return
      */
     public static ArrayList<DTOTavolo> getAllTavoli() {
-        
+
         DBTavolo dbTavolo = new DBTavolo();
         ArrayList<DBTavolo> listaDBTavoli = dbTavolo.getAllTavoli();
-        
+
         ArrayList<DTOTavolo> listaTavoli = new ArrayList<>();
 
         for (DBTavolo db : listaDBTavoli) {
             DTOTavolo tavolo = new DTOTavolo(
                     db.getIdTavolo(),
                     db.getMaxPosti(),
-                    db.getStato()
-            );
+                    db.getStato());
             listaTavoli.add(tavolo);
         }
 
@@ -100,20 +112,18 @@ public class EntityTavolo {
     public static ArrayList<DTOTavolo> getTavoliByStato(String stato) {
         DBTavolo dbTavolo = new DBTavolo();
         ArrayList<DBTavolo> listaDBTavoli = dbTavolo.getTavoliPerStato(stato);
-        
+
         ArrayList<DTOTavolo> listaTavoli = new ArrayList<>();
 
         for (DBTavolo db : listaDBTavoli) {
             DTOTavolo tavolo = new DTOTavolo(
                     db.getIdTavolo(),
                     db.getMaxPosti(),
-                    db.getStato()
-            );
+                    db.getStato());
             listaTavoli.add(tavolo);
         }
         return listaTavoli;
     }
-
 
     // Getters e setters
     public int getIdTavolo() {

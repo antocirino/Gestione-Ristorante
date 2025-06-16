@@ -1,7 +1,6 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import database.DBDettaglioOrdinePietanza;
 
@@ -74,32 +73,6 @@ public class EntityDettaglioOrdinePietanza {
     }
 
     /**
-     * Salva il dettaglio ordine nel database
-     * 
-     * @param idDettaglio ID del dettaglio ordine (0 per auto-incremento)
-     * @return il numero di righe modificate o -1 in caso di errore
-     */
-    public int scriviSuDB(int idDettaglio) {
-        DBDettaglioOrdinePietanza d = new DBDettaglioOrdinePietanza(); // DAO
-
-        d.setIdOrdine(this.idOrdine);
-        d.setIdPietanza(this.idPietanza);
-        d.setQuantita(this.quantita);
-        d.setParteDiMenu(this.parteDiMenu);
-        d.setIdMenu(this.idMenu);
-
-        int result = d.salvaInDB(idDettaglio);
-        System.out.println("DettaglioOrdinePietanza: id_dettaglio " + result);
-
-        // Aggiorna l'ID se si tratta di un nuovo dettaglio
-        if (idDettaglio == 0 && result > 0) {
-            this.idDettaglio = result;
-        }
-
-        return result;
-    }
-
-    /**
      * Salva il dettaglio ordine nel database utilizzando INSERT ... ON CONFLICT
      * Se esiste già un dettaglio con lo stesso id_ordine, id_pietanza,
      * parte_di_menu e id_menu,
@@ -108,7 +81,7 @@ public class EntityDettaglioOrdinePietanza {
      * @return l'ID del dettaglio ordine se il salvataggio è avvenuto con successo,
      *         -1 in caso di errore
      */
-    public int scriviSuDBConOnConflict() {
+    public int scriviSuDB() {
         DBDettaglioOrdinePietanza d = new DBDettaglioOrdinePietanza(); // DAO
 
         d.setIdOrdine(this.idOrdine);
@@ -147,32 +120,6 @@ public class EntityDettaglioOrdinePietanza {
     public static ArrayList<EntityDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
         DBDettaglioOrdinePietanza d = new DBDettaglioOrdinePietanza();
         return d.getDettagliOrdine(idOrdine);
-    }
-
-    /**
-     * Recupera i dettagli di un ordine come mappa
-     * 
-     * @param idOrdine ID dell'ordine
-     * @return ArrayList di mappe con gli attributi dei dettagli
-     */
-    public static ArrayList<Map<String, Object>> getDettagliOrdineAsMap(int idOrdine) {
-        DBDettaglioOrdinePietanza d = new DBDettaglioOrdinePietanza();
-        return d.getDettagliOrdineAsMap(idOrdine);
-    }
-
-    /**
-     * Calcola il subtotale del dettaglio (prezzo pietanza * quantità)
-     * 
-     * @return Subtotale del dettaglio
-     */
-    public double getSubtotale() {
-        if (this.pietanza != null) {
-            return this.pietanza.getPrezzo() * this.quantita;
-        } else {
-            // Carica la pietanza se non è già caricata
-            this.pietanza = new EntityPietanza(this.idPietanza);
-            return this.pietanza.getPrezzo() * this.quantita;
-        }
     }
 
     // Getters e setters

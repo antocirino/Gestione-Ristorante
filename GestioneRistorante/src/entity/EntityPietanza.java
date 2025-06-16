@@ -21,11 +21,23 @@ public class EntityPietanza {
     private List<Object> ingredienti;
 
     // Costruttori
+    /**
+     * Costruttore vuoto
+     */
     public EntityPietanza() {
         this.ingredienti = new ArrayList<Object>();
         this.disponibile = true;
     }
 
+    /**
+     * Costruttore con attributi principali
+     * 
+     * @param idPietanza    ID della pietanza (0 per auto-incremento)
+     * @param nome          Nome della pietanza
+     * @param prezzo        Prezzo della pietanza
+     * @param idCategoria   ID della categoria a cui appartiene la pietanza
+     * @param nomeCategoria Nome della categoria a cui appartiene la pietanza
+     */
     public EntityPietanza(int idPietanza, String nome, double prezzo, int idCategoria, String nomeCategoria) {
         this.idPietanza = idPietanza;
         this.nome = nome;
@@ -279,6 +291,12 @@ public class EntityPietanza {
         return dto;
     }
 
+    /**
+     * Recupera l'ID della pietanza a partire dal nome
+     * 
+     * @param nomePietanza Nome della pietanza da cercare
+     * @return ID della pietanza o -1 se non trovata
+     */
     public static int getIdPietanzaByNome(String nomePietanza) {
         return DBPietanza.getIdByNome(nomePietanza);
     }

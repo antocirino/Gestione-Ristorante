@@ -113,22 +113,6 @@ public class EntityOrdine {
         return o.aggiornaStato(nuovoStato);
     }
 
-    public int aggiornaCostoTotale(double nuovoCosto) {
-        this.costoTotale = nuovoCosto;
-        DBOrdine o = new DBOrdine(this.idOrdine);
-        return o.aggiornaCosto(nuovoCosto);
-    }
-
-    /**
-     * Recupera tutti gli ordini dal database
-     * 
-     * @return ArrayList di oggetti Ordine
-     */
-    public static ArrayList<EntityOrdine> getTuttiOrdini() {
-        DBOrdine ordine = new DBOrdine();
-        return ordine.getTuttiOrdini();
-    }
-
     /**
      * Recupera gli ordini con un determinato stato
      * 
@@ -159,10 +143,10 @@ public class EntityOrdine {
      * @return ArrayList di oggetti DTOPietanzaCuoco con le pietanze dell'ordine
      */
     public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine() {
-        ArrayList<DTOPietanzaCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        ArrayList<DTOPietanzaCuoco> pietanzaDaOrdine = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
-        pietanzeDAoRDINE = ordine.getPietanzeDaOrdine();
-        return pietanzeDAoRDINE;
+        pietanzaDaOrdine = ordine.getPietanzeDaOrdine();
+        return pietanzaDaOrdine;
     }
 
     /**
@@ -171,21 +155,10 @@ public class EntityOrdine {
      * @return ArrayList di oggetti DTOMenuFissoCuoco con i menu fissi dell'ordine
      */
     public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine() {
-        ArrayList<DTOMenuFissoCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        ArrayList<DTOMenuFissoCuoco> pietanzaDaOrdine = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
-        pietanzeDAoRDINE = ordine.getMenuFissiDaOrdine();
-        return pietanzeDAoRDINE;
-    }
-
-    /**
-     * Recupera gli ordini con un determinato stato
-     * 
-     * @param stato lo stato degli ordini da recuperare
-     * @return ArrayList di oggetti Ordine con lo stato specificato
-     */
-    public static ArrayList<EntityOrdine> getOrdiniByStato(String stato) {
-        DBOrdine ordine = new DBOrdine();
-        return ordine.getOrdiniByStato(stato);
+        pietanzaDaOrdine = ordine.getMenuFissiDaOrdine();
+        return pietanzaDaOrdine;
     }
 
     /**
@@ -271,7 +244,7 @@ public class EntityOrdine {
                     quantita);
 
             // Salva il dettaglio nel database utilizzando ON CONFLICT
-            int dettaglioId = dettaglio.scriviSuDBConOnConflict();
+            int dettaglioId = dettaglio.scriviSuDB();
             System.out.println("Dettaglio ordine salvato/aggiornato con ID: " + dettaglioId);
             if (dettaglioId > 0) {
                 // Se il salvataggio è riuscito, prenota gli ingredienti e aggiorna il costo
@@ -301,6 +274,15 @@ public class EntityOrdine {
         }
     }
 
+    /**
+     * Crea un nuovo ordine
+     * 
+     * @param idTavolo     ID del tavolo associato all'ordine
+     * @param numPersone   Numero di persone per l'ordine
+     * @param idRistorante ID del ristorante associato all'ordine
+     * @param stato        Stato iniziale dell'ordine
+     * @return un nuovo oggetto EntityOrdine con l'ID assegnato dal database
+     */
     public EntityOrdine creaOrdine(int idTavolo, int numPersone, int idRistorante, String stato) {
         DBOrdine ordine = new DBOrdine(idTavolo, numPersone, idRistorante, stato);
         int id = ordine.salvaInDB();
@@ -312,17 +294,11 @@ public class EntityOrdine {
     }
 
     /**
-     * Aggiunge un menu fisso all'ordine. Un menu fisso è composto da diverse
-     * pietanze
-     * a un prezzo fisso. Questo metodo aggiunge tutte le pietanze del menu ma
-     * considera solo il prezzo complessivo del menu, non la somma dei prezzi delle
-     * singole pietanze.
+     * Aggiunge un menu fisso all'ordine
      * 
-     * @param menuId   ID del menu fisso
-     * @param nome     Nome del menu fisso
-     * @param prezzo   Prezzo complessivo del menu fisso
-     * @param pietanze Lista delle pietanze incluse nel menu fisso
-     * @param quantita Quantità di menu fissi da aggiungere
+     * @param idOrdine    ID dell'ordine a cui aggiungere il menu fisso
+     * @param idMenuFisso ID del menu fisso da aggiungere
+     * @param quantita    Quantità del menu fisso da aggiungere
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
     public boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
@@ -390,7 +366,7 @@ public class EntityOrdine {
                 dettaglio.setIdMenu(idMenuFisso); // Associa al menu fisso
 
                 // Salva il dettaglio nel database usando ON CONFLICT
-                if (dettaglio.scriviSuDBConOnConflict() <= 0) {
+                if (dettaglio.scriviSuDB() <= 0) {
                     System.err.println(
                             "Errore: Impossibile salvare il dettaglio per la pietanza del menu: " + pietanza.getNome());
                     tutteLeAggiunte = false;
