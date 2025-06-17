@@ -156,8 +156,41 @@ public class EntityRicetta {
      * @return ArrayList di oggetti Ricetta
      */
     public static ArrayList<EntityRicetta> getTutteRicette() {
-        DBRicetta ricetta = new DBRicetta();
-        return ricetta.getTutteRicette();
+        DBRicetta db = new DBRicetta();
+        ArrayList<DBRicetta> ricetteDB = db.getTutteRicette();
+
+        ArrayList<EntityRicetta> ricette = new ArrayList<>();
+
+        // Converte ogni oggetto DBRicetta in EntityRicetta
+        for (DBRicetta ricettaDB : ricetteDB) {
+            EntityRicetta ricetta = new EntityRicetta();
+            ricetta.setIdRicetta(ricettaDB.getIdRicetta());
+            ricetta.setNome(ricettaDB.getNome());
+            ricetta.setDescrizione(ricettaDB.getDescrizione());
+            ricetta.setIdPietanza(ricettaDB.getIdPietanza());
+            ricetta.setTempoPreparazione(ricettaDB.getTempoPreparazione());
+            ricetta.setIstruzioni(ricettaDB.getIstruzioni());
+
+            // Carica gli ingredienti se necessario
+            if (ricettaDB.getIdRicetta() > 0) {
+                ArrayList<Object[]> ingredientiDB = ricettaDB.getIngredientiRicetta();
+                List<IngredienteQuantita> ingredienti = new ArrayList<>();
+                for (Object[] ingrediente : ingredientiDB) {
+                    int idIngrediente = (Integer) ingrediente[0];
+                    String nomeIngrediente = (String) ingrediente[1];
+                    String unitaMisura = (String) ingrediente[2];
+                    float quantita = (Float) ingrediente[3];
+
+                    ingredienti.add(
+                            ricetta.new IngredienteQuantita(idIngrediente, nomeIngrediente, unitaMisura, quantita));
+                }
+                ricetta.setIngredienti(ingredienti);
+            }
+
+            ricette.add(ricetta);
+        }
+
+        return ricette;
     }
 
     /**
@@ -167,8 +200,36 @@ public class EntityRicetta {
      * @return Ricetta associata alla pietanza o null se non esiste
      */
     public static EntityRicetta getRicettaByPietanza(int idPietanza) {
-        DBRicetta ricetta = new DBRicetta();
-        return ricetta.getRicettaByPietanza(idPietanza);
+        DBRicetta db = new DBRicetta();
+        DBRicetta ricettaDB = db.getRicettaByPietanza(idPietanza);
+
+        if (ricettaDB == null) {
+            return null;
+        }
+
+        // Converte l'oggetto DBRicetta in EntityRicetta
+        EntityRicetta ricetta = new EntityRicetta();
+        ricetta.setIdRicetta(ricettaDB.getIdRicetta());
+        ricetta.setNome(ricettaDB.getNome());
+        ricetta.setDescrizione(ricettaDB.getDescrizione());
+        ricetta.setIdPietanza(ricettaDB.getIdPietanza());
+        ricetta.setTempoPreparazione(ricettaDB.getTempoPreparazione());
+        ricetta.setIstruzioni(ricettaDB.getIstruzioni());
+
+        // Carica gli ingredienti se necessario
+        ArrayList<Object[]> ingredientiDB = ricettaDB.getIngredientiRicetta();
+        List<IngredienteQuantita> ingredienti = new ArrayList<>();
+        for (Object[] ingrediente : ingredientiDB) {
+            int idIngrediente = (Integer) ingrediente[0];
+            String nomeIngrediente = (String) ingrediente[1];
+            String unitaMisura = (String) ingrediente[2];
+            float quantita = (Float) ingrediente[3];
+
+            ingredienti.add(ricetta.new IngredienteQuantita(idIngrediente, nomeIngrediente, unitaMisura, quantita));
+        }
+        ricetta.setIngredienti(ingredienti);
+
+        return ricetta;
     }
 
     /**

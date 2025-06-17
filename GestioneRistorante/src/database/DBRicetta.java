@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.EntityRicetta;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'ricetta' nel database
@@ -182,10 +181,10 @@ public class DBRicetta {
     /**
      * Recupera tutte le ricette dal database
      * 
-     * @return ArrayList di oggetti Ricetta
+     * @return ArrayList di oggetti DBRicetta
      */
-    public ArrayList<EntityRicetta> getTutteRicette() {
-        ArrayList<EntityRicetta> listaRicette = new ArrayList<>();
+    public ArrayList<DBRicetta> getTutteRicette() {
+        ArrayList<DBRicetta> listaRicette = new ArrayList<>();
         String query = "SELECT r.*, p.nome as nome_pietanza " +
                 "FROM ricetta r " +
                 "JOIN pietanza p ON r.id_pietanza = p.id_pietanza " +
@@ -194,7 +193,7 @@ public class DBRicetta {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityRicetta ricetta = new EntityRicetta();
+                DBRicetta ricetta = new DBRicetta();
                 ricetta.setIdRicetta(rs.getInt("id_ricetta"));
                 ricetta.setNome(rs.getString("nome"));
                 ricetta.setDescrizione(rs.getString("descrizione"));
@@ -214,16 +213,16 @@ public class DBRicetta {
      * Recupera la ricetta per una specifica pietanza
      * 
      * @param idPietanza l'ID della pietanza
-     * @return Ricetta associata alla pietanza o null se non esiste
+     * @return Oggetto DBRicetta con i dati della ricetta o null se non esiste
      */
-    public EntityRicetta getRicettaByPietanza(int idPietanza) {
-        EntityRicetta ricetta = null;
+    public DBRicetta getRicettaByPietanza(int idPietanza) {
+        DBRicetta ricetta = null;
         String query = "SELECT * FROM ricetta WHERE id_pietanza = " + idPietanza;
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
-                ricetta = new EntityRicetta();
+                ricetta = new DBRicetta();
                 ricetta.setIdRicetta(rs.getInt("id_ricetta"));
                 ricetta.setNome(rs.getString("nome"));
                 ricetta.setDescrizione(rs.getString("descrizione"));

@@ -1,6 +1,5 @@
 package entity;
 
-import java.util.ArrayList;
 
 import database.DBRistorante;
 
@@ -120,15 +119,6 @@ public class EntityRistorante {
         return r.eliminaDaDB(this.idRistorante);
     }
 
-    /**
-     * Recupera tutti i ristoranti dal database
-     * 
-     * @return ArrayList di oggetti Ristorante
-     */
-    public static ArrayList<EntityRistorante> getTuttiRistoranti() {
-        DBRistorante r = new DBRistorante();
-        return r.getTuttiRistoranti();
-    }
   
     // Getters e setters
     public int getIdRistorante() {

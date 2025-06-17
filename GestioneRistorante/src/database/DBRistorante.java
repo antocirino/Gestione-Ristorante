@@ -2,10 +2,8 @@ package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import CFG.DBConnection;
-import entity.EntityRistorante;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'ristorante' nel
@@ -109,31 +107,6 @@ public class DBRistorante {
             System.err.println("Errore nell'eliminazione del ristorante dal database: " + e.getMessage());
         }
         return -1; // Errore
-    }
-
-    /**
-     * Recupera tutti i ristoranti dal database
-     * 
-     * @return ArrayList di oggetti Ristorante
-     */
-    public ArrayList<EntityRistorante> getTuttiRistoranti() {
-        ArrayList<EntityRistorante> listaRistoranti = new ArrayList<>();
-        try {
-            String query = "SELECT * FROM ristorante";
-            ResultSet rs = DBConnection.selectQuery(query);
-
-            while (rs.next()) {
-                EntityRistorante ristorante = new EntityRistorante(
-                        rs.getInt("id_ristorante"),
-                        rs.getString("nome"),
-                        rs.getInt("numero_tavoli"),
-                        rs.getDouble("costo_coperto"));
-                listaRistoranti.add(ristorante);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero dei ristoranti: " + e.getMessage());
-        }
-        return listaRistoranti;
     }
 
 
