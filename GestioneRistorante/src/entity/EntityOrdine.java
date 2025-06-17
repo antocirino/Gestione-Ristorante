@@ -2,6 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 import DTO.DTOMenuFissoCuoco;
 import DTO.DTOOrdine;
@@ -152,10 +153,19 @@ public class EntityOrdine {
      * @return ArrayList di oggetti DTOMenuFissoCuoco con i menu fissi dell'ordine
      */
     public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine() {
-        ArrayList<DTOMenuFissoCuoco> pietanzaDaOrdine = new ArrayList<>();
+        ArrayList<DTOMenuFissoCuoco> menuFissiDTO = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
-        pietanzaDaOrdine = ordine.getMenuFissiDaOrdine();
-        return pietanzaDaOrdine;
+
+        // Ottiene i dati dal DB e li converte in DTO
+        ArrayList<Map<String, Object>> menuFissiDB = ordine.getMenuFissiDaOrdine();
+        for (Map<String, Object> menuDB : menuFissiDB) {
+            String nome = (String) menuDB.get("nome");
+            int quantita = (Integer) menuDB.get("quantita");
+            DTOMenuFissoCuoco menuDTO = new DTOMenuFissoCuoco(nome, quantita);
+            menuFissiDTO.add(menuDTO);
+        }
+
+        return menuFissiDTO;
     }
 
     /**

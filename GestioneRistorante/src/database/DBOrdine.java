@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import DTO.DTOMenuFissoCuoco;
 import DTO.DTOPietanzaCuoco;
 
 /**
@@ -277,8 +276,14 @@ public class DBOrdine {
         return pietanzaDaOrdine;
     }
 
-    public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine() {
-        ArrayList<DTOMenuFissoCuoco> menuFissiDaOrdine = new ArrayList<>();
+    /**
+     * Recupera i menu fissi associati a un ordine dal database
+     * 
+     * @return ArrayList di mappe con chiavi "nome" e "quantita" per ciascun menu
+     *         fisso
+     */
+    public ArrayList<Map<String, Object>> getMenuFissiDaOrdine() {
+        ArrayList<Map<String, Object>> menuFissiDaOrdine = new ArrayList<>();
 
         String query = String.format(
                 "SELECT m.nome, SUM(dop.quantita) AS quantita_totale " +
@@ -293,7 +298,13 @@ public class DBOrdine {
             while (rs.next()) {
                 String nome = rs.getString("nome");
                 int quantita = rs.getInt("quantita_totale");
-                menuFissiDaOrdine.add(new DTOMenuFissoCuoco(nome, quantita));
+
+                // Usa una mappa per rappresentare la coppia nome-quantità
+                Map<String, Object> menuFisso = new HashMap<>();
+                menuFisso.put("nome", nome);
+                menuFisso.put("quantita", quantita);
+
+                menuFissiDaOrdine.add(menuFisso);
             }
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nel recupero dei menu fissi: " + e.getMessage());
