@@ -5,17 +5,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
 
 import DTO.DTOIngrediente;
 import control.Controller;
 import utility.SvgIconManager;
-
-// Importa la libreria SVG Salamander
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGUniverse;
 
 /**
  * Schermata per il direttore che permette di generare report e monitorare il
@@ -101,30 +95,32 @@ public class DirettoreForm extends JFrame {
         styleComboBox(reportTypeComboBox);
         reportTypeComboBox.setPreferredSize(new Dimension(250, 40));
 
-        /* Commentato temporaneamente il filtro del periodo
-        JLabel periodoLabel = new JLabel("Periodo:");
-        periodoLabel.setFont(boldFont);
-        periodoLabel.setForeground(textColor);
-        periodoLabel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
-
-        periodoComboBox = new JComboBox<>(new String[] {
-                "Oggi",
-                "Ultima Settimana",
-                "Ultimo Mese",
-                "Ultimo Anno"
-        });
-        styleComboBox(periodoComboBox);
-        periodoComboBox.setPreferredSize(new Dimension(200, 40));
-        */
+        /*
+         * Commentato temporaneamente il filtro del periodo
+         * JLabel periodoLabel = new JLabel("Periodo:");
+         * periodoLabel.setFont(boldFont);
+         * periodoLabel.setForeground(textColor);
+         * periodoLabel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+         * 
+         * periodoComboBox = new JComboBox<>(new String[] {
+         * "Oggi",
+         * "Ultima Settimana",
+         * "Ultimo Mese",
+         * "Ultimo Anno"
+         * });
+         * styleComboBox(periodoComboBox);
+         * periodoComboBox.setPreferredSize(new Dimension(200, 40));
+         */
 
         generaReportButton = createStyledButton("Genera Report", primaryColor);
 
         controlPanel.add(tipoReportLabel);
         controlPanel.add(reportTypeComboBox);
-        /* Commentato temporaneamente il filtro del periodo
-        controlPanel.add(periodoLabel);
-        controlPanel.add(periodoComboBox);
-        */
+        /*
+         * Commentato temporaneamente il filtro del periodo
+         * controlPanel.add(periodoLabel);
+         * controlPanel.add(periodoComboBox);
+         */
         controlPanel.add(generaReportButton);
 
         // Pannello principale per contenuto centrale

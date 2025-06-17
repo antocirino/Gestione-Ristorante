@@ -2,24 +2,16 @@ package boundary;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
 import control.Controller;
 import java.nio.file.Path;
 import utility.SvgIconManager;
 
-// Importa la libreria SVG Salamander
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGUniverse;
-
 import DTO.DTOOrdine;
 import DTO.DTOTavolo;
-import DTO.DTOIngrediente;
 
 /**
  * Schermata per il cassiere che permette di calcolare il conto di un tavolo

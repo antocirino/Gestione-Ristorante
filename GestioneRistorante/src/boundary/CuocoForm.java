@@ -7,10 +7,8 @@ import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import DTO.DTOIngredienteCuoco;
 import DTO.DTOIngredientiRicettaPietanza;
