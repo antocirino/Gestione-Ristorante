@@ -22,7 +22,8 @@
 │   │   ├── entity/     #Definisce le entità di dominio e loro relazioni
 │   │   ├── Exceptions/ #Contiene le classi per la gestione personalizzata delle eccezioni
 │   │   ├── resources/  # Risorse statiche come immagini, icone e file di testo
-│   │   └── test/       # Test unitari e di integrazione
+│   │   ├── test/       # Test unitari e di integrazione
+│   │   └── utility/    # Contiene classi di utility per la gestione delle icone SVG
 │   └── bin/
 ├── SQL/
 │   ├── init/
