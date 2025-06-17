@@ -11,7 +11,6 @@ import utility.SvgIconManager;
 
 public class FirstForm extends JFrame {
     private JPanel mainPanel;
-    private JLabel statusLabel;
     private Color primaryColor = new Color(52, 152, 219);
     private Color accentColor = new Color(41, 128, 185);
     private Color textColor = new Color(44, 62, 80);

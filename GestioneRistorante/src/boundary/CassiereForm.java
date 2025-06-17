@@ -569,7 +569,7 @@ public class CassiereForm extends JFrame {
 
         if (success) {
             JOptionPane.showMessageDialog(this,
-                    "💰 Pagamento registrato con successo!\n🪑 Il tavolo è stato liberato.",
+                    "Pagamento registrato con successo!\nIl tavolo è stato liberato.",
                     "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
 
             // Aggiorno la lista dei tavoli

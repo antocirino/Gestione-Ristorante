@@ -23,7 +23,6 @@ import com.lowagie.text.pdf.draw.LineSeparator;
 import DTO.DTOOrdine;
 import control.Controller;
 import entity.EntityDettaglioOrdinePietanza;
-import entity.EntityOrdine;
 import entity.EntityPietanza;
 import database.DBOrdine;
 import java.util.Map;
@@ -172,7 +171,6 @@ public class ContoPdfExporter {
      */
     private static void aggiungiDettagliOrdine(Document document, DTOOrdine ordine) throws Exception {
         // Recupero l'entity ordine per accedere ai dettagli
-        EntityOrdine entityOrdine = new EntityOrdine(ordine.getIdOrdine());
 
         // Crea tabella per i dettagli
         PdfPTable table = new PdfPTable(4);
