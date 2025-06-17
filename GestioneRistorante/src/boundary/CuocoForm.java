@@ -53,6 +53,7 @@ public class CuocoForm extends JFrame {
     private enum StatoOrdine {
         IN_ATTESA("in_attesa", "In attesa"),
         IN_PREPARAZIONE("in_preparazione", "In preparazione"),
+        CONFERMATO("confermato", "Confermato"),
         PRONTO("pronto", "Pronto"),
         CONSEGNATO("consegnato", "Consegnato"),
         PAGATO("pagato", "Pagato");
@@ -252,7 +253,7 @@ public class CuocoForm extends JFrame {
         });
 
         // Carica i dati iniziali
-        ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("in_attesa");
+        ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("confermato");
         ArrayList<DTOOrdine> ordini_in_preparazione = Controller.getOrdiniByStato("in_preparazione");
         ArrayList<DTOOrdine> ordini_pronti = Controller.getOrdiniByStato("pronto");
 
@@ -268,7 +269,7 @@ public class CuocoForm extends JFrame {
         Timer timer = new Timer(30000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("in_attesa");
+                ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("confermato");
                 ArrayList<DTOOrdine> ordini_in_preparazione = Controller.getOrdiniByStato("in_preparazione");
                 ArrayList<DTOOrdine> ordini_pronti = Controller.getOrdiniByStato("pronto");
 
@@ -385,7 +386,7 @@ public class CuocoForm extends JFrame {
         String stato = ordiniTable.getValueAt(selectedRow, 4).toString();
         visualizzaIngredientiButton.setEnabled(true);
 
-        if (stato.equals(StatoOrdine.IN_ATTESA.getDescrizione())) {
+        if (stato.equals(StatoOrdine.CONFERMATO.getDescrizione())) {
             // Ordine in attesa
             iniziaPreparazioneButton.setEnabled(true);
             segnaCompletatoButton.setEnabled(false);
@@ -424,7 +425,7 @@ public class CuocoForm extends JFrame {
                 "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
 
         // Ricarica gli ordini dopo l'aggiornamento
-        ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("in_attesa");
+        ArrayList<DTOOrdine> ordini_in_attesa = Controller.getOrdiniByStato("confermato");
         ArrayList<DTOOrdine> ordini_in_preparazione = Controller.getOrdiniByStato("in_preparazione");
         ArrayList<DTOOrdine> ordini_pronti = Controller.getOrdiniByStato("pronto");
 

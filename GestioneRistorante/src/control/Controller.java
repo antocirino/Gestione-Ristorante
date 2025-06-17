@@ -235,7 +235,7 @@ public class Controller {
      */
     public static void ConfermaOrdine(int idOrdine, int idTavolo) {
         EntityOrdine ordine = new EntityOrdine(idOrdine);
-        ordine.aggiornaStato("in_attesa");
+        ordine.aggiornaStato("confermato");
     }
 
     /**

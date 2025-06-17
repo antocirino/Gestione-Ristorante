@@ -17,7 +17,7 @@ public class EntityOrdine {
     private int idTavolo;
     private int numPersone;
     private Date dataOrdine;
-    private String stato; // in_attesa, in_preparazione, pronto, consegnato, pagato
+    private String stato; // in_attesa,confermato, in_preparazione, pronto, consegnato, pagato
     private double costoTotale; // Nuovo campo per tenere traccia del costo totale
 
     /**
