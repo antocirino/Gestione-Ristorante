@@ -16,39 +16,37 @@ SCHEMA_FILE = os.path.join('..', 'init', '01-schema.sql')
 OUTPUT_FILE = os.path.join('..', 'init', '02-sample-data-generated.sql')
 RICETTE_FILE = os.path.join('.', 'ricette.json')
 
-
+#Pulisi dati qui 
 
 # Dati casuali per le pietanze
 nomi_antipasti = [
-    "Bruschetta pomodoro e basilico", "Carpaccio di manzo", "Antipasto misto",
-    "Insalata caprese", "Crostini ai funghi", "Affettati misti", "Olive all ascolana",
-    "Insalata di mare", "Parmigiana di melanzane", "Burrata con pomodorini", 
+    "Bruschetta pomodoro e basilico", "Antipasto misto", "Burrata con pomodorini",
+    "Carpaccio di manzo","Insalata caprese", "Insalata di mare"
 ]
 
 nomi_primi = [
-    "Spaghetti alla carbonara", "Risotto ai funghi porcini", "Lasagne alla bolognese",
+    "Risotto ai funghi porcini", "Lasagne alla bolognese",
     "Tagliatelle al ragu", "Penne all arrabbiata", "Ravioli ricotta e spinaci", 
-    "Linguine allo scoglio", "Gnocchi al pesto", "Orecchiette alle cime di rapa",
-    "Bucatini all amatriciana", "Fettuccine Alfredo", "Spaghetti aglio e olio",
+    "Orecchiette alle cime di rapa", "Fettuccine Alfredo", "Linguine allo scoglio"
 ]
 
 nomi_secondi = [
-    "Tagliata di manzo", "Scaloppine al limone", "Filetto di branzino",
-    "Cotoletta alla milanese", "Baccala alla vicentina", "Bistecca fiorentina",
-    "Polpo alla griglia", "Arrosto di vitello", "Ossobuco alla milanese", 
-    "Salsiccia e friarielli", "Frittura di pesce", "Spezzatino di manzo",
+    "Tagliata di manzo","Filetto di branzino", "Cotoletta alla milanese", 
+    "Scaloppine al limone", "Polpo alla griglia", "Arrosto di vitello",
+    "Ossobuco alla milanese", "Salsiccia e friarielli", "Frittura di pesce",
+    "Parmigiana di melanzane"
 ]
 
 nomi_contorni = [
-    "Patate al forno", "Insalata mista", "Verdure grigliate",
-    "Friarielli", "Funghi trifolati", "Melanzane a funghetto", 
-    "Patatine fritte", "Pure di patate", "Carciofi alla romana"
+    "Patate al forno", "Verdure grigliate", "Insalata mista",
+    "Funghi trifolati","Patatine fritte", "Friarielli", "Melanzane a funghetto", 
+    "Pure di patate"
 ]
 
 nomi_dolci = [
     "Tiramisu", "Panna cotta", "Cannolo siciliano",
-    "Baba al rum", "Sfogliatella", "Profiteroles", 
-    "Crostata di frutta", "Torta al cioccolato"
+    "Baba al rum", "Sfogliatella", "Crostata di frutta", 
+    "Torta al cioccolato", "Tagliata di frutta",
 ]
 
 nomi_bevande = [
@@ -57,9 +55,11 @@ nomi_bevande = [
     "Birra alla spina", "Sprite", "Caffe", "Amaro", 
     "Limoncello", "Grappa", "Prosecco", "Vino rosato della casa",
 ]
+# Dati per gli ingredienti - mappa con nome come chiave e dizionario con id, quantità, unità e soglia
+ingredienti_comuni = {}
 
-# Dati per gli ingredienti
-ingredienti_comuni = [
+# Riempimento del dizionario
+ingredient_list = [
     ("Pomodoro", "kg", 0.0, 10.0),
     ("Farina", "kg", 0.0, 5.0),
     ("Sale", "kg", 0.0, 1.0),
@@ -127,8 +127,17 @@ ingredienti_comuni = [
     ("Rum", "litri", 5.0, 1.0),
     ("Friarielli", "kg", 8.0, 1.5),
     ("Olive", "kg", 5.0, 1.0),
-    ("Pinoli", "kg", 2.0, 0.5)
+    ("Pinoli", "kg", 2.0, 0.5),
+    ("Frutta fresca", "kg", 20.0, 2.0)
 ]
+
+for i, (nome, unita, quantita, soglia) in enumerate(ingredient_list, 1):
+    ingredienti_comuni[nome] = {
+        "id": i,
+        "quantita_disponibile": quantita,
+        "unita_misura": unita,
+        "soglia_riordino": soglia
+    }
 
 def leggi_schema():
     """Legge lo schema SQL per comprendere le tabelle"""
@@ -194,8 +203,8 @@ def genera_dati_ingredienti():
     sql += "INSERT INTO `ingrediente` (`nome`, `quantita_disponibile`, `unita_misura`, `soglia_riordino`) VALUES\n"
     
     values = []
-    for nome, unita_misura, quantita, soglia in ingredienti_comuni:
-        values.append(f"('{nome}', {quantita}, '{unita_misura}', {soglia})")
+    for nome, info in ingredienti_comuni.items():
+        values.append(f"('{nome}', {info['quantita_disponibile']}, '{info['unita_misura']}', {info['soglia_riordino']})")
     
     sql += ",\n".join(values) + ";\n\n"
     return sql
@@ -374,48 +383,77 @@ def genera_dati_menu_fisso():
     
     values_comp = []
     
-    # Menu 1: Degustazione
+    # Mapping corretto dei piatti dopo le modifiche (spostamento parmigiana negli secondi):
+    # Antipasti (ID 1-6):
+    # 1=Bruschetta, 2=Antipasto misto, 3=Burrata pomodorini, 
+    # 4=Carpaccio, 5=Insalata caprese, 6=Insalata di mare
+    
+    # Primi (ID 7-14):
+    # 7=Risotto funghi, 8=Lasagne, 9=Tagliatelle ragù, 10=Penne arrabbiata,
+    # 11=Ravioli ricotta, 12=Orecchiette, 13=Fettuccine, 14=Linguine scoglio
+    
+    # Secondi (ID 15-24):
+    # 15=Tagliata manzo, 16=Filetto branzino, 17=Cotoletta,
+    # 18=Scaloppine, 19=Polpo, 20=Arrosto, 21=Ossobuco, 22=Salsiccia, 
+    # 23=Frittura, 24=Parmigiana
+    
+    # Contorni (ID 25-32):
+    # 25=Patate forno, 26=Verdure grigliate, 27=Insalata mista,
+    # 28=Funghi, 29=Patatine, 30=Friarielli, 31=Melanzane, 32=Purè
+    
+    # Dolci (ID 33-40):
+    # 33=Tiramisù, 34=Panna cotta, 35=Cannolo, 36=Babà, 
+    # 37=Sfogliatella, 38=Crostata, 39=Torta cioccolato, 40=Tagliata frutta
+    
+    # Menu 1: Degustazione (deve contenere 2 primi)
     values_comp.extend([
-        "(1, 1)",  # Un antipasto
-        "(1, 11)", # Un primo
-        "(1, 21)", # Un secondo
-        "(1, 31)", # Un contorno
-        "(1, 41)"  # Un dolce
+        "(1, 3)",  # Antipasto: Burrata con pomodorini
+        "(1, 7)",  # Primo 1: Risotto ai funghi porcini
+        "(1, 9)",  # Primo 2: Tagliatelle al ragù
+        "(1, 15)", # Secondo: Tagliata di manzo
+        "(1, 25)", # Contorno: Patate al forno
+        "(1, 33)", # Dolce: Tiramisù
+        "(1, 40)"  # Frutta: Tagliata di frutta
     ])
     
-    # Menu 2: di Terra
+    # Menu 2: di Terra (solo piatti con carne o verdure)
     values_comp.extend([
-        "(2, 2)",  # Antipasto terra
-        "(2, 12)", # Primo terra
-        "(2, 22)", # Secondo terra
-        "(2, 32)", # Contorno
-        "(2, 42)"  # Dolce
+        "(2, 4)",  # Antipasto: Carpaccio di manzo
+        "(2, 9)",  # Primo: Tagliatelle al ragù
+        "(2, 20)", # Secondo: Arrosto di vitello
+        "(2, 26)", # Contorno: Verdure grigliate
+        "(2, 38)", # Dolce: Crostata
+        "(2, 40)"  # Frutta: Tagliata di frutta
     ])
     
-    # Menu 3: di Mare
+    # Menu 3: di Mare (solo piatti con pesce o verdure)
     values_comp.extend([
-        "(3, 8)",  # Antipasto mare
-        "(3, 17)", # Primo mare
-        "(3, 23)", # Secondo mare
-        "(3, 33)", # Contorno
-        "(3, 43)"  # Dolce
+        "(3, 6)",  # Antipasto: Insalata di mare
+        "(3, 14)", # Primo: Linguine allo scoglio
+        "(3, 16)", # Secondo: Filetto di branzino
+        "(3, 27)", # Contorno: Insalata mista
+        "(3, 34)", # Dolce: Panna cotta
+        "(3, 40)"  # Frutta: Tagliata di frutta
     ])
     
-    # Menu 4: Vegetariano
+    # Menu 4: Vegetariano (solo piatti vegetariani)
     values_comp.extend([
-        "(4, 4)",  # Antipasto veg
-        "(4, 16)", # Primo veg
-        "(4, 31)", # Contorno 1
-        "(4, 33)", # Contorno 2
-        "(4, 44)"  # Dolce
+        "(4, 5)",  # Antipasto: Insalata caprese
+        "(4, 11)", # Primo: Ravioli ricotta e spinaci
+        "(4, 24)", # Secondo: Parmigiana di melanzane
+        "(4, 28)", # Contorno: Funghi trifolati
+        "(4, 38)", # Dolce: Crostata di frutta
+        "(4, 40)"  # Frutta: Tagliata di frutta
     ])
     
-    # Menu 5: Bambini
+    # Menu 5: Bambini (specifici piatti richiesti)
     values_comp.extend([
-        "(5, 10)", # Antipasto semplice
-        "(5, 15)", # Pasta semplice
-        "(5, 36)", # Patatine
-        "(5, 45)"  # Gelato
+        "(5, 1)",  # Antipasto: Bruschetta
+        "(5, 10)", # Primo RICHIESTO: Penne all'arrabbiata
+        "(5, 17)", # Secondo RICHIESTO: Cotoletta alla milanese
+        "(5, 29)", # Contorno: Patatine fritte
+        "(5, 39)", # Dolce: Torta al cioccolato
+        "(5, 40)"  # Frutta: Tagliata di frutta
     ])
     
     sql_comp += ",\n".join(values_comp) + ";\n\n"

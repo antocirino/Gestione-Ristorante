@@ -23,40 +23,6 @@
         { "id": 46, "quantita": 0.05 }
       ]
     },
-    "Crostini ai funghi": {
-      "descrizione": "Crostini di pane con crema di funghi porcini",
-      "tempo_preparazione": 20,
-      "istruzioni": "Tostare fette di pane, saltare i funghi in padella con aglio e prezzemolo, disporre sui crostini.",
-      "ingredienti": [
-        { "id": 2, "quantita": 0.05 },
-        { "id": 15, "quantita": 0.15 },
-        { "id": 5, "quantita": 0.01 },
-        { "id": 4, "quantita": 0.03 },
-        { "id": 3, "quantita": 0.002 }
-      ]
-    },
-    "Affettati misti": {
-      "descrizione": "Selezione di affettati tipici italiani",
-      "tempo_preparazione": 10,
-      "istruzioni": "Affettare e disporre su un tagliere vari tipi di salumi italiani, guarnire con olive e grissini.",
-      "ingredienti": [
-        { "id": 10, "quantita": 0.08 },
-        { "id": 11, "quantita": 0.08 },
-        { "id": 46, "quantita": 0.03 }
-      ]
-    },
-    "Olive all ascolana": {
-      "descrizione": "Olive ripiene di carne e fritte",
-      "tempo_preparazione": 45,
-      "istruzioni": "Denocciolate le olive, preparare un ripieno con carni miste, riempire le olive, impanarle e friggerle.",
-      "ingredienti": [
-        { "id": 46, "quantita": 0.2 },
-        { "id": 19, "quantita": 0.1 },
-        { "id": 12, "quantita": 2 },
-        { "id": 2, "quantita": 0.1 },
-        { "id": 4, "quantita": 0.1 }
-      ]
-    },
     "Burrata con pomodorini": {
       "descrizione": "Burrata fresca servita con pomodorini e basilico",
       "tempo_preparazione": 5,
@@ -94,18 +60,6 @@
         { "id": 3, "quantita": 0.002 }
       ]
     },
-    "Parmigiana di melanzane": {
-      "descrizione": "Melanzane fritte a strati con pomodoro, mozzarella e parmigiano",
-      "tempo_preparazione": 60,
-      "istruzioni": "Tagliare le melanzane a fette, friggerle, preparare un sugo di pomodoro, alternare strati di melanzane, sugo, mozzarella e parmigiano, infornare.",
-      "ingredienti": [
-        { "id": 36, "quantita": 0.5 },
-        { "id": 1, "quantita": 0.2 },
-        { "id": 7, "quantita": 0.15 },
-        { "id": 8, "quantita": 0.05 },
-        { "id": 4, "quantita": 0.1 }
-      ]
-    },
     "Insalata di mare": {
       "descrizione": "Mix di frutti di mare conditi con olio, limone e prezzemolo",
       "tempo_preparazione": 30,
@@ -122,18 +76,6 @@
     }
   },
   "Primi": {
-    "Spaghetti alla carbonara": {
-      "descrizione": "Ricetta tradizionale romana",
-      "tempo_preparazione": 20,
-      "istruzioni": "Cuocere la pasta, preparare il condimento con uova, pecorino, guanciale e pepe nero.",
-      "ingredienti": [
-        { "id": 18, "quantita": 0.1 },
-        { "id": 11, "quantita": 0.05 },
-        { "id": 12, "quantita": 2 },
-        { "id": 9, "quantita": 0.03 },
-        { "id": 13, "quantita": 0.005 }
-      ]
-    },
     "Risotto ai funghi porcini": {
       "descrizione": "Ricetta cremosa con funghi porcini",
       "tempo_preparazione": 25,
@@ -198,20 +140,6 @@
         { "id": 3, "quantita": 0.005 }
       ]
     },
-    "Gnocchi al pesto": {
-      "descrizione": "Gnocchi di patate con salsa al basilico",
-      "tempo_preparazione": 45,
-      "istruzioni": "Preparare gli gnocchi con patate e farina, cuocerli in acqua bollente e condirli con pesto fresco fatto con basilico, pinoli, parmigiano, aglio e olio.",
-      "ingredienti": [
-        { "id": 38, "quantita": 0.5 },
-        { "id": 2, "quantita": 0.1 },
-        { "id": 6, "quantita": 0.1 },
-        { "id": 8, "quantita": 0.05 },
-        { "id": 5, "quantita": 0.005 },
-        { "id": 51, "quantita": 0.03 },
-        { "id": 4, "quantita": 0.1 }
-      ]
-    },
     "Orecchiette alle cime di rapa": {
       "descrizione": "Pasta tipica pugliese con cime di rapa",
       "tempo_preparazione": 30,
@@ -222,18 +150,6 @@
         { "id": 5, "quantita": 0.01 },
         { "id": 14, "quantita": 0.002 },
         { "id": 4, "quantita": 0.04 }
-      ]
-    },
-    "Bucatini all amatriciana": {
-      "descrizione": "Pasta con sugo di pomodoro e guanciale",
-      "tempo_preparazione": 25,
-      "istruzioni": "Rosolare il guanciale tagliato a listarelle, aggiungere la salsa di pomodoro, cuocere per 15 minuti, condire la pasta e servire con pecorino grattugiato.",
-      "ingredienti": [
-        { "id": 18, "quantita": 0.1 },
-        { "id": 10, "quantita": 0.08 },
-        { "id": 1, "quantita": 0.2 },
-        { "id": 9, "quantita": 0.04 },
-        { "id": 14, "quantita": 0.001 }
       ]
     },
     "Fettuccine Alfredo": {
@@ -248,18 +164,6 @@
         { "id": 13, "quantita": 0.001 }
       ]
     },
-    "Spaghetti aglio e olio": {
-      "descrizione": "Piatto semplice ma gustoso della tradizione",
-      "tempo_preparazione": 15,
-      "istruzioni": "Soffriggere l aglio tritato in abbondante olio, eventualmente aggiungere peperoncino, condire la pasta scolata al dente.",
-      "ingredienti": [
-        { "id": 18, "quantita": 0.1 },
-        { "id": 5, "quantita": 0.03 },
-        { "id": 4, "quantita": 0.05 },
-        { "id": 14, "quantita": 0.001 },
-        { "id": 3, "quantita": 0.002 }
-      ]
-    },
     "Linguine allo scoglio": {
       "descrizione": "Pasta con frutti di mare e pomodorini",
       "tempo_preparazione": 30,
@@ -272,18 +176,6 @@
         { "id": 40, "quantita": 0.1 },
         { "id": 56, "quantita": 0.1 },
         { "id": 57, "quantita": 0.1 }
-      ]
-    },
-    "Pasta alla norma": {
-      "descrizione": "Ricetta siciliana con melanzane e ricotta salata",
-      "tempo_preparazione": 35,
-      "istruzioni": "Friggere le melanzane a cubetti, preparare un sugo di pomodoro, unire alla pasta scolata al dente e completare con ricotta salata grattugiata.",
-      "ingredienti": [
-        { "id": 18, "quantita": 0.1 },
-        { "id": 1, "quantita": 0.15 },
-        { "id": 36, "quantita": 0.2 },
-        { "id": 4, "quantita": 0.03 },
-        { "id": 5, "quantita": 0.005 }
       ]
     }
   },
@@ -320,19 +212,6 @@
         { "id": 25, "quantita": 0.05 }
       ]
     },
-    "Pollo alla cacciatora": {
-      "descrizione": "Pollo in umido con pomodoro, vino e olive",
-      "tempo_preparazione": 45,
-      "istruzioni": "Rosolare il pollo, aggiungere cipolla, sedano, carote, sfumare con vino, aggiungere pomodoro e olive, cuocere lentamente.",
-      "ingredienti": [
-        { "id": 60, "quantita": 0.3 },
-        { "id": 1, "quantita": 0.1 },
-        { "id": 22, "quantita": 0.05 },
-        { "id": 20, "quantita": 0.03 },
-        { "id": 21, "quantita": 0.03 },
-        { "id": 24, "quantita": 0.05 }
-      ]
-    },
     "Scaloppine al limone": {
       "descrizione": "Fettine di vitello cotte con succo di limone",
       "tempo_preparazione": 20,
@@ -343,17 +222,6 @@
         { "id": 25, "quantita": 0.03 },
         { "id": 23, "quantita": 0.05 },
         { "id": 54, "quantita": 0.1 }
-      ]
-    },
-    "Bistecca fiorentina": {
-      "descrizione": "Bistecca di manzo alta e con l osso, tipica toscana",
-      "tempo_preparazione": 30,
-      "istruzioni": "Portare la carne a temperatura ambiente, cuocerla sulla griglia a fuoco vivo per pochi minuti per lato, salare a fine cottura.",
-      "ingredienti": [
-        { "id": 32, "quantita": 0.5 },
-        { "id": 3, "quantita": 0.01 },
-        { "id": 4, "quantita": 0.02 },
-        { "id": 13, "quantita": 0.002 }
       ]
     },
     "Polpo alla griglia": {
@@ -409,21 +277,6 @@
         { "id": 14, "quantita": 0.003 }
       ]
     },
-    "Spezzatino di manzo": {
-      "descrizione": "Bocconcini di manzo cotti lentamente con verdure",
-      "tempo_preparazione": 120,
-      "istruzioni": "Rosolare la carne a cubetti, aggiungere le verdure tritate, sfumare con vino rosso, aggiungere brodo e cuocere a fuoco basso per circa 2 ore.",
-      "ingredienti": [
-        { "id": 31, "quantita": 0.3 },
-        { "id": 21, "quantita": 0.1 },
-        { "id": 22, "quantita": 0.1 },
-        { "id": 20, "quantita": 0.05 },
-        { "id": 24, "quantita": 0.1 },
-        { "id": 38, "quantita": 0.2 },
-        { "id": 4, "quantita": 0.03 },
-        { "id": 3, "quantita": 0.005 }
-      ]
-    },
     "Frittura di pesce": {
       "descrizione": "Mix di pesce e frutti di mare fritti in pastella",
       "tempo_preparazione": 25,
@@ -435,6 +288,18 @@
         { "id": 2, "quantita": 0.1 },
         { "id": 3, "quantita": 0.003 },
         { "id": 12, "quantita": 1 }
+      ]
+    },
+    "Parmigiana di melanzane": {
+      "descrizione": "Melanzane fritte a strati con pomodoro, mozzarella e parmigiano",
+      "tempo_preparazione": 60,
+      "istruzioni": "Tagliare le melanzane a fette, friggerle, preparare un sugo di pomodoro, alternare strati di melanzane, sugo, mozzarella e parmigiano, infornare.",
+      "ingredienti": [
+        { "id": 36, "quantita": 0.5 },
+        { "id": 1, "quantita": 0.2 },
+        { "id": 7, "quantita": 0.15 },
+        { "id": 8, "quantita": 0.05 },
+        { "id": 4, "quantita": 0.1 }
       ]
     }
   },
@@ -530,18 +395,6 @@
         { "id": 3, "quantita": 0.003 },
         { "id": 13, "quantita": 0.001 }
       ]
-    },
-    "Carciofi alla romana": {
-      "descrizione": "Carciofi ripieni di erbe aromatiche",
-      "tempo_preparazione": 40,
-      "istruzioni": "Pulire i carciofi, riempire con un trito di aglio, prezzemolo, menta e pangrattato, cuocere in padella con acqua e olio.",
-      "ingredienti": [
-        { "id": 46, "quantita": 0.5 },
-        { "id": 5, "quantita": 0.02 },
-        { "id": 6, "quantita": 0.01 },
-        { "id": 4, "quantita": 0.04 },
-        { "id": 2, "quantita": 0.02 }
-      ]
     }
   },
   "Dolci": {
@@ -566,43 +419,6 @@
         { "id": 26, "quantita": 0.1 },
         { "id": 28, "quantita": 0.08 },
         { "id": 53, "quantita": 0.005 }
-      ]
-    },
-    "Torta di mele": {
-      "descrizione": "Torta soffice con mele e cannella",
-      "tempo_preparazione": 60,
-      "istruzioni": "Preparare un impasto con uova, zucchero, farina, burro, lievito, aggiungere le mele a fette, spolverare con cannella e zucchero, cuocere in forno.",
-      "ingredienti": [
-        { "id": 12, "quantita": 3 },
-        { "id": 28, "quantita": 0.15 },
-        { "id": 2, "quantita": 0.2 },
-        { "id": 25, "quantita": 0.1 },
-        { "id": 47, "quantita": 0.5 }
-      ]
-    },
-    "Gelato artigianale": {
-      "descrizione": "Gelato fatto in casa in vari gusti",
-      "tempo_preparazione": 180,
-      "istruzioni": "Preparare una crema base con latte, panna, tuorli d uovo e zucchero, aromatizzare secondo il gusto desiderato, raffreddare e mantecare in gelatiera.",
-      "ingredienti": [
-        { "id": 26, "quantita": 0.25 },
-        { "id": 27, "quantita": 0.25 },
-        { "id": 12, "quantita": 6 },
-        { "id": 28, "quantita": 0.15 },
-        { "id": 53, "quantita": 0.005 },
-        { "id": 49, "quantita": 0.05 }
-      ]
-    },
-    "Cheesecake": {
-      "descrizione": "Torta fredda a base di formaggio e biscotti",
-      "tempo_preparazione": 240,
-      "istruzioni": "Preparare una base di biscotti sbriciolati e burro, per la farcia mescolare formaggio, zucchero, panna e uova, versare sulla base e cuocere in forno, raffreddare in frigo.",
-      "ingredienti": [
-        { "id": 29, "quantita": 0.5 },
-        { "id": 28, "quantita": 0.15 },
-        { "id": 27, "quantita": 0.1 },
-        { "id": 12, "quantita": 2 },
-        { "id": 25, "quantita": 0.05 }
       ]
     },
     "Cannolo siciliano": {
@@ -641,19 +457,6 @@
         { "id": 52, "quantita": 0.005 }
       ]
     },
-    "Profiteroles": {
-      "descrizione": "Bigne ripieni di panna e ricoperti di cioccolato",
-      "tempo_preparazione": 60,
-      "istruzioni": "Preparare la pasta choux, formare i bigne, cuocerli in forno, farcirli con crema o panna e coprirli con cioccolato fuso.",
-      "ingredienti": [
-        { "id": 2, "quantita": 0.1 },
-        { "id": 12, "quantita": 4 },
-        { "id": 25, "quantita": 0.1 },
-        { "id": 26, "quantita": 0.1 },
-        { "id": 27, "quantita": 0.2 },
-        { "id": 50, "quantita": 0.1 }
-      ]
-    },
     "Crostata di frutta": {
       "descrizione": "Base di pasta frolla con crema e frutta fresca",
       "tempo_preparazione": 60,
@@ -677,6 +480,14 @@
         { "id": 28, "quantita": 0.15 },
         { "id": 12, "quantita": 4 },
         { "id": 2, "quantita": 0.1 }
+      ]
+    },
+    "Tagliata di frutta": {
+      "descrizione": "Selezione di frutta fresca di stagione",
+      "tempo_preparazione": 5,
+      "istruzioni": "Lavare e tagliare la frutta a pezzi, disporla su un piatto da portata, servire fresca.",
+      "ingredienti": [
+        { "id": 69, "quantita": 0.5 }
       ]
     }
   }
