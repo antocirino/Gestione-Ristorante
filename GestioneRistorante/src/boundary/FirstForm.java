@@ -77,27 +77,9 @@ public class FirstForm extends JFrame {
         ruoliPanel.add(direttoreButton);
 
         // Pannello per testare la connessione al database e uscire dall'applicazione
-        JPanel testPanel = new JPanel(new GridLayout(1, 2, 15, 0));
+        JPanel testPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         testPanel.setBackground(lightColor);
         testPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 0, 40));
-
-        JButton testDbButton = new JButton("Verifica connessione database");
-        styleButton(testDbButton);
-        testDbButton.setPreferredSize(new Dimension(250, 40));
-        testDbButton.setFont(smallFont);
-        testDbButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Controller controller = Controller.getInstance();
-                boolean result = controller.testDatabaseConnection();
-                if (result) {
-                    statusLabel.setText("✓ Connessione al database riuscita");
-                    statusLabel.setForeground(new Color(46, 204, 113));
-                } else {
-                    statusLabel.setText("✗ Impossibile connettersi al database");
-                    statusLabel.setForeground(new Color(231, 76, 60));
-                }
-            }
-        });
 
         JButton exitButton = new JButton("Esci dall'applicazione");
         exitButton.setPreferredSize(new Dimension(250, 40));
@@ -225,7 +207,6 @@ public class FirstForm extends JFrame {
             }
         });
 
-        testPanel.add(testDbButton);
         testPanel.add(exitButton);
 
         // Pannello inferiore con status
