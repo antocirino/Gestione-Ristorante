@@ -640,6 +640,8 @@ public class CameriereForm extends JFrame {
             textField.setForeground(textColor);
             textField.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
             textField.setHorizontalAlignment(JTextField.CENTER);
+            // Disabilita la modifica diretta del campo di testo dello spinner
+            textField.setEditable(false);
         }
 
         // Aggiungi effetti focus per lo Spinner

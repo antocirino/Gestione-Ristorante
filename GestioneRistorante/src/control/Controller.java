@@ -391,41 +391,6 @@ public class Controller {
         return dto;
     }
 
-    private Connection connection;
-
-    // Connessione al database
-    /**
-     * Testa la connessione al database
-     * 
-     * @return true se la connessione è stabilita correttamente, false altrimenti
-     */
-    public boolean testDatabaseConnection() {
-        try {
-            System.out.println("Testing database connection...");
-            if (connection == null || connection.isClosed()) {
-                System.out.println("Connection is null or closed, creating a new connection.");
-                connection = DBConnection.getConnection();
-                System.out.println("New connection created: " + connection);
-            }
-
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM tavolo");
-
-            System.out.println("Executing test query on tavolo table...");
-            boolean result = rs.next();
-
-            rs.close();
-            stmt.close();
-
-            System.out.println("Database connection test successful: " + result);
-
-            return result;
-        } catch (SQLException e) {
-            System.err.println("Errore durante il test della connessione al database: " + e.getMessage());
-            return false;
-        }
-    }
-
     /**
      * Recupera il costo del coperto impostato per il ristorante
      * 
