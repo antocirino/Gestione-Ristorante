@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
-import control.Controller;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
