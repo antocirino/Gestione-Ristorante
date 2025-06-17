@@ -2,9 +2,5 @@
 
 # CODICE
 
-# DIAGRAMMI
-
-# LATEX
-
-- Aggiungere diagrammi mancanti
-- controllare scenari su documentazione=codice=diagrammi
+- aggiungere immagini schermate in README.md
+- eliminare readme.md inutili e sout

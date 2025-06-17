@@ -1,16 +1,95 @@
 # 🍽️ Sistema di Gestione per Ristorante
 
-> Progetto sviluppato per il corso di Ingegneria del Software.     
-> Linguaggio di programmazione utilizzato: **Java**   
-> Database: **Relazionale (MySQL)**    
-> Architettura: **BCED (Boundary Control Entity Database)**    
-> Containerizzazione: **Docker** 
+> Progetto sviluppato per il corso di Ingegneria del Software.  
+> Linguaggio di programmazione utilizzato: **Java**  
+> Database: **Relazionale (MySQL)**  
+> Architettura: **BCED (Boundary Control Entity Database)**  
+> Containerizzazione: **Docker**
 
 ---
 
-## 📋 Descrizione del Progetto
+## 📁 Struttura del Progetto
 
-Questo sistema software ha l'obiettivo di supportare digitalmente la gestione di un ristorante, facilitando le attività quotidiane del personale e migliorando l'efficienza complessiva del servizio. Il sistema consente la raccolta digitale degli ordini da parte dei camerieri, la verifica della disponibilità degli ingredienti in magazzino, il supporto alla cucina nella preparazione dei piatti, la gestione del conto da parte del cassiere, e l'analisi delle scorte da parte del direttore.
+```bash
+.
+├── GestioneRistorante/
+│   ├── src/
+│   │   ├── boundary/   #Contiene le classi per l'interfaccia utente e gestione dell'input/output
+│   │   ├── CFG/        #Connessione al database
+│   │   ├── control/    #Implementa la logica di stampa PDF e coordina le operazioni
+│   │   ├── database/   #Gestisce le query al database MySQL
+│   │   ├── DTO/        #Data Transfer Objects per il trasferimento di dati tra i vari strati
+│   │   ├── entity/     #Definisce le entità di dominio e loro relazioni
+│   │   ├── Exceptions/ #Contiene le classi per la gestione personalizzata delle eccezioni
+│   │   ├── resources/  # Risorse statiche come immagini, icone e file di testo
+│   │   └── test/       # Test unitari e di integrazione
+│   └── bin/
+├── SQL/
+│   ├── init/
+│   └── seeding/
+├── docker/
+├── images/
+└── pom.xml
+```
+
+### Architettura BCED
+
+Il progetto implementa l'architettura BCED (Boundary Control Entity Database):
+
+- **Boundary**: Gestisce l'interazione con l'utente attraverso l'interfaccia grafica Swing
+- **Control**: Implementa la logica di business e coordina il flusso tra interfaccia e dati
+- **Entity**: Rappresenta le entità del dominio e le loro relazioni
+- **Database**: Gestisce la persistenza dei dati attraverso il database MySQL
+
+Questa architettura favorisce la separazione delle responsabilità e migliora la manutenibilità
+del codice.
+
+## 🔧 Tecnologie & Librerie
+
+- **Java 11** → Linguaggio di programmazione principale del progetto
+- **MySQL 8.0** → Sistema di gestione database relazionale per la persistenza dei dati
+- **Swing** → Libreria grafica Java per la creazione dell'interfaccia utente
+- **JDBC 8.0.26** → Connettore Java per l'interazione con il database MySQL
+- **Docker 20.10** → Piattaforma per la containerizzazione dell'applicazione
+
+## 📋 Funzionalità e Schermate
+
+### FirstForm
+
+La schermata iniziale consente ad ogni tipo di utente (cameriere, cuoco, cassiere, direttore)
+l'accesso alle funzionalità appropriate per il proprio ruolo.
+
+![FirstForm](images/firstform.png)
+
+### Form Cameriere
+
+L'interfaccia del cameriere permette di gestire le ordinazioni dei clienti. È possibile
+creare nuovi ordini, associarli ai tavoli, modificare elementi e inviare le richieste
+direttamente alla cucina.
+
+![Dashboard Cameriere](images/dashboard_cameriere.png)
+
+### Form Cuoco
+
+Il modulo dedicato ai cuochi visualizza in tempo reale gli ordini ricevuti, organizzandoli
+per tempo di attesa. Il cuoco può segnare i piatti come "in preparazione" o
+"completati", aggiornando automaticamente lo stato dell'ordine e visualizzare dettagli relativi alle pietanze ordinate.
+
+![Interfaccia Cuoco](images/interfaccia_cuoco.png)
+
+### Form Cassiere
+
+L'interfaccia del cassiere gestisce i pagamenti e l'emissione degli scontrini. Il sistema
+calcola automaticamente il conto in base agli ordini associati al tavolo, supportando la creazione PDF dello scontrino.
+
+![Modulo Cassiere](images/modulo_cassiere.png)
+
+### Form Direttore
+
+Il pannello amministrativo consente al direttore di monitorare l'andamento del ristorante e controllare le scorte.
+Include strumenti per la generazione di report per gli ingredienti da riordinare.
+
+![Pannello Direttore](images/pannello_direttore.png)
 
 ## 🐳 Docker e Containerizzazione
 
@@ -225,13 +304,6 @@ Per informazioni più dettagliate, consultare i seguenti documenti:
 
 - **[GUI-Docker.md](GUI-Docker.md)**: Guida dettagliata per la configurazione dell'interfaccia grafica in Docker per macOS e Windows
 - **[TESTING.md](TESTING.md)**: Guide per testing e configurazione dell'ambiente di sviluppo, inclusa la configurazione di IntelliJ IDEA
-
-## 📁 Struttura del Progetto
-
-- **`/GestioneRistorante/src/`**: File sorgente Java
-- **`/GestioneRistorante/bin/`**: File compilati
-- **`/SQL/init/`**: Script di inizializzazione del database
-- **`/SQL/seeding/`**: Script per la generazione di dati di test
 
 ## 🧠 Autori
 
