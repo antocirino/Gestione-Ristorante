@@ -184,13 +184,7 @@ public class FirstForm extends JFrame {
                 yesButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         confirmDialog.dispose();
-                        statusLabel.setText("Chiusura dell'applicazione...");
-                        // Piccolo delay per mostrare il messaggio
-                        SwingUtilities.invokeLater(new Runnable() {
-                            public void run() {
-                                System.exit(0);
-                            }
-                        });
+                        System.exit(0);
                     }
                 });
 
