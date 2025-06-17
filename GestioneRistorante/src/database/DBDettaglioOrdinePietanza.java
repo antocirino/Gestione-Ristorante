@@ -3,12 +3,8 @@ package database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import CFG.DBConnection;
-import entity.EntityDettaglioOrdinePietanza;
-import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella
@@ -150,10 +146,10 @@ public class DBDettaglioOrdinePietanza {
      * Recupera tutti i dettagli di un ordine dal database
      * 
      * @param idOrdine ID dell'ordine
-     * @return ArrayList di oggetti DettaglioOrdinePietanza
+     * @return ArrayList di oggetti DBDettaglioOrdinePietanza
      */
-    public ArrayList<EntityDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
-        ArrayList<EntityDettaglioOrdinePietanza> listaDettagli = new ArrayList<>();
+    public ArrayList<DBDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
+        ArrayList<DBDettaglioOrdinePietanza> listaDettagli = new ArrayList<>();
         try {
             String query = "SELECT d.*, p.nome as nome_pietanza, p.prezzo as prezzo_pietanza " +
                     "FROM dettaglio_ordine_pietanza d " +
@@ -162,50 +158,15 @@ public class DBDettaglioOrdinePietanza {
             ResultSet rs = DBConnection.selectQuery(query);
 
             while (rs.next()) {
-                EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza();
+                DBDettaglioOrdinePietanza dettaglio = new DBDettaglioOrdinePietanza();
                 dettaglio.setIdDettaglio(rs.getInt("id_dettaglio"));
                 dettaglio.setIdOrdine(rs.getInt("id_ordine"));
                 dettaglio.setIdPietanza(rs.getInt("id_pietanza"));
                 dettaglio.setQuantita(rs.getInt("quantita"));
                 dettaglio.setParteDiMenu(rs.getBoolean("parte_di_menu"));
                 dettaglio.setIdMenu(rs.getInt("id_menu"));
-
-                EntityPietanza pietanza = new EntityPietanza(rs.getInt("id_pietanza"));
-                dettaglio.setPietanza(pietanza);
-
-                listaDettagli.add(dettaglio);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero dei dettagli dell'ordine: " + e.getMessage());
-        }
-        return listaDettagli;
-    }
-
-    /**
-     * Recupera i dettagli di un ordine come mappa
-     * 
-     * @param idOrdine ID dell'ordine
-     * @return ArrayList di mappe con gli attributi dei dettagli
-     */
-    public ArrayList<Map<String, Object>> getDettagliOrdineAsMap(int idOrdine) {
-        ArrayList<Map<String, Object>> listaDettagli = new ArrayList<>();
-        try {
-            String query = "SELECT d.*, p.nome as nome_pietanza, p.prezzo as prezzo_pietanza " +
-                    "FROM dettaglio_ordine_pietanza d " +
-                    "JOIN pietanza p ON d.id_pietanza = p.id_pietanza " +
-                    "WHERE d.id_ordine = " + idOrdine;
-            ResultSet rs = DBConnection.selectQuery(query);
-
-            while (rs.next()) {
-                Map<String, Object> dettaglio = new HashMap<>();
-                dettaglio.put("id_dettaglio", rs.getInt("id_dettaglio"));
-                dettaglio.put("id_ordine", rs.getInt("id_ordine"));
-                dettaglio.put("id_pietanza", rs.getInt("id_pietanza"));
-                dettaglio.put("quantita", rs.getInt("quantita"));
-                dettaglio.put("nome_pietanza", rs.getString("nome_pietanza"));
-                dettaglio.put("prezzo_pietanza", rs.getDouble("prezzo_pietanza"));
-                dettaglio.put("parte_di_menu", rs.getBoolean("parte_di_menu"));
-                dettaglio.put("id_menu", rs.getInt("id_menu"));
+                dettaglio.setNomePietanza(rs.getString("nome_pietanza"));
+                dettaglio.setPrezzoPietanza(rs.getDouble("prezzo_pietanza"));
 
                 listaDettagli.add(dettaglio);
             }

@@ -2,8 +2,6 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import DTO.DTOMenuFissoCuoco;
@@ -113,22 +111,6 @@ public class EntityOrdine {
         return o.aggiornaStato(nuovoStato);
     }
 
-    public int aggiornaCostoTotale(double nuovoCosto) {
-        this.costoTotale = nuovoCosto;
-        DBOrdine o = new DBOrdine(this.idOrdine);
-        return o.aggiornaCosto(nuovoCosto);
-    }
-
-    /**
-     * Recupera tutti gli ordini dal database
-     * 
-     * @return ArrayList di oggetti Ordine
-     */
-    public static ArrayList<EntityOrdine> getTuttiOrdini() {
-        DBOrdine ordine = new DBOrdine();
-        return ordine.getTuttiOrdini();
-    }
-
     /**
      * Recupera gli ordini con un determinato stato
      * 
@@ -159,10 +141,19 @@ public class EntityOrdine {
      * @return ArrayList di oggetti DTOPietanzaCuoco con le pietanze dell'ordine
      */
     public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine() {
-        ArrayList<DTOPietanzaCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        ArrayList<DTOPietanzaCuoco> pietanzeDTO = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
-        pietanzeDAoRDINE = ordine.getPietanzeDaOrdine();
-        return pietanzeDAoRDINE;
+
+        // Ottiene i dati dal DB e li converte in DTO
+        ArrayList<Map<String, Object>> pietanzeDB = ordine.getPietanzeDaOrdine();
+        for (Map<String, Object> pietanzaDB : pietanzeDB) {
+            String nome = (String) pietanzaDB.get("nome");
+            int quantita = (Integer) pietanzaDB.get("quantita");
+            DTOPietanzaCuoco pietanzaDTO = new DTOPietanzaCuoco(nome, quantita);
+            pietanzeDTO.add(pietanzaDTO);
+        }
+
+        return pietanzeDTO;
     }
 
     /**
@@ -171,21 +162,19 @@ public class EntityOrdine {
      * @return ArrayList di oggetti DTOMenuFissoCuoco con i menu fissi dell'ordine
      */
     public ArrayList<DTOMenuFissoCuoco> getMenuFissiDaOrdine() {
-        ArrayList<DTOMenuFissoCuoco> pietanzeDAoRDINE = new ArrayList<>();
+        ArrayList<DTOMenuFissoCuoco> menuFissiDTO = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
-        pietanzeDAoRDINE = ordine.getMenuFissiDaOrdine();
-        return pietanzeDAoRDINE;
-    }
 
-    /**
-     * Recupera gli ordini con un determinato stato
-     * 
-     * @param stato lo stato degli ordini da recuperare
-     * @return ArrayList di oggetti Ordine con lo stato specificato
-     */
-    public static ArrayList<EntityOrdine> getOrdiniByStato(String stato) {
-        DBOrdine ordine = new DBOrdine();
-        return ordine.getOrdiniByStato(stato);
+        // Ottiene i dati dal DB e li converte in DTO
+        ArrayList<Map<String, Object>> menuFissiDB = ordine.getMenuFissiDaOrdine();
+        for (Map<String, Object> menuDB : menuFissiDB) {
+            String nome = (String) menuDB.get("nome");
+            int quantita = (Integer) menuDB.get("quantita");
+            DTOMenuFissoCuoco menuDTO = new DTOMenuFissoCuoco(nome, quantita);
+            menuFissiDTO.add(menuDTO);
+        }
+
+        return menuFissiDTO;
     }
 
     /**
@@ -271,7 +260,7 @@ public class EntityOrdine {
                     quantita);
 
             // Salva il dettaglio nel database utilizzando ON CONFLICT
-            int dettaglioId = dettaglio.scriviSuDBConOnConflict();
+            int dettaglioId = dettaglio.scriviSuDB();
             System.out.println("Dettaglio ordine salvato/aggiornato con ID: " + dettaglioId);
             if (dettaglioId > 0) {
                 // Se il salvataggio è riuscito, prenota gli ingredienti e aggiorna il costo
@@ -301,6 +290,15 @@ public class EntityOrdine {
         }
     }
 
+    /**
+     * Crea un nuovo ordine
+     * 
+     * @param idTavolo     ID del tavolo associato all'ordine
+     * @param numPersone   Numero di persone per l'ordine
+     * @param idRistorante ID del ristorante associato all'ordine
+     * @param stato        Stato iniziale dell'ordine
+     * @return un nuovo oggetto EntityOrdine con l'ID assegnato dal database
+     */
     public EntityOrdine creaOrdine(int idTavolo, int numPersone, int idRistorante, String stato) {
         DBOrdine ordine = new DBOrdine(idTavolo, numPersone, idRistorante, stato);
         int id = ordine.salvaInDB();
@@ -312,17 +310,11 @@ public class EntityOrdine {
     }
 
     /**
-     * Aggiunge un menu fisso all'ordine. Un menu fisso è composto da diverse
-     * pietanze
-     * a un prezzo fisso. Questo metodo aggiunge tutte le pietanze del menu ma
-     * considera solo il prezzo complessivo del menu, non la somma dei prezzi delle
-     * singole pietanze.
+     * Aggiunge un menu fisso all'ordine
      * 
-     * @param menuId   ID del menu fisso
-     * @param nome     Nome del menu fisso
-     * @param prezzo   Prezzo complessivo del menu fisso
-     * @param pietanze Lista delle pietanze incluse nel menu fisso
-     * @param quantita Quantità di menu fissi da aggiungere
+     * @param idOrdine    ID dell'ordine a cui aggiungere il menu fisso
+     * @param idMenuFisso ID del menu fisso da aggiungere
+     * @param quantita    Quantità del menu fisso da aggiungere
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
     public boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
@@ -390,7 +382,7 @@ public class EntityOrdine {
                 dettaglio.setIdMenu(idMenuFisso); // Associa al menu fisso
 
                 // Salva il dettaglio nel database usando ON CONFLICT
-                if (dettaglio.scriviSuDBConOnConflict() <= 0) {
+                if (dettaglio.scriviSuDB() <= 0) {
                     System.err.println(
                             "Errore: Impossibile salvare il dettaglio per la pietanza del menu: " + pietanza.getNome());
                     tutteLeAggiunte = false;
@@ -427,136 +419,6 @@ public class EntityOrdine {
             System.err.println("Errore durante l'aggiunta del menu fisso: " + e.getMessage());
             e.printStackTrace();
             return false;
-        }
-    }
-
-    /**
-     * Calcola il totale del conto per l'ordine
-     * 
-     * @param includiCoperto se true include il costo del coperto nel totale
-     * @return il totale del conto
-     */
-    public double calcolaConto(boolean includiCoperto) {
-        double totale = this.costoTotale;
-        System.out.println(this.costoTotale); // Utilizziamo direttamente il costoTotale memorizzato
-        double sconto = 0.0;
-
-        try {
-            // Recupera tutti i dettagli dell'ordine per visualizzazione
-            ArrayList<EntityDettaglioOrdinePietanza> dettagli = EntityDettaglioOrdinePietanza
-                    .getDettagliOrdine(this.idOrdine);
-
-            if (dettagli.isEmpty()) {
-                System.out.println("Nessun dettaglio trovato per l'ordine #" + this.idOrdine);
-                return 0.0;
-            }
-
-            // Stampa i dettagli per verifica (il costo è già memorizzato in costoTotale)
-            System.out.println("Dettagli del conto per ordine #" + this.idOrdine + ":");
-
-            // Raggruppa i dettagli per menu fissi per una visualizzazione migliore
-            Map<Integer, List<EntityDettaglioOrdinePietanza>> menuItemsMap = new HashMap<>();
-
-            for (EntityDettaglioOrdinePietanza dettaglio : dettagli) {
-                EntityPietanza pietanza = dettaglio.getPietanza();
-                int quantita = dettaglio.getQuantita();
-
-                if (dettaglio.isParteDiMenu()) {
-                    // Raggruppa gli elementi di menu fissi
-                    int menuId = dettaglio.getIdMenu();
-                    if (!menuItemsMap.containsKey(menuId)) {
-                        menuItemsMap.put(menuId, new ArrayList<>());
-                    }
-                    menuItemsMap.get(menuId).add(dettaglio);
-                } else {
-                    // Pietanze normali (non parte di menu fissi)
-                    double prezzoUnitario = pietanza.getPrezzo();
-                    double subtotale = prezzoUnitario * quantita;
-
-                    System.out.println("- " + pietanza.getNome() + " x" + quantita +
-                            " (" + String.format("%.2f", prezzoUnitario) + "€ x " + quantita +
-                            ") = " + String.format("%.2f", subtotale) + "€");
-                }
-            }
-
-            // Stampa i menu fissi raggruppati
-            for (Map.Entry<Integer, List<EntityDettaglioOrdinePietanza>> entry : menuItemsMap.entrySet()) {
-                int menuId = entry.getKey();
-                List<EntityDettaglioOrdinePietanza> menuItems = entry.getValue();
-
-                if (!menuItems.isEmpty()) {
-                    // Recupera informazioni sul menu dal database
-                    String nomeMenu = "Menu Fisso #" + menuId;
-                    double prezzoMenu = 0.0;
-
-                    // Recupera informazioni sul menu dal DAO
-                    DBOrdine dbOrdine = new DBOrdine();
-                    Map<String, Object> infoMenu = dbOrdine.getInfoMenuFisso(menuId);
-                    if (infoMenu != null) {
-                        nomeMenu = (String) infoMenu.get("nome");
-                        prezzoMenu = (Double) infoMenu.get("prezzo");
-                    }
-
-                    // Determina la quantità di menu dal primo elemento
-                    int quantitaMenu = menuItems.get(0).getQuantita();
-                    double subtotaleMenu = prezzoMenu * quantitaMenu;
-
-                    System.out.println("--- " + nomeMenu + " x" + quantitaMenu +
-                            " (" + String.format("%.2f", prezzoMenu) + "€ x " +
-                            quantitaMenu + ") = " +
-                            String.format("%.2f", subtotaleMenu) + "€");
-
-                    // Stampa le pietanze incluse nel menu
-                    for (EntityDettaglioOrdinePietanza item : menuItems) {
-                        EntityPietanza pietanza = item.getPietanza();
-                        System.out.println("    • " + pietanza.getNome() + " (incluso nel menu)");
-                    }
-                    System.out.println();
-                }
-            }
-
-            System.out.println("Subtotale: " + String.format("%.2f", totale) + "€");
-
-            // Controlla se applicare sconti in base al numero di persone o al totale
-            if (this.numPersone > 8) {
-                // Sconto del 10% per gruppi numerosi
-                sconto = totale * 0.10;
-                System.out.println("Sconto gruppo (10%): -" + String.format("%.2f", sconto) + "€");
-                totale -= sconto;
-            } else if (totale > 100) {
-                // Sconto del 5% per conti superiori a 100€
-                sconto = totale * 0.05;
-                System.out.println("Sconto per importo elevato (5%): -" + String.format("%.2f", sconto) + "€");
-                totale -= sconto;
-            }
-
-            // Aggiungi il costo del coperto se richiesto
-            if (includiCoperto) {
-                // Recupera il costo del coperto dal ristorante
-                double costoCoperto = 2.0; // Valore di default
-
-                // Recupera il costo del coperto dal DAO
-                DBOrdine dbOrdine = new DBOrdine();
-                costoCoperto = dbOrdine.getCostoCoperto();
-
-                double totaleCoperto = costoCoperto * this.numPersone;
-                System.out.println(
-                        "Coperto: " + costoCoperto + "€ x " + this.numPersone + " persone = " + totaleCoperto + "€");
-                totale += totaleCoperto;
-            }
-
-            System.out.println("TOTALE CONTO: " + String.format("%.2f", totale) + "€");
-            // Aggiorna il costo totale dell'ordine
-            this.costoTotale = totale;
-            // Aggiorna il costo totale nel database
-            if (!aggiornaCostoTotale()) {
-                System.err.println("Avviso: Impossibile aggiornare il costo totale nel database");
-            }
-            return totale;
-        } catch (Exception e) {
-            System.err.println("Errore durante il calcolo del conto: " + e.getMessage());
-            e.printStackTrace();
-            return 0.0;
         }
     }
 

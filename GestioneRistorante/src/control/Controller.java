@@ -86,7 +86,7 @@ public class Controller {
     /**
      * Recupera tutti i tavoli dal database
      * 
-     * @return Lista di oggetti Tavolo
+     * @return Lista di oggetti DTOTavolo contenente tutti i tavoli
      */
     public static ArrayList<DTOTavolo> getAllTavoli() {
 
@@ -100,6 +100,12 @@ public class Controller {
 
     }
 
+    /**
+     * Recupera i tavoli in base al loro stato (es. "libero", "occupato")
+     * 
+     * @param stato Stato del tavolo da filtrare
+     * @return Lista di oggetti DTOTavolo con lo stato specificato
+     */
     public static ArrayList<DTOTavolo> getTavoliByStato(String stato) {
 
         ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
@@ -117,9 +123,9 @@ public class Controller {
 
     ///// MENUFISSI////////////////////////////////////////////////////////////////////
     /**
-     * Recuperare tutti i menu fissi dal database
+     * Recupera tutti i menu fissi dal database
      * 
-     * @return
+     * @return Lista di oggetti DTOMenuFisso contenente tutti i menu fissi
      */
     public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
         ArrayList<DTOMenuFisso> dto_menu_fissi_liste = new ArrayList<>();
@@ -136,7 +142,7 @@ public class Controller {
     /**
      * Recupera tutte le categorie di pietanze dal database
      * 
-     * @return Lista di categorie come Map<Integer, String> (id, nome)
+     * @return Lista di oggetti DTOCategoriaPietanza contenente tutte le categorie
      */
     public static ArrayList<DTOCategoriaPietanza> getCategoriePietanze() {
         ArrayList<DTOCategoriaPietanza> dto_categorie_liste = new ArrayList<>();
@@ -152,28 +158,9 @@ public class Controller {
 
     ///// ORDINE////////////////////////////////////////////////////////////////////
     /**
-     * Aggiorna lo stato di un ordine
+     * Recupera tutti gli ordini dal database in base al loro stato
      * 
-     * @param idOrdine   ID dell'ordine da aggiornare
-     * @param nuovoStato Nuovo stato dell'ordine
-     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
-     */
-    public static boolean updateStatoOrdine(int idOrdine, String nuovoStato) {
-        EntityOrdine ordine = new EntityOrdine(idOrdine);
-        int result = ordine.aggiornaStato(nuovoStato);
-        if (result == 0) {
-            System.err.println("Errore nell'aggiornamento dello stato dell'ordine con ID: " + idOrdine);
-            return false;
-        }
-        System.out.println("Stato dell'ordine con ID " + idOrdine + " aggiornato a: " + nuovoStato);
-        return true;
-
-    }
-
-    /**
-     * Recupera tutti gli ordini dal database IN BASE ALLO STATO
-     * 
-     * @return Lista di oggetti Ordine
+     * @return Lista di oggetti DTOOrdine contenente tutti gli ordini
      */
     public static ArrayList<DTOOrdine> getOrdiniByStato(String stato) {
         ArrayList<DTOOrdine> dto_ordini_liste = new ArrayList<>();
@@ -186,6 +173,14 @@ public class Controller {
 
     }
 
+    /**
+     * Aggiunge una pietanza all'ordine specificato
+     * 
+     * @param idOrdine   ID dell'ordine a cui aggiungere la pietanza
+     * @param idPietanza ID della pietanza da aggiungere
+     * @param quantita   Quantità della pietanza da aggiungere
+     * @return true se l'aggiunta è avvenuta con successo, false altrimenti
+     */
     public static boolean aggiungiPietanzaAllOrdine(int idOrdine, int idPietanza, int quantita) {
         EntityOrdine ordine = new EntityOrdine(idOrdine);
         boolean result = ordine.aggiungiPietanza(idPietanza, quantita);
@@ -197,6 +192,14 @@ public class Controller {
         return result;
     }
 
+    /**
+     * Aggiunge un menu fisso all'ordine specificato
+     * 
+     * @param idOrdine    ID dell'ordine a cui aggiungere il menu fisso
+     * @param idMenuFisso ID del menu fisso da aggiungere
+     * @param quantita    Quantità del menu fisso da aggiungere
+     * @return true se l'aggiunta è avvenuta con successo, false altrimenti
+     */
     public static boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
         EntityOrdine ordine = new EntityOrdine(idOrdine);
         boolean result = ordine.aggiungiMenuFisso(idOrdine, idMenuFisso, quantita);
@@ -208,6 +211,14 @@ public class Controller {
         return result;
     }
 
+    /**
+     * Crea un nuovo ordine per un tavolo specifico
+     * 
+     * @param num_persone Numero di persone per l'ordine
+     * @param id_tavolo   ID del tavolo associato all'ordine
+     * @param stato       Stato iniziale dell'ordine (es. "in_attesa")
+     * @return L'oggetto EntityOrdine creato
+     */
     public static EntityOrdine CreaOrdine(int num_persone, int id_tavolo, String stato) {
         EntityOrdine ordine = new EntityOrdine();
         ordine = ordine.creaOrdine(id_tavolo, num_persone, 1, stato);
@@ -220,11 +231,23 @@ public class Controller {
         return ordine;
     }
 
+    /**
+     * Conferma un ordine specifico, impostando il suo stato a "in_attesa"
+     * 
+     * @param idOrdine ID dell'ordine da confermare
+     * @param idTavolo ID del tavolo associato all'ordine
+     */
     public static void ConfermaOrdine(int idOrdine, int idTavolo) {
         EntityOrdine ordine = new EntityOrdine(idOrdine);
         ordine.aggiornaStato("in_attesa");
     }
 
+    /**
+     * Recupera le pietanze associate a un ordine specifico
+     * 
+     * @param idOrdine ID dell'ordine di cui recuperare le pietanze
+     * @return Lista di oggetti DTOPietanzaCuoco associati all'ordine
+     */
     public static ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine(int idOrdine) {
         EntityOrdine ordine = new EntityOrdine(idOrdine);
         ArrayList<DTOPietanzaCuoco> pietanzeDAoRDINE = ordine.getPietanzeDaOrdine();
@@ -238,6 +261,13 @@ public class Controller {
         return menuFissiDAoRDINE;
     }
 
+    /**
+     * Aggiorna lo stato di un ordine
+     * 
+     * @param idOrdine ID dell'ordine da aggiornare
+     * @param stato    Nuovo stato dell'ordine
+     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
+     */
     public static boolean aggiornaStatoOrdine(int idOrdine, String stato) {
         EntityOrdine ordine = new EntityOrdine(idOrdine);
         int result = ordine.aggiornaStato(stato);
@@ -252,6 +282,12 @@ public class Controller {
         return isStatoValido;
     }
 
+    /**
+     * Recupera l'ordine associato a un tavolo specifico
+     * 
+     * @param id_tavolo ID del tavolo di cui recuperare l'ordine
+     * @return DTOOrdine contenente i dettagli dell'ordine, o null se non esiste
+     */
     public static DTOOrdine getOrdineByTavolo(int id_tavolo) {
         DTOOrdine dtoOrdine = EntityOrdine.getOrdinePerTavolo(id_tavolo);
         if (dtoOrdine == null) {
@@ -292,13 +328,24 @@ public class Controller {
     }
 
     /////////////// INGREDIENTE////////////////////////////////////////////////////////
+    /**
+     * Recupera gli ingredienti esauriti dal database
+     * 
+     * @return Lista di DTOIngrediente contenente gli ingredienti esauriti
+     */
     public static ArrayList<DTOIngrediente> generaReport() {
         ArrayList<DTOIngrediente> dto_ingredienti_liste = EntityIngrediente.getIngredientiEsauriti();
         return dto_ingredienti_liste;
     }
 
     /////////////// GENERALI////////////////////////////////////////////////////////
-
+    /**
+     * Registra il pagamento di un ordine e libera il tavolo associato
+     * 
+     * @param idTavolo ID del tavolo associato all'ordine da pagare
+     * @return true se il pagamento è stato registrato con successo, false
+     *         altrimenti
+     */
     public static boolean registraPagamentoOrdine(int idTavolo) {
         DTOOrdine dtoOrdine = EntityOrdine.getOrdinePerTavolo(idTavolo);
         int idOrdine = dtoOrdine.getIdOrdine();
@@ -351,7 +398,7 @@ public class Controller {
      */
     public static double getCostoCoperto() {
         // Utilizziamo EntityRistorante per recuperare l'informazione
-        EntityRistorante ristorante = new EntityRistorante(1); // Assumiamo ID=1 per il ristorante predefinito
+        EntityRistorante ristorante = new EntityRistorante(1); // Abbiamo un solo ristorante
         return ristorante.getCostoCoperto();
     }
 }

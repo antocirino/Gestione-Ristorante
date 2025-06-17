@@ -44,6 +44,9 @@ public class CassiereForm extends JFrame {
     private Font regularFont = new Font("Segoe UI", Font.PLAIN, 16);
     private Font boldFont = new Font("Segoe UI", Font.BOLD, 16);
 
+    /*
+     * Costruttore della schermata CassiereForm
+     */
     public CassiereForm() {
         setTitle("Gestione Ristorante - Cassiere");
         setSize(1000, 700);
@@ -220,7 +223,13 @@ public class CassiereForm extends JFrame {
     }
 
     // Metodi di utilità per lo styling moderno
-
+    /**
+     * Crea un pulsante con stile moderno
+     * 
+     * @param text            Il testo del pulsante
+     * @param backgroundColor Il colore di sfondo del pulsante
+     * @return Un JButton con lo stile applicato
+     */
     private JButton createStyledButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setFont(boldFont);
@@ -307,7 +316,12 @@ public class CassiereForm extends JFrame {
         return button;
     }
 
-    // Metodo helper per creare colori con opacità ridotta per lo stato disabilitato
+    /**
+     * Crea un colore disabilitato basato su un colore originale
+     * 
+     * @param originalColor Il colore originale
+     * @return Un nuovo colore con saturazione e luminosità ridotte
+     */
     private Color createDisabledColor(Color originalColor) {
         // Riduce la saturazione e aumenta la luminosità per un effetto "spento"
         float[] hsb = Color.RGBtoHSB(originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue(), null);
@@ -323,6 +337,11 @@ public class CassiereForm extends JFrame {
                 desaturatedColor.getBlue(), 150); // Alpha = 150 (circa 60% opacità)
     }
 
+    /**
+     * Stile per il JComboBox
+     * 
+     * @param comboBox
+     */
     private void styleComboBox(JComboBox<String> comboBox) {
         comboBox.setFont(regularFont);
         comboBox.setBackground(Color.WHITE);
@@ -374,6 +393,11 @@ public class CassiereForm extends JFrame {
         });
     }
 
+    /**
+     * Stile per il JTextField
+     * 
+     * @param textField
+     */
     private void styleTextField(JTextField textField) {
         textField.setFont(regularFont);
         textField.setBackground(Color.WHITE);
@@ -402,6 +426,11 @@ public class CassiereForm extends JFrame {
         });
     }
 
+    /**
+     * Aggiunge uno stile allo JScrollPane
+     * 
+     * @param scrollPane
+     */
     private void styleScrollPane(JScrollPane scrollPane) {
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200), 1),
@@ -409,6 +438,11 @@ public class CassiereForm extends JFrame {
         scrollPane.getViewport().setBackground(Color.WHITE);
     }
 
+    /**
+     * Creazione di un pannello
+     * 
+     * @return Un JPanel con uno stile moderno
+     */
     private JPanel createModernPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(Color.WHITE);
@@ -602,12 +636,28 @@ public class CassiereForm extends JFrame {
         coppertiField.setEditable(true);
     }
 
-    // Metodo per caricare icone SVG (copiato dalle altre forme)
+    /**
+     * Carica un'icona SVG con dimensioni specificate e colore di default
+     * 
+     * @param filename Il nome del file SVG
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @return Un ImageIcon caricato dall'SVG
+     */
     private ImageIcon loadSVGIcon(String filename, int width, int height) {
         return loadSVGIcon(filename, width, height, Color.WHITE);
     }
 
-    // Metodo sovraccaricato per specificare il colore dell'icona
+    /**
+     * Carica un'icona SVG con dimensioni specificate e colore personalizzato
+     * 
+     * @param filename Il nome del file SVG
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @param color    Il colore da applicare all'icona
+     * @return Un ImageIcon caricato dall'SVG, o un'icona di fallback in caso di
+     *         errore
+     */
     private ImageIcon loadSVGIcon(String filename, int width, int height, Color color) {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
@@ -706,7 +756,15 @@ public class CassiereForm extends JFrame {
         }
     }
 
-    // Metodo per creare icone di fallback
+    /**
+     * Crea un'icona di fallback con un'immagine di testo
+     * 
+     * @param filename Il nome del file per cui si sta creando l'icona di fallback
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @param color    Il colore del testo dell'icona di fallback
+     * @return Un ImageIcon con il testo come fallback
+     */
     private ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
@@ -729,7 +787,12 @@ public class CassiereForm extends JFrame {
         return new ImageIcon(image);
     }
 
-    // Metodo per ottenere icone Unicode come fallback
+    /**
+     * Restituisce un'icona Unicode basata sul nome del file
+     * 
+     * @param filename Il nome del file per cui si vuole l'icona
+     * @return Una stringa con l'icona Unicode corrispondente
+     */
     private String getUnicodeIcon(String filename) {
         if (filename.contains("payment")) {
             return "💳";

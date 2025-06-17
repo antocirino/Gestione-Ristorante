@@ -83,6 +83,9 @@ public class CuocoForm extends JFrame {
         }
     }
 
+    /**
+     * Costruttore della schermata CuocoForm
+     */
     public CuocoForm() {
         setTitle("Gestione Ristorante - Cuoco");
         setSize(1200, 800);
@@ -359,9 +362,11 @@ public class CuocoForm extends JFrame {
                     "" // Campo note vuoto
             });
         }
-        //NON CARICHIAMO I MENU FISSI, PERCHE KLE PIETANZE DEL MENU FISSO VENGONO CARICATE GIA DA Controller.getPietanzeDaOrdine(idOrdine);
+        // NON CARICHIAMO I MENU FISSI, PERCHE LE PIETANZE DEL MENU FISSO VENGONO
+        // CARICATE GIA DA Controller.getPietanzeDaOrdine(idOrdine);
 
     }
+
     /**
      * Aggiorna lo stato dei pulsanti in base allo stato dell'ordine selezionato
      */
@@ -586,7 +591,13 @@ public class CuocoForm extends JFrame {
         return button;
     }
 
-    // Metodo helper per creare colori con opacità ridotta per lo stato disabilitato
+    /**
+     * Crea un colore disabilitato basato su un colore originale
+     * Riduce la saturazione e aumenta la luminosità per un effetto "spento"
+     * 
+     * @param originalColor Il colore originale da disabilitare
+     * @return Il colore disabilitato
+     */
     private Color createDisabledColor(Color originalColor) {
         // Riduce la saturazione e aumenta la luminosità per un effetto "spento"
         float[] hsb = Color.RGBtoHSB(originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue(), null);
@@ -602,6 +613,12 @@ public class CuocoForm extends JFrame {
                 desaturatedColor.getBlue(), 150); // Alpha = 150 (circa 60% opacità)
     }
 
+    /**
+     * Applica lo stile moderno alla tabella
+     * Imposta font, colori, altezza riga e header
+     * 
+     * @param table La tabella da stilizzare
+     */
     private void styleTable(JTable table) {
         table.setFont(regularFont);
         table.setRowHeight(35);
@@ -616,6 +633,12 @@ public class CuocoForm extends JFrame {
         table.getTableHeader().setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
     }
 
+    /**
+     * Applica lo stile moderno allo JScrollPane
+     * Imposta bordi, colore di sfondo e padding
+     * 
+     * @param scrollPane Lo JScrollPane da stilizzare
+     */
     private void styleScrollPane(JScrollPane scrollPane) {
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200), 1),
@@ -623,6 +646,12 @@ public class CuocoForm extends JFrame {
         scrollPane.getViewport().setBackground(Color.WHITE);
     }
 
+    /**
+     * Crea un pannello con uno stile moderno
+     * Imposta colore di sfondo, bordi e padding
+     * 
+     * @return Il pannello stilizzato
+     */
     private JPanel createModernPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(Color.WHITE);
@@ -632,7 +661,16 @@ public class CuocoForm extends JFrame {
         return panel;
     }
 
-    // Metodo per caricare icone SVG
+    /**
+     * Carica un'icona SVG da un file
+     * Prova diversi percorsi per trovare il file
+     * Se non trovato, crea un'icona di fallback con il nome del file
+     * 
+     * @param filename Il nome del file SVG
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @return L'icona SVG caricata o un'icona di fallback
+     */
     private ImageIcon loadSVGIcon(String filename, int width, int height) {
         return loadSVGIcon(filename, width, height, Color.WHITE);
     }
@@ -736,7 +774,16 @@ public class CuocoForm extends JFrame {
         }
     }
 
-    // Metodo per creare icone di fallback
+    /**
+     * Crea un'icona di fallback con il nome del file come testo
+     * Utilizza un BufferedImage per disegnare il testo al centro
+     * 
+     * @param filename Il nome del file per l'icona di fallback
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @param color    Il colore del testo dell'icona di fallback
+     * @return L'icona di fallback creata
+     */
     private ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
@@ -759,7 +806,13 @@ public class CuocoForm extends JFrame {
         return new ImageIcon(image);
     }
 
-    // Metodo per ottenere icone Unicode come fallback
+    /**
+     * Ottiene l'icona Unicode corrispondente al nome del file
+     * Utilizza emoji per rappresentare le icone comuni
+     * 
+     * @param filename Il nome del file dell'icona
+     * @return L'icona Unicode corrispondente
+     */
     private String getUnicodeIcon(String filename) {
         if (filename.contains("restaurant_menu")) {
             return "🍽️";

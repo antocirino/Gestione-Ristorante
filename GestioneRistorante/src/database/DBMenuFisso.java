@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'menu_fisso' nel
@@ -146,12 +145,12 @@ public class DBMenuFisso {
     }
 
     /**
-     * Recupera le pietanze che compongono questo menu fisso
+     * Recupera le pietanze che compongono questo menu fisso come oggetti DB
      * 
-     * @return Lista di oggetti Pietanza che compongono il menu
+     * @return Lista di oggetti DBPietanza che compongono il menu
      */
-    public ArrayList<EntityPietanza> getPietanze() {
-        ArrayList<EntityPietanza> pietanze = new ArrayList<>();
+    public ArrayList<DBPietanza> getPietanzeDB() {
+        ArrayList<DBPietanza> pietanze = new ArrayList<>();
         String query = "SELECT p.*, cp.nome as nome_categoria FROM pietanza p " +
                 "JOIN composizione_menu cm ON p.id_pietanza = cm.id_pietanza " +
                 "JOIN categoria_pietanza cp ON p.id_categoria = cp.id_categoria " +
@@ -161,12 +160,12 @@ public class DBMenuFisso {
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             while (rs.next()) {
-                EntityPietanza pietanza = new EntityPietanza(
-                        rs.getInt("id_pietanza"),
-                        rs.getString("nome"),
-                        rs.getDouble("prezzo"),
-                        rs.getInt("id_categoria"),
-                        rs.getString("nome_categoria"));
+                DBPietanza pietanza = new DBPietanza();
+                pietanza.setIdPietanza(rs.getInt("id_pietanza"));
+                pietanza.setNome(rs.getString("nome"));
+                pietanza.setPrezzo(rs.getDouble("prezzo"));
+                pietanza.setIdCategoria(rs.getInt("id_categoria"));
+                pietanza.setNomeCategoria(rs.getString("nome_categoria"));
 
                 pietanze.add(pietanza);
             }

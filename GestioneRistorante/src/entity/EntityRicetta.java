@@ -156,8 +156,41 @@ public class EntityRicetta {
      * @return ArrayList di oggetti Ricetta
      */
     public static ArrayList<EntityRicetta> getTutteRicette() {
-        DBRicetta ricetta = new DBRicetta();
-        return ricetta.getTutteRicette();
+        DBRicetta db = new DBRicetta();
+        ArrayList<DBRicetta> ricetteDB = db.getTutteRicette();
+
+        ArrayList<EntityRicetta> ricette = new ArrayList<>();
+
+        // Converte ogni oggetto DBRicetta in EntityRicetta
+        for (DBRicetta ricettaDB : ricetteDB) {
+            EntityRicetta ricetta = new EntityRicetta();
+            ricetta.setIdRicetta(ricettaDB.getIdRicetta());
+            ricetta.setNome(ricettaDB.getNome());
+            ricetta.setDescrizione(ricettaDB.getDescrizione());
+            ricetta.setIdPietanza(ricettaDB.getIdPietanza());
+            ricetta.setTempoPreparazione(ricettaDB.getTempoPreparazione());
+            ricetta.setIstruzioni(ricettaDB.getIstruzioni());
+
+            // Carica gli ingredienti se necessario
+            if (ricettaDB.getIdRicetta() > 0) {
+                ArrayList<Object[]> ingredientiDB = ricettaDB.getIngredientiRicetta();
+                List<IngredienteQuantita> ingredienti = new ArrayList<>();
+                for (Object[] ingrediente : ingredientiDB) {
+                    int idIngrediente = (Integer) ingrediente[0];
+                    String nomeIngrediente = (String) ingrediente[1];
+                    String unitaMisura = (String) ingrediente[2];
+                    float quantita = (Float) ingrediente[3];
+
+                    ingredienti.add(
+                            ricetta.new IngredienteQuantita(idIngrediente, nomeIngrediente, unitaMisura, quantita));
+                }
+                ricetta.setIngredienti(ingredienti);
+            }
+
+            ricette.add(ricetta);
+        }
+
+        return ricette;
     }
 
     /**
@@ -167,10 +200,45 @@ public class EntityRicetta {
      * @return Ricetta associata alla pietanza o null se non esiste
      */
     public static EntityRicetta getRicettaByPietanza(int idPietanza) {
-        DBRicetta ricetta = new DBRicetta();
-        return ricetta.getRicettaByPietanza(idPietanza);
+        DBRicetta db = new DBRicetta();
+        DBRicetta ricettaDB = db.getRicettaByPietanza(idPietanza);
+
+        if (ricettaDB == null) {
+            return null;
+        }
+
+        // Converte l'oggetto DBRicetta in EntityRicetta
+        EntityRicetta ricetta = new EntityRicetta();
+        ricetta.setIdRicetta(ricettaDB.getIdRicetta());
+        ricetta.setNome(ricettaDB.getNome());
+        ricetta.setDescrizione(ricettaDB.getDescrizione());
+        ricetta.setIdPietanza(ricettaDB.getIdPietanza());
+        ricetta.setTempoPreparazione(ricettaDB.getTempoPreparazione());
+        ricetta.setIstruzioni(ricettaDB.getIstruzioni());
+
+        // Carica gli ingredienti se necessario
+        ArrayList<Object[]> ingredientiDB = ricettaDB.getIngredientiRicetta();
+        List<IngredienteQuantita> ingredienti = new ArrayList<>();
+        for (Object[] ingrediente : ingredientiDB) {
+            int idIngrediente = (Integer) ingrediente[0];
+            String nomeIngrediente = (String) ingrediente[1];
+            String unitaMisura = (String) ingrediente[2];
+            float quantita = (Float) ingrediente[3];
+
+            ingredienti.add(ricetta.new IngredienteQuantita(idIngrediente, nomeIngrediente, unitaMisura, quantita));
+        }
+        ricetta.setIngredienti(ingredienti);
+
+        return ricetta;
     }
 
+    /**
+     * Verifica se la ricetta è eseguibile, cioè se tutti gli ingredienti sono
+     * disponibili in quantità sufficiente
+     * 
+     * @param quantitaPietanze La quantità di pietanze da preparare
+     * @return true se la ricetta è eseguibile, false altrimenti
+     */
     public boolean isRicettaEseguibile(int quantitaPietanze) {
         ArrayList<EntityRicettaIngrediente> lista = EntityRicettaIngrediente.getIngredientiPerRicetta(this.idRicetta);
         if (lista == null || lista.isEmpty()) {
@@ -181,15 +249,21 @@ public class EntityRicetta {
         for (EntityRicettaIngrediente ri : lista) {
             EntityIngrediente ingr = new EntityIngrediente(ri.getIdIngrediente());
 
-            if (ingr == null || ingr.getQuantitaDisponibile() < ri.getQuantita()*quantitaPietanze) {
+            if (ingr == null || ingr.getQuantitaDisponibile() < ri.getQuantita() * quantitaPietanze) {
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * Prenota gli ingredienti necessari per preparare la ricetta
+     * 
+     * @param quantitaPietanze La quantità di pietanze da preparare
+     * @return true se la prenotazione è avvenuta con successo, false altrimenti
+     */
     public boolean prenotaIngredienti(int quantitaPietanze) {
-        
+
         ArrayList<EntityRicettaIngrediente> lista = EntityRicettaIngrediente.getIngredientiPerRicetta(this.idRicetta);
         if (lista == null || lista.isEmpty()) {
             return false; // Nessun ingrediente trovato, non eseguibile
@@ -198,62 +272,64 @@ public class EntityRicetta {
         for (EntityRicettaIngrediente ri : lista) {
             EntityIngrediente ingr = new EntityIngrediente(ri.getIdIngrediente());
             float new_qta = ri.getQuantita() * quantitaPietanze;
-            
+
             ingr.prenotaIngrediente(new_qta);
         }
         return true;
-}
-
-// Classe interna per rappresentare un ingrediente con la sua quantità
-public class IngredienteQuantita {
-    private int idIngrediente;
-    private String nomeIngrediente;
-    private String unitaMisura;
-    private float quantita;
-
-    public IngredienteQuantita(int idIngrediente, String nomeIngrediente, String unitaMisura, float quantita) {
-        this.idIngrediente = idIngrediente;
-        this.nomeIngrediente = nomeIngrediente;
-        this.unitaMisura = unitaMisura;
-        this.quantita = quantita;
     }
 
-    public int getIdIngrediente() {
-        return idIngrediente;
-    }
+    /**
+     * Classe interna che rappresenta un ingrediente con la sua quantità
+     */
+    public class IngredienteQuantita {
+        private int idIngrediente;
+        private String nomeIngrediente;
+        private String unitaMisura;
+        private float quantita;
 
-    public void setIdIngrediente(int idIngrediente) {
-        this.idIngrediente = idIngrediente;
-    }
+        public IngredienteQuantita(int idIngrediente, String nomeIngrediente, String unitaMisura, float quantita) {
+            this.idIngrediente = idIngrediente;
+            this.nomeIngrediente = nomeIngrediente;
+            this.unitaMisura = unitaMisura;
+            this.quantita = quantita;
+        }
 
-    public String getNomeIngrediente() {
-        return nomeIngrediente;
-    }
+        public int getIdIngrediente() {
+            return idIngrediente;
+        }
 
-    public void setNomeIngrediente(String nomeIngrediente) {
-        this.nomeIngrediente = nomeIngrediente;
-    }
+        public void setIdIngrediente(int idIngrediente) {
+            this.idIngrediente = idIngrediente;
+        }
 
-    public String getUnitaMisura() {
-        return unitaMisura;
-    }
+        public String getNomeIngrediente() {
+            return nomeIngrediente;
+        }
 
-    public void setUnitaMisura(String unitaMisura) {
-        this.unitaMisura = unitaMisura;
-    }
+        public void setNomeIngrediente(String nomeIngrediente) {
+            this.nomeIngrediente = nomeIngrediente;
+        }
 
-    public float getQuantita() {
-        return quantita;
-    }
+        public String getUnitaMisura() {
+            return unitaMisura;
+        }
 
-    public void setQuantita(float quantita) {
-        this.quantita = quantita;
-    }
+        public void setUnitaMisura(String unitaMisura) {
+            this.unitaMisura = unitaMisura;
+        }
 
-    @Override
-    public String toString() {
-        return nomeIngrediente + ": " + quantita + " " + unitaMisura;
-    }
+        public float getQuantita() {
+            return quantita;
+        }
+
+        public void setQuantita(float quantita) {
+            this.quantita = quantita;
+        }
+
+        @Override
+        public String toString() {
+            return nomeIngrediente + ": " + quantita + " " + unitaMisura;
+        }
 
     }
 

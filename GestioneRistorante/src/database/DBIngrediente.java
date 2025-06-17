@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CFG.DBConnection;
-import entity.EntityIngrediente;
 
+/**
+ * Classe DAO per gestire l'accesso ai dati della tabella 'ingrediente' nel
+ * database
+ */
 public class DBIngrediente {
     // ATTRIBUTI
     private int idIngrediente;
@@ -98,7 +101,7 @@ public class DBIngrediente {
     }
 
     /**
-     * Metodo per ottenere gli ingredienti esauriti
+     * Metodo per ottenere gli ingredienti da riordinare
      * 
      * @return ArrayList di ingredienti con scorte minori o uguali alla soglia di
      *         riordino
@@ -122,7 +125,7 @@ public class DBIngrediente {
                     ing.setQuantitaDisponibile(quantita);
                     ing.setUnitaMisura(rs.getString("unita_misura"));
                     ing.setSogliaRiordino(soglia);
-                    
+
                     lista.add(ing);
                 }
             }
@@ -131,34 +134,6 @@ public class DBIngrediente {
         }
 
         return lista;
-    }
-
-    /**
-     * Recupera tutti gli ingredienti sotto la soglia di riordino
-     * 
-     * @return ArrayList di oggetti Ingrediente sotto soglia
-     */
-    public static ArrayList<EntityIngrediente> getIngredientiSottoSoglia() {
-        ArrayList<EntityIngrediente> ingredienti = new ArrayList<>();
-        try {
-            String query = "SELECT * FROM ingrediente WHERE quantita_disponibile <= soglia_riordino";
-            ResultSet rs = DBConnection.selectQuery(query);
-
-            while (rs.next()) {
-                EntityIngrediente ingrediente = new EntityIngrediente();
-                ingrediente.setIdIngrediente(rs.getInt("id_ingrediente"));
-                ingrediente.setNome(rs.getString("nome"));
-                ingrediente.setQuantitaDisponibile(rs.getFloat("quantita_disponibile"));
-                ingrediente.setUnitaMisura(rs.getString("unita_misura"));
-                ingrediente.setSogliaRiordino(rs.getFloat("soglia_riordino"));
-
-                ingredienti.add(ingrediente);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero degli ingredienti sotto soglia: " + e.getMessage());
-        }
-
-        return ingredienti;
     }
 
     /**

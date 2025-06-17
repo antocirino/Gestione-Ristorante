@@ -36,25 +36,10 @@ public class EntityIngrediente {
     }
 
     /**
-     * Salva l'ingrediente nel database
+     * Recupera tutti gli ingredienti sotto la soglia di riordino
      * 
-     * @param id_ingrediente ID dell'ingrediente (0 per auto-incremento)
-     * @return il numero di righe modificate o -1 in caso di errore
+     * @return ArrayList di oggetti DTOIngrediente
      */
-    public int scriviSuDB(int id_ingrediente) {
-
-        DBIngrediente s = new DBIngrediente(); // DAO
-
-        s.setNome(this.nome);
-        s.setQuantitaDisponibile(this.quantitaDisponibile);
-        s.setUnitaMisura(this.unitaMisura);
-        s.setSogliaRiordino(this.sogliaRiordino);
-
-        int i = s.salvaInDB(id_ingrediente);
-
-        return i;
-    }
-
     public static ArrayList<DTOIngrediente> getIngredientiEsauriti() {
         ArrayList<DTOIngrediente> listaIngredienti = new ArrayList<>();
         ArrayList<DBIngrediente> lista_ingredienti = DBIngrediente.getIngredientiEsauriti();
@@ -68,15 +53,6 @@ public class EntityIngrediente {
             listaIngredienti.add(dto);
         }
         return listaIngredienti;
-    }
-
-    /**
-     * Recupera tutti gli ingredienti sotto la soglia di riordino
-     * 
-     * @return ArrayList di oggetti Ingrediente sotto soglia
-     */
-    public static ArrayList<EntityIngrediente> getIngredientiSottoSoglia() {
-        return DBIngrediente.getIngredientiSottoSoglia();
     }
 
     /**
@@ -97,16 +73,6 @@ public class EntityIngrediente {
         DBIngrediente dbIngrediente = new DBIngrediente(this.idIngrediente);
         dbIngrediente.setQuantitaDisponibile(this.quantitaDisponibile);
         return dbIngrediente.aggiornaQuantita() > 0;
-    }
-
-    /**
-     * Verifica se l'ingrediente è disponibile nella quantità richiesta
-     * 
-     * @param quantita Quantità richiesta
-     * @return true se la quantità è disponibile, false altrimenti
-     */
-    public boolean isDisponibile(float quantita) {
-        return this.quantitaDisponibile >= quantita;
     }
 
     // Getters e setters
@@ -148,10 +114,6 @@ public class EntityIngrediente {
 
     public void setSogliaRiordino(float sogliaRiordino) {
         this.sogliaRiordino = sogliaRiordino;
-    }
-
-    public boolean daSottoScorta() {
-        return quantitaDisponibile <= sogliaRiordino;
     }
 
     @Override

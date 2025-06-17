@@ -3,7 +3,6 @@ package database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import CFG.DBConnection;
 
@@ -28,51 +27,6 @@ public class DBRicettaIngrediente {
         this.idRicetta = idRicetta;
         this.idIngrediente = idIngrediente;
         caricaDaDB();
-    }
-
-    /**
-     * Inserisce una nuova associazione ricetta-ingrediente nel database
-     */
-    public int salvaInDB() {
-        String query = String.format(Locale.US,
-            "INSERT INTO ricetta_ingrediente (id_ricetta, id_ingrediente, quantita) VALUES (%d, %d, %.2f)",
-            this.idRicetta, this.idIngrediente, this.quantita);
-        try {
-            return DBConnection.updateQuery(query);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nell'inserimento di ricetta_ingrediente: " + e.getMessage());
-            return -1;
-        }
-    }
-
-    /**
-     * Aggiorna la quantità di un ingrediente per una ricetta
-     */
-    public int aggiornaQuantita() {
-        String query = String.format(Locale.US,
-            "UPDATE ricetta_ingrediente SET quantita = %.2f WHERE id_ricetta = %d AND id_ingrediente = %d",
-            this.quantita, this.idRicetta, this.idIngrediente);
-        try {
-            return DBConnection.updateQuery(query);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nell'aggiornamento di ricetta_ingrediente: " + e.getMessage());
-            return -1;
-        }
-    }
-
-    /**
-     * Elimina una riga ricetta-ingrediente dal database
-     */
-    public int eliminaDaDB() {
-        String query = String.format(
-            "DELETE FROM ricetta_ingrediente WHERE id_ricetta = %d AND id_ingrediente = %d",
-            this.idRicetta, this.idIngrediente);
-        try {
-            return DBConnection.updateQuery(query);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nell'eliminazione di ricetta_ingrediente: " + e.getMessage());
-            return -1;
-        }
     }
 
     /**

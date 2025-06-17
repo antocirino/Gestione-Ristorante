@@ -27,7 +27,8 @@ import entity.EntityPietanza;
 import database.DBOrdine;
 import java.util.Map;
 import java.util.List;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Classe responsabile dell'esportazione di un conto in formato PDF.
@@ -114,7 +115,12 @@ public class ContoPdfExporter {
     }
 
     /**
-     * Aggiunge l'intestazione al documento PDF.
+     * Aggiunge l'intestazione del conto al documento PDF.
+     * 
+     * @param document Il documento PDF in cui aggiungere l'intestazione
+     * @param ordine   DTO contenente le informazioni dell'ordine
+     * @throws Exception se si verificano errori durante l'aggiunta
+     *                   dell'intestazione
      */
     private static void aggiungiIntestazione(Document document, DTOOrdine ordine) throws Exception {
         // Titolo del ristorante
@@ -148,7 +154,7 @@ public class ContoPdfExporter {
         String dataOrdine = dateFormat.format(ordine.getDataOrdine());
 
         // Recupera informazioni del tavolo
-        //EntityTavolo tavolo = new EntityTavolo(ordine.getIdTavolo());
+        // EntityTavolo tavolo = new EntityTavolo(ordine.getIdTavolo());
 
         infoParagraph.add(new Phrase("TAVOLO #" + ordine.getIdTavolo() + " - Coperti: " + ordine.getNumPersone() + "\n",
                 infoFont));
@@ -162,6 +168,10 @@ public class ContoPdfExporter {
 
     /**
      * Aggiunge i dettagli dell'ordine al documento PDF.
+     * 
+     * @param document Il documento PDF in cui aggiungere i dettagli
+     * @param ordine   DTO contenente le informazioni dell'ordine
+     * @throws Exception se si verificano errori durante l'aggiunta dei dettagli
      */
     private static void aggiungiDettagliOrdine(Document document, DTOOrdine ordine) throws Exception {
         // Recupero l'entity ordine per accedere ai dettagli
@@ -199,7 +209,7 @@ public class ContoPdfExporter {
         table.addCell(cellTotale);
 
         // Recupera i dettagli dell'ordine
-        java.util.ArrayList<EntityDettaglioOrdinePietanza> dettagli = EntityDettaglioOrdinePietanza
+        ArrayList<EntityDettaglioOrdinePietanza> dettagli = EntityDettaglioOrdinePietanza
                 .getDettagliOrdine(ordine.getIdOrdine());
 
         // Font per le righe della tabella
@@ -207,7 +217,7 @@ public class ContoPdfExporter {
         Font pietanzaFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
 
         // Mappa per raggruppare i dettagli dei menu fissi
-        java.util.Map<Integer, java.util.List<EntityDettaglioOrdinePietanza>> menuItemsMap = new java.util.HashMap<>();
+        Map<Integer, List<EntityDettaglioOrdinePietanza>> menuItemsMap = new HashMap<>();
 
         // Raggruppa i dettagli per menu fissi
         for (EntityDettaglioOrdinePietanza dettaglio : dettagli) {
@@ -215,7 +225,7 @@ public class ContoPdfExporter {
                 // Raggruppa gli elementi di menu fissi
                 int menuId = dettaglio.getIdMenu();
                 if (!menuItemsMap.containsKey(menuId)) {
-                    menuItemsMap.put(menuId, new java.util.ArrayList<>());
+                    menuItemsMap.put(menuId, new ArrayList<>());
                 }
                 menuItemsMap.get(menuId).add(dettaglio);
             }
@@ -273,6 +283,12 @@ public class ContoPdfExporter {
 
     /**
      * Crea una cella formattata per la tabella.
+     * 
+     * @param testo     Il testo da inserire nella cella
+     * @param font      Il font da utilizzare per il testo
+     * @param alignment L'allineamento del testo (Element.ALIGN_LEFT,
+     *                  Element.ALIGN_CENTER, Element.ALIGN_RIGHT)
+     * @return La cella formattata
      */
     private static PdfPCell creaCella(String testo, Font font, int alignment) {
         PdfPCell cell = new PdfPCell(new Phrase(testo, font));
@@ -286,6 +302,10 @@ public class ContoPdfExporter {
 
     /**
      * Aggiunge il totale del conto al documento PDF.
+     * 
+     * @param document Il documento PDF in cui aggiungere il totale
+     * @param ordine   DTO contenente le informazioni dell'ordine
+     * @throws Exception se si verificano errori durante l'aggiunta del totale
      */
     private static void aggiungiTotale(Document document, DTOOrdine ordine) throws Exception {
         // Crea tabella per il totale
@@ -350,7 +370,10 @@ public class ContoPdfExporter {
     }
 
     /**
-     * Stile comune per le righe della tabella dei totali.
+     * Applica lo stile comune alle righe del totale.
+     * 
+     * @param labelCell La cella contenente l'etichetta
+     * @param valueCell La cella contenente il valore
      */
     private static void styleRigaTotali(PdfPCell labelCell, PdfPCell valueCell) {
         for (PdfPCell cell : new PdfPCell[] { labelCell, valueCell }) {
@@ -364,6 +387,10 @@ public class ContoPdfExporter {
 
     /**
      * Aggiunge il piè di pagina al documento PDF.
+     * 
+     * @param document Il documento PDF in cui aggiungere il piè di pagina
+     * @throws Exception se si verificano errori durante l'aggiunta del piè di
+     *                   pagina
      */
     private static void aggiungiPieDiPagina(Document document) throws Exception {
         // Linea separatrice
