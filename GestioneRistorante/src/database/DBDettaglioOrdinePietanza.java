@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import CFG.DBConnection;
-import entity.EntityDettaglioOrdinePietanza;
-import entity.EntityPietanza;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella
@@ -148,10 +146,10 @@ public class DBDettaglioOrdinePietanza {
      * Recupera tutti i dettagli di un ordine dal database
      * 
      * @param idOrdine ID dell'ordine
-     * @return ArrayList di oggetti DettaglioOrdinePietanza
+     * @return ArrayList di oggetti DBDettaglioOrdinePietanza
      */
-    public ArrayList<EntityDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
-        ArrayList<EntityDettaglioOrdinePietanza> listaDettagli = new ArrayList<>();
+    public ArrayList<DBDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
+        ArrayList<DBDettaglioOrdinePietanza> listaDettagli = new ArrayList<>();
         try {
             String query = "SELECT d.*, p.nome as nome_pietanza, p.prezzo as prezzo_pietanza " +
                     "FROM dettaglio_ordine_pietanza d " +
@@ -160,16 +158,15 @@ public class DBDettaglioOrdinePietanza {
             ResultSet rs = DBConnection.selectQuery(query);
 
             while (rs.next()) {
-                EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza();
+                DBDettaglioOrdinePietanza dettaglio = new DBDettaglioOrdinePietanza();
                 dettaglio.setIdDettaglio(rs.getInt("id_dettaglio"));
                 dettaglio.setIdOrdine(rs.getInt("id_ordine"));
                 dettaglio.setIdPietanza(rs.getInt("id_pietanza"));
                 dettaglio.setQuantita(rs.getInt("quantita"));
                 dettaglio.setParteDiMenu(rs.getBoolean("parte_di_menu"));
                 dettaglio.setIdMenu(rs.getInt("id_menu"));
-
-                EntityPietanza pietanza = new EntityPietanza(rs.getInt("id_pietanza"));
-                dettaglio.setPietanza(pietanza);
+                dettaglio.setNomePietanza(rs.getString("nome_pietanza"));
+                dettaglio.setPrezzoPietanza(rs.getDouble("prezzo_pietanza"));
 
                 listaDettagli.add(dettaglio);
             }

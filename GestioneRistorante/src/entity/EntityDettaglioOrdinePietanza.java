@@ -118,8 +118,27 @@ public class EntityDettaglioOrdinePietanza {
      * @return ArrayList di oggetti DettaglioOrdinePietanza
      */
     public static ArrayList<EntityDettaglioOrdinePietanza> getDettagliOrdine(int idOrdine) {
-        DBDettaglioOrdinePietanza d = new DBDettaglioOrdinePietanza();
-        return d.getDettagliOrdine(idOrdine);
+        DBDettaglioOrdinePietanza dao = new DBDettaglioOrdinePietanza();
+        ArrayList<DBDettaglioOrdinePietanza> listaDB = dao.getDettagliOrdine(idOrdine);
+
+        // Converte gli oggetti DB in Entity
+        ArrayList<EntityDettaglioOrdinePietanza> listaEntity = new ArrayList<>();
+        for (DBDettaglioOrdinePietanza dbDettaglio : listaDB) {
+            EntityDettaglioOrdinePietanza entityDettaglio = new EntityDettaglioOrdinePietanza();
+            entityDettaglio.setIdDettaglio(dbDettaglio.getIdDettaglio());
+            entityDettaglio.setIdOrdine(dbDettaglio.getIdOrdine());
+            entityDettaglio.setIdPietanza(dbDettaglio.getIdPietanza());
+            entityDettaglio.setQuantita(dbDettaglio.getQuantita());
+            entityDettaglio.setParteDiMenu(dbDettaglio.isParteDiMenu());
+            entityDettaglio.setIdMenu(dbDettaglio.getIdMenu());
+
+            // Inizializza la pietanza
+            entityDettaglio.setPietanza(new EntityPietanza(dbDettaglio.getIdPietanza()));
+
+            listaEntity.add(entityDettaglio);
+        }
+
+        return listaEntity;
     }
 
     // Getters e setters
