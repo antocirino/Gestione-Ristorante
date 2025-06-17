@@ -312,7 +312,6 @@ public class EntityOrdine {
      */
     public boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
         EntityMenuFisso menufisso = new EntityMenuFisso(idMenuFisso);
-        String nome = menufisso.getNome();
         double prezzo = menufisso.getPrezzo();
         ArrayList<EntityPietanza> pietanze = menufisso.getPietanze();
         try {

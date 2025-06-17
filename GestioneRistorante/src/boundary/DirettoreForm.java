@@ -21,7 +21,6 @@ public class DirettoreForm extends JFrame {
     private DefaultTableModel tableModel;
     private JPanel graphPanel;
     private JComboBox<String> reportTypeComboBox;
-    private JComboBox<String> periodoComboBox;
     private JButton generaReportButton;
     private JButton stampaReportButton;
     private JButton indietroButton;
