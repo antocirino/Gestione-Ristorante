@@ -14,16 +14,16 @@
 .
 ├── GestioneRistorante/
 │   ├── src/
-│   │   ├── boundary/   #Contiene le classi per l'interfaccia utente e gestione dell'input/output
-│   │   ├── CFG/        #Connessione al database
-│   │   ├── control/    #Implementa la logica di stampa PDF e coordina le operazioni
-│   │   ├── database/   #Gestisce le query al database MySQL
-│   │   ├── DTO/        #Data Transfer Objects per il trasferimento di dati tra i vari strati
-│   │   ├── entity/     #Definisce le entità di dominio e loro relazioni
-│   │   ├── Exceptions/ #Contiene le classi per la gestione personalizzata delle eccezioni
+│   │   ├── boundary/   # Contiene le classi per l'interfaccia utente e gestione dell'input/output
+│   │   ├── CFG/        # Connessione al database
+│   │   ├── control/    # Coordina le operazioni
+│   │   ├── database/   # Gestisce le query al database MySQL
+│   │   ├── DTO/        # Data Transfer Objects per il trasferimento di dati tra i vari strati
+│   │   ├── entity/     # Definisce le entità di dominio e loro relazioni
+│   │   ├── Exceptions/ # Contiene le classi per la gestione personalizzata delle eccezioni
 │   │   ├── resources/  # Risorse statiche come immagini, icone e file di testo
 │   │   ├── test/       # Test unitari e di integrazione
-│   │   └── utility/    # Contiene classi di utility per la gestione delle icone SVG
+│   │   └── utility/    # Contiene classi di utility per la gestione delle icone SVG e generazione PDF
 │   └── bin/
 ├── SQL/
 │   ├── init/
@@ -38,7 +38,7 @@
 Il progetto implementa l'architettura BCED (Boundary Control Entity Database):
 
 - **Boundary**: Gestisce l'interazione con l'utente attraverso l'interfaccia grafica Swing
-- **Control**: Implementa la logica di business e coordina il flusso tra interfaccia e dati
+- **Control**: Implementa la logica di business e coordina il flusso tra interfaccia e entità
 - **Entity**: Rappresenta le entità del dominio e le loro relazioni
 - **Database**: Gestisce la persistenza dei dati attraverso il database MySQL
 
