@@ -3,7 +3,6 @@ package control;
 import java.util.ArrayList;
 import java.nio.file.Path;
 
-
 import DTO.DTOCategoriaPietanza;
 import DTO.DTOIngrediente;
 import DTO.DTOIngredientiRicettaPietanza;
@@ -29,6 +28,7 @@ import entity.EntityTavolo;
 public class Controller {
 
     private static Controller instance = null;
+    private static final Object lock = new Object();
 
     private Controller() {
     };
@@ -178,14 +178,16 @@ public class Controller {
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
     public static boolean aggiungiPietanzaAllOrdine(int idOrdine, int idPietanza, int quantita) {
-        EntityOrdine ordine = new EntityOrdine(idOrdine);
-        boolean result = ordine.aggiungiPietanza(idPietanza, quantita);
-        if (result) {
-            System.out.println("Pietanza aggiunta all'ordine con ID: " + idOrdine);
-        } else {
-            System.err.println("Errore nell'aggiunta della pietanza all'ordine con ID: " + idOrdine);
+        synchronized (lock) {
+            EntityOrdine ordine = new EntityOrdine(idOrdine);
+            boolean result = ordine.aggiungiPietanza(idPietanza, quantita);
+            if (result) {
+                System.out.println("Pietanza aggiunta all'ordine con ID: " + idOrdine);
+            } else {
+                System.err.println("Errore nell'aggiunta della pietanza all'ordine con ID: " + idOrdine);
+            }
+            return result;
         }
-        return result;
     }
 
     /**
@@ -197,14 +199,16 @@ public class Controller {
      * @return true se l'aggiunta è avvenuta con successo, false altrimenti
      */
     public static boolean aggiungiMenuFisso(int idOrdine, int idMenuFisso, int quantita) {
-        EntityOrdine ordine = new EntityOrdine(idOrdine);
-        boolean result = ordine.aggiungiMenuFisso(idOrdine, idMenuFisso, quantita);
-        if (result) {
-            System.out.println("Menu fisso aggiunto all'ordine con ID: " + idOrdine);
-        } else {
-            System.err.println("Errore nell'aggiunta del menu fisso all'ordine con ID: " + idOrdine);
+        synchronized (lock) {
+            EntityOrdine ordine = new EntityOrdine(idOrdine);
+            boolean result = ordine.aggiungiMenuFisso(idOrdine, idMenuFisso, quantita);
+            if (result) {
+                System.out.println("Menu fisso aggiunto all'ordine con ID: " + idOrdine);
+            } else {
+                System.err.println("Errore nell'aggiunta del menu fisso all'ordine con ID: " + idOrdine);
+            }
+            return result;
         }
-        return result;
     }
 
     /**
