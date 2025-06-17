@@ -156,7 +156,7 @@ public class CameriereForm extends JFrame {
 
         // Inizializzo i dati
         caricaCategorie();
-        caricaTavoli();
+        caricaTavoliLiberi();
         caricaPietanze();
         caricaMenuFissi();
 
@@ -690,7 +690,7 @@ public class CameriereForm extends JFrame {
     /**
      * Carica i tavoli liberi nel combobox
      */
-    private void caricaTavoli() {
+    private void caricaTavoliLiberi() {
         try {
 
             List<DTOTavolo> tavoli = Controller.getTavoliByStato("libero");
@@ -1012,7 +1012,7 @@ public class CameriereForm extends JFrame {
         dialogPanel.add(tavoloLabel, gbc);
 
         tavoliLiberiComboBox = new JComboBox<>();
-        caricaTavoliLiberi();
+        caricaTuttiTavoli();
         styleComboBox(tavoliLiberiComboBox);
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -1078,7 +1078,7 @@ public class CameriereForm extends JFrame {
     /**
      * Carica i tavoli liberi per la selezione iniziale
      */
-    private void caricaTavoliLiberi() {
+    private void caricaTuttiTavoli() {
         try {
             List<DTOTavolo> tavoli = Controller.getAllTavoli();
 
@@ -1174,7 +1174,7 @@ public class CameriereForm extends JFrame {
                     "Ordine Creato", JOptionPane.INFORMATION_MESSAGE);
 
             // Aggiorna la lista dei tavoli disponibili
-            caricaTavoli();
+            caricaTavoliLiberi();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Errore durante la creazione dell'ordine: " + e.getMessage(),
