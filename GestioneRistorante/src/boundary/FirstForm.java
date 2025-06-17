@@ -282,7 +282,14 @@ public class FirstForm extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Metodo per creare button moderni con icone SVG
+    /**
+     * Crea un pulsante moderno con icona e testo
+     * Utilizza un layout per posizionare l'icona sopra il testo
+     * 
+     * @param text
+     * @param iconName
+     * @return
+     */
     private JButton createModernButton(String text, String iconName) {
         JButton button = new JButton();
 
@@ -316,7 +323,16 @@ public class FirstForm extends JFrame {
         return button;
     }
 
-    // Metodo per caricare icone SVG
+    /**
+     * Carica un'icona SVG da un file
+     * Prova diversi percorsi per trovare il file
+     * Se non trovato, crea un'icona di fallback con il nome del file
+     * 
+     * @param filename
+     * @param width
+     * @param height
+     * @return
+     */
     private ImageIcon loadSVGIcon(String filename, int width, int height) {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
@@ -415,7 +431,15 @@ public class FirstForm extends JFrame {
         }
     }
 
-    // Metodo per creare icone di fallback
+    /**
+     * Crea un'icona di fallback con il nome del file
+     * Utilizza un'emoji Unicode per rappresentare l'icona
+     * 
+     * @param filename Il nome del file dell'icona
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @return L'icona di fallback creata
+     */
     private ImageIcon createFallbackIcon(String filename, int width, int height) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
@@ -438,7 +462,13 @@ public class FirstForm extends JFrame {
         return new ImageIcon(image);
     }
 
-    // Metodo per ottenere icone Unicode come fallback
+    /**
+     * Restituisce un'icona Unicode basata sul nome del file
+     * Utilizza emoji per rappresentare le icone comuni
+     * 
+     * @param filename Il nome del file dell'icona
+     * @return L'icona Unicode corrispondente
+     */
     private String getUnicodeIcon(String filename) {
         if (filename.contains("person")) {
             return "👤";
@@ -455,7 +485,12 @@ public class FirstForm extends JFrame {
         }
     }
 
-    // Metodo per stilizzare i pulsanti
+    /**
+     * Applica lo stile moderno al pulsante
+     * Imposta font, colori, bordi e aggiunge effetti hover e animazioni
+     * 
+     * @param button Il pulsante da stilizzare
+     */
     private void styleButton(JButton button) {
         button.setFont(regularFont);
         button.setForeground(textColor);
@@ -547,7 +582,14 @@ public class FirstForm extends JFrame {
     private JButton cassiereButton;
     private JButton direttoreButton;
 
-    // Metodo per aprire le finestre dei ruoli gestendo correttamente la visibilità
+    /**
+     * Apre la finestra del ruolo selezionato
+     * Nasconde la finestra principale e mostra quella del ruolo
+     * Gestisce la chiusura della finestra del ruolo per tornare alla finestra
+     * principale
+     * 
+     * @param role Il ruolo selezionato (Cameriere, Cuoco, Cassiere, Direttore)
+     */
     private void openRoleWindow(String role) {
         JFrame roleWindow = null;
 

@@ -73,6 +73,10 @@ public class CameriereForm extends JFrame {
     private int currentTableId = -1;
     private int currentPersons = 0;
 
+    /**
+     * Costruttore della schermata CameriereForm
+     * 
+     */
     public CameriereForm() {
         setTitle("Gestione Ristorante - Cameriere");
         setSize(1200, 800);
@@ -171,6 +175,9 @@ public class CameriereForm extends JFrame {
 
     /**
      * Crea il pannello con la lista delle pietanze
+     * 
+     * @return Un JPanel con la tabella delle pietanze e i controlli per aggiungere
+     *         all'ordine
      */
     private JPanel createMenuPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
@@ -258,6 +265,8 @@ public class CameriereForm extends JFrame {
 
     /**
      * Crea il pannello con la lista dei menu fissi
+     * 
+     * @return Un JPanel con la tabella dei menu fissi e i pulsanti per aggiungere
      */
     private JPanel createMenuFissoPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
@@ -354,6 +363,8 @@ public class CameriereForm extends JFrame {
 
     /**
      * Crea il pannello per la gestione dell'ordine
+     * 
+     * @return Un JPanel con le informazioni dell'ordine e la tabella delle pietanze
      */
     private JPanel createOrdinePanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
@@ -433,6 +444,13 @@ public class CameriereForm extends JFrame {
 
     // Metodi di utilità per lo styling moderno
 
+    /**
+     * Crea un pulsante
+     * 
+     * @param text            Il testo del pulsante
+     * @param backgroundColor Il colore di sfondo del pulsante
+     * @return Un JButton con lo stile applicato
+     */
     private JButton createStyledButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setFont(regularFont);
@@ -482,6 +500,11 @@ public class CameriereForm extends JFrame {
         return button;
     }
 
+    /**
+     * Aggiungi stile al JTable
+     * 
+     * @param table il JTable da stilizzare
+     */
     private void styleTable(JTable table) {
         table.setFont(regularFont);
         table.setRowHeight(35);
@@ -496,6 +519,11 @@ public class CameriereForm extends JFrame {
         table.getTableHeader().setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
     }
 
+    /**
+     * Aggiunge uno stile allo JScrollPane
+     * 
+     * @param scrollPane lo JScrollPane da stilizzare
+     */
     private void styleScrollPane(JScrollPane scrollPane) {
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200), 1),
@@ -503,6 +531,11 @@ public class CameriereForm extends JFrame {
         scrollPane.getViewport().setBackground(Color.WHITE);
     }
 
+    /**
+     * Stile per il JComboBox
+     * 
+     * @param comboBox il JComboBox da stilizzare
+     */
     private void styleComboBox(JComboBox<String> comboBox) {
         comboBox.setFont(regularFont);
         comboBox.setBackground(Color.WHITE);
@@ -555,6 +588,11 @@ public class CameriereForm extends JFrame {
         });
     }
 
+    /**
+     * Stile per il JTextField
+     * 
+     * @param textField il JTextField da stilizzare
+     */
     private void styleTextField(JTextField textField) {
         textField.setFont(regularFont);
         textField.setBackground(Color.WHITE);
@@ -582,6 +620,11 @@ public class CameriereForm extends JFrame {
         });
     }
 
+    /**
+     * Aggiunge uno stile allo Spinner
+     * 
+     * @param spinner lo Spinner da stilizzare
+     */
     private void styleSpinner(JSpinner spinner) {
         spinner.setFont(regularFont);
         spinner.setPreferredSize(new Dimension(80, 40));
@@ -617,6 +660,9 @@ public class CameriereForm extends JFrame {
         });
     }
 
+    /**
+     * Crea un pannello
+     */
     private JPanel createModernPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(Color.WHITE);
@@ -653,10 +699,10 @@ public class CameriereForm extends JFrame {
 
             tavoliComboBox.removeAllItems();
             for (DTOTavolo tavolo : tavoli) {
-                    int idTavolo = tavolo.getIdTavolo();
-                    int maxPosti = tavolo.getMaxPosti();
-                    tavoliComboBox.addItem(
-                            idTavolo + " - Tavolo " + " (max " + maxPosti + " posti)");
+                int idTavolo = tavolo.getIdTavolo();
+                int maxPosti = tavolo.getMaxPosti();
+                tavoliComboBox.addItem(
+                        idTavolo + " - Tavolo " + " (max " + maxPosti + " posti)");
             }
         } catch (Exception e) {
             // Ignora o gestisci l'errore in modo silenzioso, o loggalo
@@ -1163,12 +1209,28 @@ public class CameriereForm extends JFrame {
         }
     }
 
-    // Metodo per caricare icone SVG (copiato da FirstForm)
+    /**
+     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo
+     * 
+     * @param filename Il nome del file SVG
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non
+     */
     private ImageIcon loadSVGIcon(String filename, int width, int height) {
         return loadSVGIcon(filename, width, height, Color.WHITE);
     }
 
-    // Metodo sovraccaricato per specificare il colore dell'icona
+    /**
+     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo
+     * 
+     * @param filename Il nome del file SVG
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @param color    Il colore di sfondo dell'icona
+     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non
+     *         trovata
+     */
     private ImageIcon loadSVGIcon(String filename, int width, int height, Color color) {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
@@ -1260,7 +1322,15 @@ public class CameriereForm extends JFrame {
         }
     }
 
-    // Metodo per creare icone di fallback
+    /**
+     * Crea un'icona di fallback con un testo Unicode
+     * 
+     * @param filename Il nome del file (usato per determinare l'icona Unicode)
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @param color    Il colore del testo dell'icona
+     * @return Un ImageIcon con l'icona di fallback
+     */
     private ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
@@ -1283,7 +1353,12 @@ public class CameriereForm extends JFrame {
         return new ImageIcon(image);
     }
 
-    // Metodo per ottenere icone Unicode come fallback
+    /**
+     * Restituisce un'icona Unicode basata sul nome del file
+     * 
+     * @param filename Il nome del file dell'icona
+     * @return Una stringa con l'icona Unicode corrispondente
+     */
     private String getUnicodeIcon(String filename) {
         if (filename.contains("pietanza")) {
             return "🍝";
@@ -1303,20 +1378,4 @@ public class CameriereForm extends JFrame {
             return "📄";
         }
     }
-
-    /*
-     * public static void main(String[] args) {
-     * try {
-     * UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * 
-     * SwingUtilities.invokeLater(new Runnable() {
-     * public void run() {
-     * new CameriereForm().setVisible(true);
-     * }
-     * });
-     * }
-     */
 }
