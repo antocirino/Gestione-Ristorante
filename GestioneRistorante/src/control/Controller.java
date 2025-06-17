@@ -86,7 +86,7 @@ public class Controller {
     /**
      * Recupera tutti i tavoli dal database
      * 
-     * @return Lista di oggetti Tavolo
+     * @return Lista di oggetti DTOTavolo contenente tutti i tavoli
      */
     public static ArrayList<DTOTavolo> getAllTavoli() {
 
@@ -100,6 +100,12 @@ public class Controller {
 
     }
 
+    /**
+     * Recupera i tavoli in base al loro stato (es. "libero", "occupato")
+     * 
+     * @param stato Stato del tavolo da filtrare
+     * @return Lista di oggetti DTOTavolo con lo stato specificato
+     */
     public static ArrayList<DTOTavolo> getTavoliByStato(String stato) {
 
         ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
@@ -117,9 +123,9 @@ public class Controller {
 
     ///// MENUFISSI////////////////////////////////////////////////////////////////////
     /**
-     * Recuperare tutti i menu fissi dal database
+     * Recupera tutti i menu fissi dal database
      * 
-     * @return
+     * @return Lista di oggetti DTOMenuFisso contenente tutti i menu fissi
      */
     public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
         ArrayList<DTOMenuFisso> dto_menu_fissi_liste = new ArrayList<>();
@@ -136,7 +142,7 @@ public class Controller {
     /**
      * Recupera tutte le categorie di pietanze dal database
      * 
-     * @return Lista di categorie come Map<Integer, String> (id, nome)
+     * @return Lista di oggetti DTOCategoriaPietanza contenente tutte le categorie
      */
     public static ArrayList<DTOCategoriaPietanza> getCategoriePietanze() {
         ArrayList<DTOCategoriaPietanza> dto_categorie_liste = new ArrayList<>();
@@ -152,9 +158,9 @@ public class Controller {
 
     ///// ORDINE////////////////////////////////////////////////////////////////////
     /**
-     * Recupera tutti gli ordini dal database IN BASE ALLO STATO
+     * Recupera tutti gli ordini dal database in base al loro stato
      * 
-     * @return Lista di oggetti Ordine
+     * @return Lista di oggetti DTOOrdine contenente tutti gli ordini
      */
     public static ArrayList<DTOOrdine> getOrdiniByStato(String stato) {
         ArrayList<DTOOrdine> dto_ordini_liste = new ArrayList<>();
@@ -427,7 +433,7 @@ public class Controller {
      */
     public static double getCostoCoperto() {
         // Utilizziamo EntityRistorante per recuperare l'informazione
-        EntityRistorante ristorante = new EntityRistorante(1); // Assumiamo ID=1 per il ristorante predefinito
+        EntityRistorante ristorante = new EntityRistorante(1); // Abbiamo un solo ristorante
         return ristorante.getCostoCoperto();
     }
 }
