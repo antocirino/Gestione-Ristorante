@@ -75,21 +75,21 @@ Il modulo dedicato ai cuochi visualizza in tempo reale gli ordini ricevuti, orga
 per tempo di attesa. Il cuoco può segnare i piatti come "in preparazione" o
 "completati", aggiornando automaticamente lo stato dell'ordine e visualizzare dettagli relativi alle pietanze ordinate.
 
-![Interfaccia Cuoco](images/interfaccia_cuoco.png)
+![Interfaccia Cuoco](images/dashboard_cuoco.png)
 
 ### Form Cassiere
 
 L'interfaccia del cassiere gestisce i pagamenti e l'emissione degli scontrini. Il sistema
 calcola automaticamente il conto in base agli ordini associati al tavolo, supportando la creazione PDF dello scontrino.
 
-![Modulo Cassiere](images/modulo_cassiere.png)
+![Modulo Cassiere](images/dashboard_cassiere.png)
 
 ### Form Direttore
 
 Il pannello amministrativo consente al direttore di monitorare l'andamento del ristorante e controllare le scorte.
 Include strumenti per la generazione di report per gli ingredienti da riordinare.
 
-![Pannello Direttore](images/pannello_direttore.png)
+![Pannello Direttore](images/dashboard_direttore.png)
 
 ## 🐳 Docker e Containerizzazione
 
