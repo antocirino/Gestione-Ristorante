@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import CFG.DBConnection;
-import DTO.DTOPietanzaCuoco;
 
 /**
  * Classe DAO per gestire l'accesso ai dati della tabella 'ordine' nel database
@@ -252,8 +251,14 @@ public class DBOrdine {
         return listaOrdini;
     }
 
-    public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine() {
-        ArrayList<DTOPietanzaCuoco> pietanzaDaOrdine = new ArrayList<>();
+    /**
+     * Recupera le pietanze associate a un ordine dal database
+     * 
+     * @return ArrayList di mappe con chiavi "nome" e "quantita" per ciascuna
+     *         pietanza
+     */
+    public ArrayList<Map<String, Object>> getPietanzeDaOrdine() {
+        ArrayList<Map<String, Object>> pietanzeDaOrdine = new ArrayList<>();
         String query = String.format(
                 "SELECT p.nome, SUM(dop.quantita) AS quantita_totale " +
                         "FROM dettaglio_ordine_pietanza dop " +
@@ -267,13 +272,19 @@ public class DBOrdine {
             while (rs.next()) {
                 String nome = rs.getString("nome");
                 int quantita = rs.getInt("quantita_totale");
-                pietanzaDaOrdine.add(new DTOPietanzaCuoco(nome, quantita));
+
+                // Usa una mappa per rappresentare la coppia nome-quantità
+                Map<String, Object> pietanza = new HashMap<>();
+                pietanza.put("nome", nome);
+                pietanza.put("quantita", quantita);
+
+                pietanzeDaOrdine.add(pietanza);
             }
         } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Errore nel recupero degli ordini per stato: " + e.getMessage());
+            System.err.println("Errore nel recupero delle pietanze: " + e.getMessage());
         }
 
-        return pietanzaDaOrdine;
+        return pietanzeDaOrdine;
     }
 
     /**

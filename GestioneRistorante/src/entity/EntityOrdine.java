@@ -141,10 +141,19 @@ public class EntityOrdine {
      * @return ArrayList di oggetti DTOPietanzaCuoco con le pietanze dell'ordine
      */
     public ArrayList<DTOPietanzaCuoco> getPietanzeDaOrdine() {
-        ArrayList<DTOPietanzaCuoco> pietanzaDaOrdine = new ArrayList<>();
+        ArrayList<DTOPietanzaCuoco> pietanzeDTO = new ArrayList<>();
         DBOrdine ordine = new DBOrdine(this.idOrdine);
-        pietanzaDaOrdine = ordine.getPietanzeDaOrdine();
-        return pietanzaDaOrdine;
+
+        // Ottiene i dati dal DB e li converte in DTO
+        ArrayList<Map<String, Object>> pietanzeDB = ordine.getPietanzeDaOrdine();
+        for (Map<String, Object> pietanzaDB : pietanzeDB) {
+            String nome = (String) pietanzaDB.get("nome");
+            int quantita = (Integer) pietanzaDB.get("quantita");
+            DTOPietanzaCuoco pietanzaDTO = new DTOPietanzaCuoco(nome, quantita);
+            pietanzeDTO.add(pietanzaDTO);
+        }
+
+        return pietanzeDTO;
     }
 
     /**
