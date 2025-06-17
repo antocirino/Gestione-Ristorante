@@ -35,6 +35,7 @@ COPY ./GestioneRistorante/bin/database ./bin/database/
 COPY ./GestioneRistorante/bin/DTO ./bin/DTO/
 COPY ./GestioneRistorante/bin/entity ./bin/entity/
 COPY ./GestioneRistorante/bin/Exception ./bin/Exception/
+COPY ./GestioneRistorante/bin/utility ./bin/utility/
 COPY ./GestioneRistorante/bin/resources ./bin/resources/
 
 # Copia lo script di avvio

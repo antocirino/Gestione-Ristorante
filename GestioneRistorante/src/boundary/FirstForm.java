@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
+import control.Controller;
+import utility.SvgIconManager;
 
 // Importa la libreria SVG Salamander
 import com.kitfox.svg.SVGDiagram;
@@ -268,7 +270,7 @@ public class FirstForm extends JFrame {
         button.setLayout(new BorderLayout(0, 10));
 
         // Carica icona SVG
-        ImageIcon svgIcon = loadSVGIcon(iconName + ".svg", 40, 40);
+        ImageIcon svgIcon = SvgIconManager.loadSVGIcon(iconName + ".svg", 40, 40);
         JLabel iconLabel = new JLabel(svgIcon, SwingConstants.CENTER);
 
         // Etichetta per il testo
@@ -292,168 +294,6 @@ public class FirstForm extends JFrame {
         });
 
         return button;
-    }
-
-    /**
-     * Carica un'icona SVG da un file
-     * Prova diversi percorsi per trovare il file
-     * Se non trovato, crea un'icona di fallback con il nome del file
-     * 
-     * @param filename
-     * @param width
-     * @param height
-     * @return
-     */
-    private ImageIcon loadSVGIcon(String filename, int width, int height) {
-        try {
-            // Percorsi possibili per le icone SVG (nell'ordine di priorità)
-            String[] possiblePaths = {
-                    "bin/resources/icons/" + filename, // Nel container/dopo compilazione
-                    "resources/icons/" + filename, // Percorso relativo nel container
-                    "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
-                    "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
-                    "src/resources/icons/" + filename // Durante sviluppo
-            };
-
-            java.io.File svgFile = null;
-            String usedPath = null;
-
-            for (String path : possiblePaths) {
-                java.io.File testFile = new java.io.File(path);
-                if (testFile.exists()) {
-                    svgFile = testFile;
-                    usedPath = path;
-                    System.out.println("Icona SVG trovata: " + usedPath);
-                    break;
-                }
-            }
-
-            // Se non trovato con percorsi diretti, prova con il class loader
-            if (svgFile == null || !svgFile.exists()) {
-                try {
-                    java.net.URL resourceUrl = getClass().getClassLoader().getResource("icons/" + filename);
-                    if (resourceUrl == null) {
-                        resourceUrl = getClass().getClassLoader().getResource("resources/icons/" + filename);
-                    }
-                    if (resourceUrl != null) {
-                        svgFile = new java.io.File(resourceUrl.toURI());
-                        System.out.println("Icona SVG trovata via class loader: " + resourceUrl);
-                    }
-                } catch (Exception e) {
-                    // Ignora e usa fallback
-                }
-            }
-
-            if (svgFile == null || !svgFile.exists()) {
-                System.out.println("File SVG non trovato in nessuno dei percorsi: " + filename);
-                for (String path : possiblePaths) {
-                    System.out.println("  Tentato: " + path + " -> " + new java.io.File(path).exists());
-                }
-                return createFallbackIcon(filename, width, height);
-            }
-
-            SVGUniverse svgUniverse = new SVGUniverse();
-            java.net.URI svgUri = svgFile.toURI();
-            SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(svgUri.toURL()));
-
-            if (diagram == null) {
-                System.out.println("Impossibile caricare il diagramma SVG: " + filename);
-                return createFallbackIcon(filename, width, height);
-            }
-
-            // Imposta dimensioni
-            diagram.setIgnoringClipHeuristic(true);
-
-            // Renderizza SVG come BufferedImage
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = image.createGraphics();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-
-            // Pulisci lo sfondo
-            g2.setComposite(AlphaComposite.Clear);
-            g2.fillRect(0, 0, width, height);
-            g2.setComposite(AlphaComposite.SrcOver);
-
-            // Scala e centra l'SVG
-            java.awt.geom.Rectangle2D bounds = diagram.getViewRect();
-            double scaleX = (double) width / bounds.getWidth();
-            double scaleY = (double) height / bounds.getHeight();
-            double scale = Math.min(scaleX, scaleY);
-
-            int scaledWidth = (int) (bounds.getWidth() * scale);
-            int scaledHeight = (int) (bounds.getHeight() * scale);
-            int x = (width - scaledWidth) / 2;
-            int y = (height - scaledHeight) / 2;
-
-            g2.translate(x, y);
-            g2.scale(scale, scale);
-
-            diagram.render(g2);
-            g2.dispose();
-
-            System.out.println("Icona SVG caricata con successo: " + filename);
-            return new ImageIcon(image);
-
-        } catch (Exception e) {
-            System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
-            e.printStackTrace();
-            return createFallbackIcon(filename, width, height);
-        }
-    }
-
-    /**
-     * Crea un'icona di fallback con il nome del file
-     * Utilizza un'emoji Unicode per rappresentare l'icona
-     * 
-     * @param filename Il nome del file dell'icona
-     * @param width    La larghezza dell'icona
-     * @param height   L'altezza dell'icona
-     * @return L'icona di fallback creata
-     */
-    private ImageIcon createFallbackIcon(String filename, int width, int height) {
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // Imposta colore e font
-        g2.setColor(accentColor);
-        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
-
-        String icon = getUnicodeIcon(filename);
-        FontMetrics fm = g2.getFontMetrics();
-        int textWidth = fm.stringWidth(icon);
-        int textHeight = fm.getHeight();
-        int x = (width - textWidth) / 2;
-        int y = (height - textHeight) / 2 + fm.getAscent();
-
-        g2.drawString(icon, x, y);
-        g2.dispose();
-
-        return new ImageIcon(image);
-    }
-
-    /**
-     * Restituisce un'icona Unicode basata sul nome del file
-     * Utilizza emoji per rappresentare le icone comuni
-     * 
-     * @param filename Il nome del file dell'icona
-     * @return L'icona Unicode corrispondente
-     */
-    private String getUnicodeIcon(String filename) {
-        if (filename.contains("person")) {
-            return "👤";
-        } else if (filename.contains("restaurant_menu")) {
-            return "🍽️";
-        } else if (filename.contains("payment")) {
-            return "💳";
-        } else if (filename.contains("admin_panel_settings")) {
-            return "⚙️";
-        } else if (filename.contains("exit") || filename.contains("logout")) {
-            return "🚪";
-        } else {
-            return "📋";
-        }
     }
 
     /**
