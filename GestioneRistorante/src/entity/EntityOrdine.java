@@ -244,30 +244,23 @@ public class EntityOrdine {
                     return false;
                 }
                 this.idOrdine = nuovoId;
-                System.out.println("Creato nuovo ordine con ID: " + nuovoId);
             }
 
             // Aggiorna il costo totale dell'ordine con il prezzo della pietanza
             double prezzoPietanza = pietanza.getPrezzo();
             double costoAggiuntivo = prezzoPietanza * quantita;
             this.costoTotale += costoAggiuntivo;
-            System.out.println("Aggiornamento del costo totale a seguito dell'aggiunta: " + this.costoTotale);
 
             // Crea il dettaglio ordine
-            System.out.println("Creazione/Aggiornamento del dettaglio ordine per la pietanza: " + pietanza.getNome());
             EntityDettaglioOrdinePietanza dettaglio = new EntityDettaglioOrdinePietanza(this.idOrdine,
                     pietanza.getIdPietanza(),
                     quantita);
 
             // Salva il dettaglio nel database utilizzando ON CONFLICT
             int dettaglioId = dettaglio.scriviSuDB();
-            System.out.println("Dettaglio ordine salvato/aggiornato con ID: " + dettaglioId);
             if (dettaglioId > 0) {
                 // Se il salvataggio è riuscito, prenota gli ingredienti e aggiorna il costo
                 // totale
-                System.out.println("Aggiunta pietanza: " + pietanza.getNome() + " x" + quantita +
-                        " all'ordine #" + this.idOrdine +
-                        " (+" + String.format("%.2f", costoAggiuntivo) + "€)");
 
                 // Aggiorna il costo totale nel database
                 if (!aggiornaCostoTotale()) {
@@ -341,7 +334,6 @@ public class EntityOrdine {
                     return false;
                 }
                 this.idOrdine = nuovoId;
-                System.out.println("Creato nuovo ordine con ID: " + nuovoId);
             }
 
             // FASE 1: Verifica preliminare di tutte le pietanze prima di qualsiasi modifica
@@ -410,9 +402,6 @@ public class EntityOrdine {
                 System.err.println("Avviso: Impossibile aggiornare il costo totale nel database");
             }
 
-            System.out.println("Aggiunto menu fisso: " + nome + " x" + quantita +
-                    " all'ordine #" + this.idOrdine +
-                    " (+" + String.format("%.2f", costoAggiuntivo) + "€)");
             return true;
 
         } catch (Exception e) {

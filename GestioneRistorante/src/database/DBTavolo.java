@@ -56,7 +56,7 @@ public class DBTavolo {
         // Definisco la query
         String query = "SELECT * FROM tavolo WHERE id_tavolo = " + this.idTavolo;
 
-        System.out.println(query); // Per debug
+        
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);
@@ -98,7 +98,6 @@ public class DBTavolo {
                     idTavolo, this.maxPosti, this.stato, this.idRistorante);
         }
 
-        System.out.println(query);
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -122,7 +121,6 @@ public class DBTavolo {
                 "UPDATE tavolo SET stato = '%s' WHERE id_tavolo = %d",
                 nuovoStato, this.idTavolo);
 
-        System.out.println(query);
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -169,7 +167,7 @@ public class DBTavolo {
     public ArrayList<DBTavolo> getTavoliPerStato(String statoFiltro) {
         ArrayList<DBTavolo> listaTavoli = new ArrayList<>();
         String query = "SELECT * FROM tavolo WHERE stato = '" + statoFiltro + "' ORDER BY id_tavolo";
-        System.out.println(query); // Per debug
+        
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);

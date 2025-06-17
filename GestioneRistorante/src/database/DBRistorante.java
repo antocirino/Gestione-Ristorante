@@ -39,8 +39,6 @@ public class DBRistorante {
     public void caricaDaDB() {
         String query = "SELECT * FROM ristorante WHERE id_ristorante = " + this.idRistorante;
 
-        System.out.println(query); // Per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
@@ -73,8 +71,6 @@ public class DBRistorante {
                         + ", costo_coperto = " + this.costoCoperto + " WHERE id_ristorante = " + idRistorante;
             }
 
-            System.out.println(query); // Per debug
-
             int affectedRows = DBConnection.updateQuery(query);
 
             if (affectedRows > 0 && idRistorante == 0) {
@@ -101,14 +97,13 @@ public class DBRistorante {
     public int eliminaDaDB(int idRistorante) {
         try {
             String query = "DELETE FROM ristorante WHERE id_ristorante = " + idRistorante;
-            System.out.println(query); // Per debug
+
             return DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nell'eliminazione del ristorante dal database: " + e.getMessage());
         }
         return -1; // Errore
     }
-
 
     // Getters e setters
     public int getIdRistorante() {

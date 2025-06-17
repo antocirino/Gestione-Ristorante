@@ -9,7 +9,6 @@ import utility.SvgIconManager;
 
 // Importa la libreria SVG Salamander
 
-
 public class FirstForm extends JFrame {
     private JPanel mainPanel;
     private JLabel statusLabel;

@@ -495,7 +495,6 @@ public class CassiereForm extends JFrame {
         coppertiField.setEditable(false);
 
         DTOOrdine ordine = Controller.getOrdineByTavolo(idTavolo);
-        System.out.println("Ordine recuperato: " + ordine);
 
         if (ordine == null || ordine.getIdOrdine() == 0) {
             dettagliContoTextArea.setText("Nessun ordine attivo per questo tavolo.");

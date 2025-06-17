@@ -49,12 +49,9 @@ public class DBComposizioneMenu {
                 "JOIN pietanza p ON c.id_pietanza = p.id_pietanza " +
                 "WHERE c.id_menu = " + this.idMenu + " AND c.id_pietanza = " + this.idPietanza;
 
-        System.out.println(query); // Per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
-                System.out.println("DEBUG.");
                 this.nomePietanza = rs.getString("nome_pietanza");
                 this.prezzoPietanza = rs.getDouble("prezzo_pietanza");
             }
@@ -76,7 +73,6 @@ public class DBComposizioneMenu {
             ResultSet rs = DBConnection.selectQuery(checkQuery);
             if (rs.next() && rs.getInt(1) > 0) {
                 // L'associazione esiste già, niente da fare
-                System.out.println("L'associazione menu-pietanza esiste già. Nessuna modifica necessaria.");
                 return 0;
             }
 
@@ -84,7 +80,6 @@ public class DBComposizioneMenu {
             String query = "INSERT INTO composizione_menu (id_menu, id_pietanza) VALUES (" +
                     this.idMenu + ", " + this.idPietanza + ")";
 
-            System.out.println(query); // Per debug
             return DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nel salvataggio della composizione menu nel database: " + e.getMessage());
@@ -101,7 +96,6 @@ public class DBComposizioneMenu {
         try {
             String query = "DELETE FROM composizione_menu WHERE id_menu = " + this.idMenu +
                     " AND id_pietanza = " + this.idPietanza;
-            System.out.println(query); // Per debug
             return DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nell'eliminazione della composizione menu dal database: " + e.getMessage());
@@ -117,26 +111,27 @@ public class DBComposizioneMenu {
      * @return ArrayList di oggetti Pietanza
      */
     // public ArrayList<EntityPietanza> getPietanzeByMenu(int idMenu) {
-    //     ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
-    //     try {
-    //         String query = "SELECT p.* FROM pietanza p " +
-    //                 "JOIN composizione_menu c ON p.id_pietanza = c.id_pietanza " +
-    //                 "WHERE c.id_menu = " + idMenu;
-    //         ResultSet rs = DBConnection.selectQuery(query);
+    // ArrayList<EntityPietanza> listaPietanze = new ArrayList<>();
+    // try {
+    // String query = "SELECT p.* FROM pietanza p " +
+    // "JOIN composizione_menu c ON p.id_pietanza = c.id_pietanza " +
+    // "WHERE c.id_menu = " + idMenu;
+    // ResultSet rs = DBConnection.selectQuery(query);
 
-    //         while (rs.next()) {
-    //             EntityPietanza pietanza = new EntityPietanza(
-    //                     rs.getInt("id_pietanza"),
-    //                     rs.getString("nome"),
-    //                     rs.getDouble("prezzo"),
-    //                     rs.getInt("id_categoria"));
-    //             pietanza.setDisponibile(rs.getBoolean("disponibile"));
-    //             listaPietanze.add(pietanza);
-    //         }
-    //     } catch (ClassNotFoundException | SQLException e) {
-    //         System.err.println("Errore nel recupero delle pietanze del menu: " + e.getMessage());
-    //     }
-    //     return listaPietanze;
+    // while (rs.next()) {
+    // EntityPietanza pietanza = new EntityPietanza(
+    // rs.getInt("id_pietanza"),
+    // rs.getString("nome"),
+    // rs.getDouble("prezzo"),
+    // rs.getInt("id_categoria"));
+    // pietanza.setDisponibile(rs.getBoolean("disponibile"));
+    // listaPietanze.add(pietanza);
+    // }
+    // } catch (ClassNotFoundException | SQLException e) {
+    // System.err.println("Errore nel recupero delle pietanze del menu: " +
+    // e.getMessage());
+    // }
+    // return listaPietanze;
     // }
 
     /**
@@ -194,7 +189,6 @@ public class DBComposizioneMenu {
     public int getIdMenu() {
         return idMenu;
     }
-
 
     public void setIdMenu(int idMenu) {
         this.idMenu = idMenu;

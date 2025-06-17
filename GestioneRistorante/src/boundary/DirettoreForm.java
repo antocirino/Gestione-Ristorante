@@ -206,9 +206,7 @@ public class DirettoreForm extends JFrame {
         // Event listeners
         generaReportButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Generazione report...");
                 ArrayList<DTOIngrediente> ingredienti = Controller.generaReport();
-                System.out.println(ingredienti);
                 stampaReport(ingredienti);
             }
         });

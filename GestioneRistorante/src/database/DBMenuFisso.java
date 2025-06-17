@@ -43,8 +43,6 @@ public class DBMenuFisso {
     public void caricaDaDB() {
         String query = "SELECT * FROM menu_fisso WHERE id_menu = " + this.idMenu;
 
-        System.out.println(query); // Per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
@@ -85,7 +83,7 @@ public class DBMenuFisso {
                     idMenu, this.nome, this.prezzo, this.descrizione);
         }
 
-        System.out.println(query);
+        
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -109,7 +107,7 @@ public class DBMenuFisso {
                 "INSERT INTO composizione_menu (id_menu, id_pietanza) VALUES (%d, %d)",
                 this.idMenu, idPietanza);
 
-        System.out.println(query);
+        
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -133,7 +131,7 @@ public class DBMenuFisso {
                 "DELETE FROM composizione_menu WHERE id_menu = %d AND id_pietanza = %d",
                 this.idMenu, idPietanza);
 
-        System.out.println(query);
+        
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {

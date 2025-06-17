@@ -244,8 +244,6 @@ public class EntityPietanza {
             int result = p.aggiornaDisponibilita(disponibile);
 
             if (result > 0) {
-                System.out.println("Disponibilità di " + this.nome + " aggiornata a: " +
-                        (disponibile ? "Disponibile" : "Non disponibile"));
                 return true;
             } else {
                 System.err.println("Errore nell'aggiornamento della disponibilità di " + this.nome);

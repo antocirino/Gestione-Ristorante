@@ -49,8 +49,6 @@ public class DBDettaglioOrdinePietanza {
                 "JOIN pietanza p ON d.id_pietanza = p.id_pietanza " +
                 "WHERE d.id_dettaglio = " + this.idDettaglio;
 
-        System.out.println(query); // Per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
@@ -84,14 +82,11 @@ public class DBDettaglioOrdinePietanza {
                         + ", " + (this.parteDiMenu ? "TRUE" : "FALSE")
                         + ", " + this.idMenu + ")";
 
-                System.out.println("Query di inserimento: " + query);
-
                 // Utilizziamo il metodo updateQueryReturnGeneratedKey invece di updateQuery
                 // per ottenere l'ID generato automaticamente
                 Integer generatedId = DBConnection.updateQueryReturnGeneratedKey(query);
 
                 if (generatedId != null && generatedId > 0) {
-                    System.out.println("Dettaglio ordine inserito con ID generato: " + generatedId);
                     return generatedId;
                 } else {
                     System.err.println("Errore: Nessun ID generato dopo l'inserimento del dettaglio ordine");
@@ -106,11 +101,8 @@ public class DBDettaglioOrdinePietanza {
                         + ", id_menu = " + this.idMenu
                         + " WHERE id_dettaglio = " + idDettaglio;
 
-                System.out.println("Query di aggiornamento: " + query);
-
                 int affectedRows = DBConnection.updateQuery(query);
                 if (affectedRows > 0) {
-                    System.out.println("Dettaglio ordine aggiornato con successo (ID: " + idDettaglio + ")");
                     return idDettaglio;
                 } else {
                     System.err
@@ -134,7 +126,6 @@ public class DBDettaglioOrdinePietanza {
     public int eliminaDaDB(int idDettaglio) {
         try {
             String query = "DELETE FROM dettaglio_ordine_pietanza WHERE id_dettaglio = " + idDettaglio;
-            System.out.println(query); // Per debug
             return DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nell'eliminazione del dettaglio ordine dal database: " + e.getMessage());
@@ -193,8 +184,6 @@ public class DBDettaglioOrdinePietanza {
                     + (this.parteDiMenu ? "TRUE" : "FALSE") + ", " + this.idMenu + ") "
                     + "ON DUPLICATE KEY UPDATE quantita = quantita + VALUES(quantita)";
 
-            System.out.println("Query con ON DUPLICATE KEY: " + query);
-
             // Eseguiamo la query e verifichiamo il risultato
             int affectedRows = DBConnection.updateQuery(query);
 
@@ -209,7 +198,6 @@ public class DBDettaglioOrdinePietanza {
                 ResultSet rs = DBConnection.selectQuery(selectQuery);
                 if (rs.next()) {
                     int dettaglioId = rs.getInt("id_dettaglio");
-                    System.out.println("Dettaglio ordine inserito/aggiornato con ID: " + dettaglioId);
                     return dettaglioId;
                 }
             }

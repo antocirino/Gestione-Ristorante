@@ -24,75 +24,60 @@ public class ComposizioneMenuTest {
     }
 
     @Test
-    public void testCostruttore(){
+    public void testCostruttore() {
         composizionemenu = new EntityComposizioneMenu(7, 1);
         assertEquals(7, composizionemenu.getIdMenu());
         assertEquals(1, composizionemenu.getIdPietanza());
-        System.out.println(composizionemenu);
     }
 
     @Test
-    public void testScrivisuDBelElementoNonEsistenteInDB(){
+    public void testScrivisuDBelElementoNonEsistenteInDB() {
         composizionemenu = new EntityComposizioneMenu(1, 7);
         int i = composizionemenu.scriviSuDB();
-        assertEquals(i,1);
+        assertEquals(i, 1);
     }
 
     @Test
-    public void testScrivisuDBElementoEsistenteInDB(){
+    public void testScrivisuDBElementoEsistenteInDB() {
         composizionemenu = new EntityComposizioneMenu(1, 1);
         int i = composizionemenu.scriviSuDB();
-        assertEquals(i,0);
+        assertEquals(i, 0);
     }
 
     @Test
-    public void testScrividuDBConErorri(){
+    public void testScrividuDBConErorri() {
         composizionemenu = new EntityComposizioneMenu(100, 1);
         int i = composizionemenu.scriviSuDB();
-        assertEquals(i,-1);
+        assertEquals(i, -1);
     }
 
     @Test
-    public void testEliminaElementoDaDB(){
+    public void testEliminaElementoDaDB() {
         composizionemenu = new EntityComposizioneMenu(1, 1);
         int i = composizionemenu.eliminaDaDB();
-        assertEquals(i,1);
+        assertEquals(i, 1);
     }
 
     @Test
-    public void testEliminaElementoDaDBConErrore(){
+    public void testEliminaElementoDaDBConErrore() {
         composizionemenu = new EntityComposizioneMenu(100, 1);
         int i = composizionemenu.eliminaDaDB();
-        assertEquals(i,0);
+        assertEquals(i, 0);
     }
 
-    /*
     @Test
-    public void testGetPietanzaDaMenu(){
-        int idMenu = 1;
-        ArrayList<EntityPietanza> array = EntityComposizioneMenu.getPietanzeByMenu(idMenu);
-        System.out.println(array);
-        int quantitaPietanzePresentiNelMenuConIdMenu = 5;
-        assertEquals(quantitaPietanzePresentiNelMenuConIdMenu, array.size());
-    }
-    */
-
-    @Test
-    public void testGetMenuDaPietanza(){
+    public void testGetMenuDaPietanza() {
         int idPietanza = 1;
         ArrayList<Integer> array = EntityComposizioneMenu.getMenuByPietanza(idPietanza);
-        System.out.println(array);
         assertEquals(0, array.size());
     }
 
     @Test
-    public void testGetComposizioneMenu(){
+    public void testGetComposizioneMenu() {
         int idMenu = 1;
         ArrayList<Map<String, Object>> array = EntityComposizioneMenu.getComposizioneMenuAsMap(idMenu);
-        System.out.println(array);
         int quantitaPietanzePresentiNelMenuConIdMenu = 5;
         assertEquals(quantitaPietanzePresentiNelMenuConIdMenu, array.size());
     }
-
 
 }

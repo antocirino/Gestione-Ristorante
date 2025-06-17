@@ -56,8 +56,6 @@ public class Controller {
         ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
 
         dto_pietanze_liste = EntityPietanza.getAllPietanze();
-        System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
-        System.out.println("Pietanze: " + dto_pietanze_liste);
         return dto_pietanze_liste;
     }
 
@@ -72,8 +70,6 @@ public class Controller {
         ArrayList<DTOPietanza> dto_pietanze_liste = new ArrayList<>();
 
         dto_pietanze_liste = EntityPietanza.getPietanzePerCategoria(idCategoria);
-        System.out.println("Pietanze recuperate: " + dto_pietanze_liste.size());
-        System.out.println("Pietanze: " + dto_pietanze_liste);
 
         return dto_pietanze_liste;
 
@@ -90,8 +86,6 @@ public class Controller {
         ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
 
         dto_tavoli_liste = EntityTavolo.getAllTavoli();
-        System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
-        System.out.println("Tavoli: " + dto_tavoli_liste);
 
         return dto_tavoli_liste;
 
@@ -108,11 +102,6 @@ public class Controller {
         ArrayList<DTOTavolo> dto_tavoli_liste = new ArrayList<>();
 
         dto_tavoli_liste = EntityTavolo.getTavoliByStato(stato);
-        System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
-        System.out.println("Tavoli: " + dto_tavoli_liste);
-
-        System.out.println("Tavoli recuperati: " + dto_tavoli_liste.size());
-        System.out.println("Tavoli: " + dto_tavoli_liste);
 
         return dto_tavoli_liste;
 
@@ -128,9 +117,6 @@ public class Controller {
         ArrayList<DTOMenuFisso> dto_menu_fissi_liste = new ArrayList<>();
 
         dto_menu_fissi_liste = EntityMenuFisso.getTuttiMenuFissi();
-        // Stampa per debug
-        System.out.println("Menu fissi recuperati: " + dto_menu_fissi_liste.size());
-        System.out.println("Menu fissi: " + dto_menu_fissi_liste);
 
         return dto_menu_fissi_liste;
     }
@@ -145,9 +131,6 @@ public class Controller {
         ArrayList<DTOCategoriaPietanza> dto_categorie_liste = new ArrayList<>();
 
         dto_categorie_liste = EntityCategoriaPietanza.getTutteCategorie();
-        // Stampa per debug
-        System.out.println("Categorie pietanze recuperate: " + dto_categorie_liste.size());
-        System.out.println("Categorie pietanze: " + dto_categorie_liste);
 
         return dto_categorie_liste;
 
@@ -163,8 +146,6 @@ public class Controller {
         ArrayList<DTOOrdine> dto_ordini_liste = new ArrayList<>();
 
         dto_ordini_liste = EntityOrdine.getOrdiniPerStato(stato);
-        System.out.println("Ordini recuperati: " + dto_ordini_liste.size());
-        System.out.println("Ordini: " + dto_ordini_liste);
 
         return dto_ordini_liste;
 
@@ -182,9 +163,8 @@ public class Controller {
         synchronized (lock) {
             EntityOrdine ordine = new EntityOrdine(idOrdine);
             boolean result = ordine.aggiungiPietanza(idPietanza, quantita);
-            if (result) {
-                System.out.println("Pietanza aggiunta all'ordine con ID: " + idOrdine);
-            } else {
+
+            if (!result) {
                 System.err.println("Errore nell'aggiunta della pietanza all'ordine con ID: " + idOrdine);
             }
             return result;
@@ -203,9 +183,7 @@ public class Controller {
         synchronized (lock) {
             EntityOrdine ordine = new EntityOrdine(idOrdine);
             boolean result = ordine.aggiungiMenuFisso(idOrdine, idMenuFisso, quantita);
-            if (result) {
-                System.out.println("Menu fisso aggiunto all'ordine con ID: " + idOrdine);
-            } else {
+            if (!result) {
                 System.err.println("Errore nell'aggiunta del menu fisso all'ordine con ID: " + idOrdine);
             }
             return result;
@@ -274,11 +252,9 @@ public class Controller {
         int result = ordine.aggiornaStato(stato);
         boolean isStatoValido = false;
         if (result >= 0) {
-            System.out.println("Stato dell'ordine con ID " + idOrdine + " aggiornato a: " + stato);
             isStatoValido = true;
         } else {
             System.err.println("Errore nell'aggiornamento dello stato dell'ordine con ID: " + idOrdine);
-
         }
         return isStatoValido;
     }
@@ -293,8 +269,6 @@ public class Controller {
         DTOOrdine dtoOrdine = EntityOrdine.getOrdinePerTavolo(id_tavolo);
         if (dtoOrdine == null) {
             System.err.println("Nessun ordine trovato per il tavolo specificato.");
-        } else {
-            System.out.println("Ordine recuperato: " + dtoOrdine);
         }
         return dtoOrdine;
     }
@@ -320,7 +294,6 @@ public class Controller {
         // Genera il PDF del conto utilizzando ContoPdfExporter
         try {
             Path pdfPath = ContoPdfExporter.generaPdf(ordine);
-            System.out.println("PDF del conto generato con successo: " + pdfPath);
             return pdfPath;
         } catch (Exception e) {
             System.err.println("Errore durante la generazione del PDF: " + e.getMessage());
@@ -363,8 +336,7 @@ public class Controller {
         if (tavolo.aggiornaStato(statoTavolo) < 0) {
             return false;
         }
-        System.out.println("Pagamento registrato per l'ordine con ID: " + idOrdine + " e tavolo con ID: " + idTavolo
-                + "aggiornato a 'pagato' e 'libero' rispettivamente.");
+
         return true;
 
     }

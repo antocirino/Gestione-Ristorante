@@ -56,8 +56,6 @@ public class DBOrdine {
     public void caricaDaDB() {
         String query = "SELECT * FROM ordine WHERE id_ordine = " + this.idOrdine;
 
-        System.out.println(query); // Per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
@@ -98,12 +96,9 @@ public class DBOrdine {
                         new java.sql.Timestamp(this.dataOrdine.getTime()),
                         this.idRistorante, this.costoTotale);
 
-                System.out.println("Query di inserimento: " + query);
-
                 // Otteniamo l'ID generato
                 Integer generatedId = insertAndGetId(query);
                 if (generatedId != null && generatedId > 0) {
-                    System.out.println("Nuovo ordine inserito con ID: " + generatedId);
                     return generatedId;
                 } else {
                     System.err.println("Errore: Nessun ID generato dopo l'inserimento dell'ordine");
@@ -124,11 +119,8 @@ public class DBOrdine {
                             new java.sql.Timestamp(this.dataOrdine.getTime()),
                             this.idRistorante, this.costoTotale, this.idOrdine);
 
-                    System.out.println("Query di aggiornamento: " + query);
-
                     int affectedRows = DBConnection.updateQuery(query);
                     if (affectedRows > 0) {
-                        System.out.println("Ordine aggiornato con successo (ID: " + this.idOrdine + ")");
                         return this.idOrdine;
                     } else {
                         System.err.println("Errore: Nessuna riga aggiornata per l'ordine con ID: " + this.idOrdine);
@@ -145,7 +137,6 @@ public class DBOrdine {
             e.printStackTrace();
             return -1;
         }
-        System.out.println("Errore: ID ordine non valido");
         return -1; // In caso di errore generico
     }
 
@@ -190,7 +181,6 @@ public class DBOrdine {
                 "UPDATE ordine SET stato = '%s' WHERE id_ordine = %d",
                 nuovoStato, this.idOrdine);
 
-        System.out.println(query);
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -212,7 +202,6 @@ public class DBOrdine {
                     "UPDATE ordine SET costo_totale = %.2f WHERE id_ordine = %d",
                     this.costoTotale, this.idOrdine);
 
-            System.out.println("Aggiornamento costo totale: " + query);
             int result = DBConnection.updateQuery(query);
 
             return result > 0;

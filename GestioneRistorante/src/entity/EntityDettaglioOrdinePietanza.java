@@ -91,7 +91,6 @@ public class EntityDettaglioOrdinePietanza {
         d.setIdMenu(this.idMenu);
 
         int result = d.salvaConOnConflict();
-        System.out.println("DettaglioOrdinePietanza (ON CONFLICT): id_dettaglio " + result);
 
         // Aggiorna l'ID se l'operazione è riuscita
         if (result > 0) {

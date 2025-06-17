@@ -52,8 +52,6 @@ public class DBIngrediente {
         // 1. definisco la query
         String query = "SELECT * FROM ingrediente WHERE id_ingrediente = " + this.idIngrediente;
 
-        System.out.println(query); // per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
@@ -87,7 +85,6 @@ public class DBIngrediente {
                         "VALUES (%d, '%s', %.2f, '%s', %.2f)",
                 id_ingrediente, this.nome, this.quantitaDisponibile, this.unitaMisura, this.sogliaRiordino);
 
-        System.out.println(query);
         try {
 
             ret = DBConnection.updateQuery(query);
@@ -118,7 +115,6 @@ public class DBIngrediente {
                 float quantita = rs.getFloat("quantita_disponibile");
                 float soglia = rs.getFloat("soglia_riordino");
                 if (quantita <= soglia) {
-                    System.out.println("ingrediente esurito");
                     DBIngrediente ing = new DBIngrediente();
                     ing.setIdIngrediente(rs.getInt("id_ingrediente"));
                     ing.setNome(rs.getString("nome"));
@@ -146,7 +142,6 @@ public class DBIngrediente {
             String query = "UPDATE ingrediente SET quantita_disponibile = " + this.quantitaDisponibile +
                     " WHERE id_ingrediente = " + this.idIngrediente;
 
-            System.out.println(query); // Per debug
             return DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Errore nell'aggiornamento della quantità: " + e.getMessage());

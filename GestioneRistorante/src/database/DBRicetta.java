@@ -43,8 +43,6 @@ public class DBRicetta {
         // Definisco la query
         String query = "SELECT * FROM ricetta WHERE id_ricetta = " + this.idRicetta;
 
-        System.out.println(query); // Per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
@@ -88,7 +86,6 @@ public class DBRicetta {
                     idRicetta, this.nome, this.descrizione, this.idPietanza, this.tempoPreparazione, this.istruzioni);
         }
 
-        System.out.println(query);
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -113,7 +110,6 @@ public class DBRicetta {
                 "INSERT INTO ricetta_ingrediente (id_ricetta, id_ingrediente, quantita) VALUES (%d, %d, %.2f)",
                 this.idRicetta, idIngrediente, quantita);
 
-        System.out.println(query);
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -137,7 +133,6 @@ public class DBRicetta {
                 "DELETE FROM ricetta_ingrediente WHERE id_ricetta = %d AND id_ingrediente = %d",
                 this.idRicetta, idIngrediente);
 
-        System.out.println(query);
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {

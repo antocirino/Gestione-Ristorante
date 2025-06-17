@@ -60,7 +60,6 @@ public class ContoPdfExporter {
         File appExportDir = new File("/app/exported-pdf");
         if (appExportDir.exists() && appExportDir.isDirectory() && appExportDir.canWrite()) {
             downloadDir = appExportDir;
-            System.out.println("Usando la directory dedicata per i PDF: " + appExportDir.getAbsolutePath());
         } else {
             // Fallback alla cartella Download dell'utente
             String homeDir = System.getProperty("user.home");
@@ -70,7 +69,6 @@ public class ContoPdfExporter {
                 // Se siamo in Docker, ma non troviamo /app/exported-pdf
                 // usa /tmp come ultima risorsa
                 downloadDir = new File("/tmp");
-                System.out.println("Fallback a directory temporanea: " + downloadDir.getAbsolutePath());
             } else {
                 downloadDir = new File(homeDir, "Download");
 
@@ -78,7 +76,6 @@ public class ContoPdfExporter {
                 if (!downloadDir.exists()) {
                     boolean created = downloadDir.mkdirs();
                     if (!created) {
-                        System.out.println("Non è stato possibile creare la directory: " + downloadDir);
                         // Fallback a tmp
                         downloadDir = new File("/tmp");
                     }
@@ -105,7 +102,6 @@ public class ContoPdfExporter {
             aggiungiPieDiPagina(document);
 
             document.close();
-            System.out.println("PDF del conto generato con successo in: " + outputFile.getAbsolutePath());
 
             return outputFile.toPath();
         } catch (Exception e) {

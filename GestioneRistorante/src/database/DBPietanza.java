@@ -80,8 +80,6 @@ public class DBPietanza {
                 "JOIN categoria_pietanza c ON p.id_categoria = c.id_categoria " +
                 "WHERE p.id_pietanza = " + this.idPietanza;
 
-        System.out.println(query); // Per debug
-
         try {
             ResultSet rs = DBConnection.selectQuery(query);
             if (rs.next()) {
@@ -125,7 +123,6 @@ public class DBPietanza {
                     idPietanza, this.nome, this.prezzo, this.idCategoria, this.disponibile);
         }
 
-        System.out.println(query);
         try {
             ret = DBConnection.updateQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -147,17 +144,16 @@ public class DBPietanza {
             String query = "UPDATE pietanza SET disponibile = " + (disponibile ? "TRUE" : "FALSE") +
                     " WHERE id_pietanza = " + this.idPietanza;
 
-            System.out.println("Esecuzione query: " + query);
             int result = DBConnection.updateQuery(query);
 
-            if (result > 0) {
-                System.out.println("Stato della pietanza #" + this.idPietanza + " aggiornato nel database.");
-            } else {
+            if (result < 0) {
                 System.err.println("Nessuna riga aggiornata per la pietanza #" + this.idPietanza);
             }
 
             return result;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException |
+
+                SQLException e) {
             System.err.println("Errore nell'aggiornamento della disponibilità: " + e.getMessage());
             return -1;
         }

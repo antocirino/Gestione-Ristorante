@@ -14,40 +14,44 @@ import com.kitfox.svg.SVGUniverse;
  * in tutta l'applicazione.
  */
 public class SvgIconManager {
-    
+
     // Colori predefiniti
     private static final Color DEFAULT_COLOR = Color.WHITE;
-    
+
     /**
-     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo predefinito (bianco)
+     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo predefinito
+     * (bianco)
      * 
      * @param filename Il nome del file SVG
-     * @param width La larghezza dell'icona
-     * @param height L'altezza dell'icona
-     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non trovata
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non
+     *         trovata
      */
     public static ImageIcon loadSVGIcon(String filename, int width, int height) {
         return loadSVGIcon(filename, width, height, DEFAULT_COLOR);
     }
 
     /**
-     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo personalizzato
+     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo
+     * personalizzato
      * 
      * @param filename Il nome del file SVG
-     * @param width La larghezza dell'icona
-     * @param height L'altezza dell'icona
-     * @param color Il colore di sfondo dell'icona
-     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non trovata
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @param color    Il colore di sfondo dell'icona
+     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non
+     *         trovata
      */
     public static ImageIcon loadSVGIcon(String filename, int width, int height, Color color) {
         try {
             // Percorsi possibili per le icone SVG (nell'ordine di priorità)
             String[] possiblePaths = {
-                "bin/resources/icons/" + filename, // Nel container/dopo compilazione
-                "resources/icons/" + filename, // Percorso relativo nel container
-                "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
-                "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
-                "src/resources/icons/" + filename // Durante sviluppo
+                    "bin/resources/icons/" + filename, // Nel container/dopo compilazione
+                    "resources/icons/" + filename, // Percorso relativo nel container
+                    "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
+                    "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
+                    "src/resources/icons/" + filename // Durante sviluppo
             };
 
             File svgFile = null;
@@ -124,7 +128,6 @@ public class SvgIconManager {
             return new ImageIcon(image);
 
         } catch (Exception e) {
-            System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
             e.printStackTrace();
             return createFallbackIcon(filename, width, height, color);
         }
@@ -134,9 +137,9 @@ public class SvgIconManager {
      * Crea un'icona di fallback con un testo Unicode
      * 
      * @param filename Il nome del file (usato per determinare l'icona Unicode)
-     * @param width La larghezza dell'icona
-     * @param height L'altezza dell'icona
-     * @param color Il colore del testo dell'icona
+     * @param width    La larghezza dell'icona
+     * @param height   L'altezza dell'icona
+     * @param color    Il colore del testo dell'icona
      * @return Un ImageIcon con l'icona di fallback
      */
     private static ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
@@ -186,4 +189,4 @@ public class SvgIconManager {
             return "📄";
         }
     }
-} 
+}

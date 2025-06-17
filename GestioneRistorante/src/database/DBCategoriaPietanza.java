@@ -42,7 +42,6 @@ public class DBCategoriaPietanza {
         // Definisco la query
         String query = "SELECT * FROM categoria_pietanza WHERE id_categoria = " + this.idCategoria;
 
-        System.out.println(query); // Per debug
 
         try {
             ResultSet rs = DBConnection.selectQuery(query);

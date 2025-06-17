@@ -59,7 +59,6 @@ public class DBConnection {
             try {
                 if (!connection.isClosed()) {
                     connection.close();
-                    System.out.println("Connessione chiusa correttamente");
                 }
             } catch (SQLException e) {
                 System.err.println("Errore durante la chiusura della connessione: " + e.getMessage());
