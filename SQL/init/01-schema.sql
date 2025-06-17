@@ -55,14 +55,6 @@ CREATE TABLE IF NOT EXISTS `pietanza` (
   UNIQUE KEY `unique_nome_pietanza` (`nome`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabella Menu (relazione diretta tra ristorante e pietanze)
-CREATE TABLE IF NOT EXISTS `menu` (
-  `id_ristorante` INT NOT NULL,
-  `id_pietanza` INT NOT NULL,
-  PRIMARY KEY (`id_ristorante`, `id_pietanza`),
-  FOREIGN KEY (`id_ristorante`) REFERENCES `ristorante` (`id_ristorante`) ON DELETE CASCADE,
-  FOREIGN KEY (`id_pietanza`) REFERENCES `pietanza` (`id_pietanza`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabella Ricetta 
 CREATE TABLE IF NOT EXISTS `ricetta` (

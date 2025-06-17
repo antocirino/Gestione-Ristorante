@@ -486,9 +486,75 @@
       "descrizione": "Selezione di frutta fresca di stagione",
       "tempo_preparazione": 5,
       "istruzioni": "Lavare e tagliare la frutta a pezzi, disporla su un piatto da portata, servire fresca.",
-      "ingredienti": [
-        { "id": 69, "quantita": 0.5 }
-      ]
+      "ingredienti": [{ "id": 69, "quantita": 0.5 }]
+    }
+  },
+  "Bevande": {
+    "Acqua naturale": {
+      "descrizione": "Acqua minerale naturale",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire fredda o a temperatura ambiente.",
+      "ingredienti": [{ "id": 70, "quantita": 0.5 }]
+    },
+    "Acqua frizzante": {
+      "descrizione": "Acqua minerale frizzante",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire fredda o a temperatura ambiente.",
+      "ingredienti": [{ "id": 71, "quantita": 0.5 }]
+    },
+    "Vino rosso": {
+      "descrizione": "Vino rosso italiano",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire a temperatura ambiente, in calici adatti.",
+      "ingredienti": [{ "id": 24, "quantita": 0.75 }]
+    },
+    "Vino bianco": {
+      "descrizione": "Vino bianco italiano",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire fresco, in calici adatti.",
+      "ingredienti": [{ "id": 23, "quantita": 0.75 }]
+    },
+    "Birra alla spina": {
+      "descrizione": "Birra artigianale italiana, spillata sul momento",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire fresca, in bicchieri adatti.",
+      "ingredienti": [{ "id": 76, "quantita": 0.5 }]
+    },
+    "Caffe": {
+      "descrizione": "Caffe espresso italiano",
+      "tempo_preparazione": 5,
+      "istruzioni": "Preparare con macchina da caffe, servire caldo in tazzina.",
+      "ingredienti": [{ "id": 30, "quantita": 0.01 }]
+    },
+    "Coca Cola": {
+      "descrizione": "Bibita gassata al gusto di cola",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire fredda in bicchiere con ghiaccio.",
+      "ingredienti": [{ "id": 72, "quantita": 0.33 }]
+    },
+    "Prosecco": {
+      "descrizione": "Vino spumante italiano, fresco e frizzante",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire freddo in flute.",
+      "ingredienti": [{ "id": 73, "quantita": 0.15 }]
+    },
+    "Limoncello": {
+      "descrizione": "Liquore al limone tipico della tradizione italiana",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire freddo in bicchierini.",
+      "ingredienti": [{ "id": 74, "quantita": 0.05 }]
+    },
+    "Grappa": {
+      "descrizione": "Distillato di vinaccia, forte e aromatico",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire a temperatura ambiente o fredda in bicchierini.",
+      "ingredienti": [{ "id": 75, "quantita": 0.05 }]
+    },
+    "Amaro": {
+      "descrizione": "Liquore digestivo a base di erbe",
+      "tempo_preparazione": 0,
+      "istruzioni": "Servire freddo o a temperatura ambiente in bicchierini.",
+      "ingredienti": [{ "id": 77, "quantita": 0.05 }]
     }
   }
 }

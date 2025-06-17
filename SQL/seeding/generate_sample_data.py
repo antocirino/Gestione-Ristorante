@@ -51,18 +51,17 @@ nomi_dolci = [
 
 nomi_bevande = [
     "Acqua naturale", "Acqua frizzante", "Coca Cola",
-    "Aranciata", "Vino rosso della casa", "Vino bianco della casa",
-    "Birra alla spina", "Sprite", "Caffe", "Amaro", 
-    "Limoncello", "Grappa", "Prosecco", "Vino rosato della casa",
+    "Vino rosso", "Vino bianco",
+    "Birra alla spina", "Caffe", "Amaro", 
+    "Limoncello", "Grappa", "Prosecco", 
 ]
-# Dati per gli ingredienti - mappa con nome come chiave e dizionario con id, quantità, unità e soglia
-ingredienti_comuni = {}
+
 
 # Riempimento del dizionario
 ingredient_list = [
-    ("Pomodoro", "kg", 0.0, 10.0),
-    ("Farina", "kg", 0.0, 5.0),
-    ("Sale", "kg", 0.0, 1.0),
+    ("Pomodoro", "kg", 6.0, 10.0),
+    ("Farina", "kg", 20.0, 5.0),
+    ("Sale", "kg", 2.0, 1.0),
     ("Olio d oliva", "litri", 10.0, 2.0),
     ("Aglio", "kg", 3.0, 0.5),
     ("Basilico", "mazzetti", 20.0, 5.0),
@@ -128,8 +127,18 @@ ingredient_list = [
     ("Friarielli", "kg", 8.0, 1.5),
     ("Olive", "kg", 5.0, 1.0),
     ("Pinoli", "kg", 2.0, 0.5),
-    ("Frutta fresca", "kg", 20.0, 2.0)
+    ("Frutta fresca", "kg", 20.0, 2.0),
+    ("Acqua naturale", "litri", 50.0, 10.0),
+    ("Acqua frizzante", "litri", 50.0, 10.0),
+    ("Coca Cola", "litri", 30.0, 5.0),
+    ("Prosecco", "litri", 30.0, 5.0),
+    ("Limoncello", "litri", 15.0, 3.0),
+    ("Grappa", "litri", 10.0, 2.0),
+    ("Birra alla spina", "litri", 60.0, 15.0),
+    ("Amaro", "litri", 10.0, 2.0)
 ]
+# Dati per gli ingredienti - mappa con nome come chiave e dizionario con id, quantità, unità e soglia
+ingredienti_comuni = {}
 
 for i, (nome, unita, quantita, soglia) in enumerate(ingredient_list, 1):
     ingredienti_comuni[nome] = {
@@ -138,11 +147,6 @@ for i, (nome, unita, quantita, soglia) in enumerate(ingredient_list, 1):
         "unita_misura": unita,
         "soglia_riordino": soglia
     }
-
-def leggi_schema():
-    """Legge lo schema SQL per comprendere le tabelle"""
-    with open(SCHEMA_FILE, 'r') as file:
-        return file.read()
 
 def genera_dati_categorie():
     """Genera dati per la tabella categoria_pietanza"""
@@ -266,20 +270,6 @@ def genera_dati_pietanze():
     return sql
 
 
-def genera_dati_menu(num_ristoranti=1):
-    """Genera dati per la tabella menu"""
-    sql = "-- Dati generati per la tabella menu\n"
-    sql += "INSERT INTO `menu` (`id_ristorante`, `id_pietanza`) VALUES\n"
-    
-    values = []
-    for id_ristorante in range(1, num_ristoranti + 1):
-        num_pietanze = len(nomi_antipasti + nomi_primi + nomi_secondi + nomi_contorni + nomi_dolci + nomi_bevande)
-        for id_pietanza in range(1, num_pietanze + 1):
-            values.append(f"({id_ristorante}, {id_pietanza})")
-    
-    sql += ",\n".join(values) + ";\n\n"
-    return sql
-
 def genera_dati_ricette():
     """Genera dati per la tabella ricetta e ricetta_ingrediente"""
     
@@ -314,7 +304,8 @@ def genera_dati_ricette():
         "Primi": {},
         "Secondi": {},
         "Contorni": {},
-        "Dolci": {}
+        "Dolci": {},
+        "Bevande": {}
     }
     
     # Prendiamo gli id delle pietanze basate sui nomi in ogni categoria
@@ -523,9 +514,7 @@ def main():
     print(f"Generazione dati di esempio per il database del ristorante...")
     print(f"Lo script leggerà lo schema da: {SCHEMA_FILE}")
     print(f"E scriverà i dati generati in: {OUTPUT_FILE}")
-    
-    schema = leggi_schema()
-    
+        
     num_ristoranti = 1  # Possiamo cambiare questo valore per generare più ristoranti
     
     # Generiamo tutti i dati
@@ -538,7 +527,6 @@ def main():
     sql_output += genera_dati_ingredienti()
     sql_output += genera_dati_categorie()
     sql_output += genera_dati_pietanze()
-    sql_output += genera_dati_menu(num_ristoranti)
     sql_output += genera_dati_ricette()
     sql_output += genera_dati_menu_fisso()
     # sql_output += genera_dati_ordini(num_ristoranti) --> inizialmente vuoto, non abbiamo ordini
