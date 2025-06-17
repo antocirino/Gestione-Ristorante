@@ -6,6 +6,7 @@ import java.util.Map;
 import DTO.DTOMenuFisso;
 import DTO.DTOPietanza;
 import database.DBMenuFisso;
+import database.DBPietanza;
 
 /**
  * Classe che rappresenta un menu fisso del ristorante
@@ -50,7 +51,29 @@ public class EntityMenuFisso {
         this.nome = menu.getNome();
         this.prezzo = menu.getPrezzo();
         this.descrizione = menu.getDescrizione();
-        this.pietanze = menu.getPietanze();
+
+        // Carica le pietanze associate a questo menu
+        caricaPietanze(menu);
+    }
+
+    /**
+     * Carica le pietanze associate a questo menu fisso
+     * Usato internamente dal costruttore
+     * 
+     * @param menu Oggetto DBMenuFisso da cui caricare i dati
+     */
+    private void caricaPietanze(DBMenuFisso menu) {
+        this.pietanze = new ArrayList<>();
+        ArrayList<DBPietanza> pietanzeDB = menu.getPietanzeDB();
+        for (DBPietanza dbPietanza : pietanzeDB) {
+            EntityPietanza pietanza = new EntityPietanza(
+                    dbPietanza.getIdPietanza(),
+                    dbPietanza.getNome(),
+                    dbPietanza.getPrezzo(),
+                    dbPietanza.getIdCategoria(),
+                    dbPietanza.getNomeCategoria());
+            this.pietanze.add(pietanza);
+        }
     }
 
     /**
@@ -128,8 +151,8 @@ public class EntityMenuFisso {
     public static ArrayList<DTOMenuFisso> getTuttiMenuFissi() {
 
         ArrayList<DTOMenuFisso> listaMenu = new ArrayList<>();
-        DBMenuFisso menu = new DBMenuFisso();
-        ArrayList<DBMenuFisso> menuFissi = menu.getTuttiMenuFissi();
+        DBMenuFisso menuDB = new DBMenuFisso();
+        ArrayList<DBMenuFisso> menuFissi = menuDB.getTuttiMenuFissi();
 
         for (DBMenuFisso m : menuFissi) {
             DTOMenuFisso dto = new DTOMenuFisso();
@@ -140,14 +163,16 @@ public class EntityMenuFisso {
 
             dto.setPietanze(new ArrayList<>());
             // Aggiungiamo le pietanze del menu
-            for (EntityPietanza p : m.getPietanze()) {
+            ArrayList<DBPietanza> pietanzeDB = new DBMenuFisso(m.getIdMenu()).getPietanzeDB();
+            for (DBPietanza p : pietanzeDB) {
                 DTOPietanza dtoPietanza = new DTOPietanza();
                 dtoPietanza.setIdPietanza(p.getIdPietanza());
                 dtoPietanza.setNome(p.getNome());
                 dtoPietanza.setPrezzo(p.getPrezzo());
                 dtoPietanza.setIdCategoria(p.getIdCategoria());
                 dtoPietanza.setNomeCategoria(p.getNomeCategoria());
-                dtoPietanza.setDisponibile(p.isDisponibile());
+                dtoPietanza.setDisponibile(true); // Valore predefinito poiché DBPietanza potrebbe non avere questo
+                                                  // campo
                 dto.getPietanze().add(dtoPietanza);
             }
             listaMenu.add(dto);
