@@ -8,6 +8,7 @@ import DTO.DTOMenuFisso;
 import DTO.DTOPietanza;
 import DTO.DTOTavolo;
 import entity.EntityOrdine;
+import utility.SvgIconManager;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.border.*;
@@ -19,10 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import control.Controller;
-
-// Importa la libreria SVG Salamander
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGUniverse;
 
 /**
  * Schermata per il cameriere che permette di visualizzare il menu
@@ -96,7 +93,7 @@ public class CameriereForm extends JFrame {
         titleLabel.setFont(titleFont);
 
         // Aggiunge l'icona SVG al titolo
-        ImageIcon svgIcon = loadSVGIcon("person.svg", 32, 32);
+        ImageIcon svgIcon = SvgIconManager.loadSVGIcon("person.svg", 32, 32);
         JLabel iconLabel = new JLabel(svgIcon);
         iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
 
@@ -115,17 +112,17 @@ public class CameriereForm extends JFrame {
 
         // Tab per le pietanze
         menuPanel = createMenuPanel();
-        ImageIcon pietanzaIcon = loadSVGIcon("pietanza.svg", 20, 20, textColor);
+        ImageIcon pietanzaIcon = SvgIconManager.loadSVGIcon("pietanza.svg", 20, 20, textColor);
         tabbedPane.addTab("Pietanze", pietanzaIcon, menuPanel);
 
         // Tab per i menu fissi
         menuFissoPanel = createMenuFissoPanel();
-        ImageIcon menuIcon = loadSVGIcon("menu.svg", 20, 20, textColor);
+        ImageIcon menuIcon = SvgIconManager.loadSVGIcon("menu.svg", 20, 20, textColor);
         tabbedPane.addTab("Menu Fissi", menuIcon, menuFissoPanel);
 
         // Tab per l'ordine
         ordinePanel = createOrdinePanel();
-        ImageIcon ordineIcon = loadSVGIcon("order.svg", 20, 20, textColor);
+        ImageIcon ordineIcon = SvgIconManager.loadSVGIcon("order.svg", 20, 20, textColor);
         tabbedPane.addTab("Ordine Corrente", ordineIcon, ordinePanel);
 
         // Pannello bottoni in fondo con stile moderno
@@ -376,7 +373,7 @@ public class CameriereForm extends JFrame {
         tavoloPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
         // svg tavolo
-        ImageIcon tavoloIcon = loadSVGIcon("table.svg", 20, 20);
+        ImageIcon tavoloIcon = SvgIconManager.loadSVGIcon("table.svg", 20, 20);
         JLabel tavoloIconLabel = new JLabel(tavoloIcon);
         tavoloIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
         tavoloPanel.add(tavoloIconLabel);
@@ -424,7 +421,7 @@ public class CameriereForm extends JFrame {
         inviaOrdineButton = createStyledButton("Invia Ordine", primaryColor);
 
         // Aggiungi icona SVG al pulsante
-        ImageIcon inviaIcon = loadSVGIcon("send.svg", 20, 20);
+        ImageIcon inviaIcon = SvgIconManager.loadSVGIcon("send.svg", 20, 20);
         inviaOrdineButton.setIcon(inviaIcon);
 
         inviaOrdineButton.addActionListener(new ActionListener() {
@@ -1208,176 +1205,6 @@ public class CameriereForm extends JFrame {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo
-     * 
-     * @param filename Il nome del file SVG
-     * @param width    La larghezza dell'icona
-     * @param height   L'altezza dell'icona
-     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non
-     */
-    private ImageIcon loadSVGIcon(String filename, int width, int height) {
-        return loadSVGIcon(filename, width, height, Color.WHITE);
-    }
-
-    /**
-     * Carica un'icona SVG con dimensioni specifiche e colore di sfondo
-     * 
-     * @param filename Il nome del file SVG
-     * @param width    La larghezza dell'icona
-     * @param height   L'altezza dell'icona
-     * @param color    Il colore di sfondo dell'icona
-     * @return Un ImageIcon con l'icona SVG caricata, o un'icona di fallback se non
-     *         trovata
-     */
-    private ImageIcon loadSVGIcon(String filename, int width, int height, Color color) {
-        try {
-            // Percorsi possibili per le icone SVG (nell'ordine di priorità)
-            String[] possiblePaths = {
-                    "bin/resources/icons/" + filename, // Nel container/dopo compilazione
-                    "resources/icons/" + filename, // Percorso relativo nel container
-                    "GestioneRistorante/bin/resources/icons/" + filename, // Dalla root progetto
-                    "GestioneRistorante/src/resources/icons/" + filename, // Sorgente originale
-                    "src/resources/icons/" + filename // Durante sviluppo
-            };
-
-            java.io.File svgFile = null;
-
-            for (String path : possiblePaths) {
-                java.io.File testFile = new java.io.File(path);
-                if (testFile.exists()) {
-                    svgFile = testFile;
-                    break;
-                }
-            }
-
-            // Se non trovato con percorsi diretti, prova con il class loader
-            if (svgFile == null || !svgFile.exists()) {
-                try {
-                    java.net.URL resourceUrl = getClass().getClassLoader().getResource("icons/" + filename);
-                    if (resourceUrl == null) {
-                        resourceUrl = getClass().getClassLoader().getResource("resources/icons/" + filename);
-                    }
-                    if (resourceUrl != null) {
-                        svgFile = new java.io.File(resourceUrl.toURI());
-                    }
-                } catch (Exception e) {
-                    // Ignora e usa fallback
-                }
-            }
-
-            if (svgFile == null || !svgFile.exists()) {
-                return createFallbackIcon(filename, width, height, color);
-            }
-
-            SVGUniverse svgUniverse = new SVGUniverse();
-            java.net.URI svgUri = svgFile.toURI();
-            SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(svgUri.toURL()));
-
-            if (diagram == null) {
-                return createFallbackIcon(filename, width, height, color);
-            }
-
-            // Imposta dimensioni
-            diagram.setIgnoringClipHeuristic(true);
-
-            // Renderizza SVG come BufferedImage con sfondo trasparente
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = image.createGraphics();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-
-            // Pulisci lo sfondo
-            g2.setComposite(AlphaComposite.Clear);
-            g2.fillRect(0, 0, width, height);
-            g2.setComposite(AlphaComposite.SrcOver);
-
-            // Imposta il colore dell'SVG
-            g2.setColor(color);
-
-            // Scala e centra l'SVG
-            java.awt.geom.Rectangle2D bounds = diagram.getViewRect();
-            double scaleX = (double) width / bounds.getWidth();
-            double scaleY = (double) height / bounds.getHeight();
-            double scale = Math.min(scaleX, scaleY);
-
-            int scaledWidth = (int) (bounds.getWidth() * scale);
-            int scaledHeight = (int) (bounds.getHeight() * scale);
-            int x = (width - scaledWidth) / 2;
-            int y = (height - scaledHeight) / 2;
-
-            g2.translate(x, y);
-            g2.scale(scale, scale);
-
-            diagram.render(g2);
-            g2.dispose();
-
-            return new ImageIcon(image);
-
-        } catch (Exception e) {
-            System.out.println("Errore nel caricamento SVG " + filename + ": " + e.getMessage());
-            e.printStackTrace();
-            return createFallbackIcon(filename, width, height, color);
-        }
-    }
-
-    /**
-     * Crea un'icona di fallback con un testo Unicode
-     * 
-     * @param filename Il nome del file (usato per determinare l'icona Unicode)
-     * @param width    La larghezza dell'icona
-     * @param height   L'altezza dell'icona
-     * @param color    Il colore del testo dell'icona
-     * @return Un ImageIcon con l'icona di fallback
-     */
-    private ImageIcon createFallbackIcon(String filename, int width, int height, Color color) {
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // Imposta colore e font
-        g2.setColor(color);
-        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, Math.min(width, height) - 4));
-
-        String icon = getUnicodeIcon(filename);
-        FontMetrics fm = g2.getFontMetrics();
-        int textWidth = fm.stringWidth(icon);
-        int textHeight = fm.getHeight();
-        int x = (width - textWidth) / 2;
-        int y = (height - textHeight) / 2 + fm.getAscent();
-
-        g2.drawString(icon, x, y);
-        g2.dispose();
-
-        return new ImageIcon(image);
-    }
-
-    /**
-     * Restituisce un'icona Unicode basata sul nome del file
-     * 
-     * @param filename Il nome del file dell'icona
-     * @return Una stringa con l'icona Unicode corrispondente
-     */
-    private String getUnicodeIcon(String filename) {
-        if (filename.contains("pietanza")) {
-            return "🍝";
-        } else if (filename.contains("menu")) {
-            return "📋";
-        } else if (filename.contains("order")) {
-            return "🛒";
-        } else if (filename.contains("person")) {
-            return "👤";
-        } else if (filename.contains("restaurant_menu")) {
-            return "🍽️";
-        } else if (filename.contains("payment")) {
-            return "💳";
-        } else if (filename.contains("admin_panel_settings")) {
-            return "⚙️";
-        } else {
-            return "📄";
         }
     }
 }
