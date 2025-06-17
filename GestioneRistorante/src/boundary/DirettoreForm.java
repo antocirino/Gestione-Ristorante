@@ -95,6 +95,7 @@ public class DirettoreForm extends JFrame {
         styleComboBox(reportTypeComboBox);
         reportTypeComboBox.setPreferredSize(new Dimension(250, 40));
 
+        /* Commentato temporaneamente il filtro del periodo
         JLabel periodoLabel = new JLabel("Periodo:");
         periodoLabel.setFont(boldFont);
         periodoLabel.setForeground(textColor);
@@ -108,13 +109,16 @@ public class DirettoreForm extends JFrame {
         });
         styleComboBox(periodoComboBox);
         periodoComboBox.setPreferredSize(new Dimension(200, 40));
+        */
 
         generaReportButton = createStyledButton("Genera Report", primaryColor);
 
         controlPanel.add(tipoReportLabel);
         controlPanel.add(reportTypeComboBox);
+        /* Commentato temporaneamente il filtro del periodo
         controlPanel.add(periodoLabel);
         controlPanel.add(periodoComboBox);
+        */
         controlPanel.add(generaReportButton);
 
         // Pannello principale per contenuto centrale
