@@ -75,7 +75,7 @@ public class FirstForm extends JFrame {
         ruoliPanel.add(cassiereButton);
         ruoliPanel.add(direttoreButton);
 
-        // Pannello per testare la connessione al database e uscire dall'applicazione
+        // Pannello uscire dall'applicazione
         JPanel testPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         testPanel.setBackground(lightColor);
         testPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 0, 40));
@@ -213,21 +213,13 @@ public class FirstForm extends JFrame {
         statusPanel.setBackground(new Color(245, 247, 250));
         statusPanel.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
 
-        // Pannello sinistro per status
+        // Pannello sinistro per nomi creatori
         JPanel leftStatusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         leftStatusPanel.setBackground(new Color(245, 247, 250));
-        statusLabel = new JLabel("Pronto");
-        statusLabel.setFont(smallFont);
-        statusLabel.setForeground(textColor);
-        leftStatusPanel.add(statusLabel);
-
-        // Pannello centrale per nomi creatori
-        JPanel centerStatusPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        centerStatusPanel.setBackground(new Color(245, 247, 250));
         JLabel namesLabel = new JLabel("Matteo Adaggio, Alessandro Cioffi, Luigi Cirillo, Antonio Cirino");
         namesLabel.setFont(smallFont);
         namesLabel.setForeground(new Color(149, 165, 166));
-        centerStatusPanel.add(namesLabel);
+        leftStatusPanel.add(namesLabel);
 
         // Pannello destro per versione e copyright
         JPanel rightStatusPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
@@ -246,7 +238,6 @@ public class FirstForm extends JFrame {
 
         // Assemblaggio pannello di stato
         statusPanel.add(leftStatusPanel, BorderLayout.WEST);
-        statusPanel.add(centerStatusPanel, BorderLayout.CENTER);
         statusPanel.add(rightStatusPanel, BorderLayout.EAST);
 
         // Assemblaggio pannelli
